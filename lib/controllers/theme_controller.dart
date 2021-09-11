@@ -1,9 +1,10 @@
+import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/utils/user_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ThemeController extends ChangeNotifier {
-  ThemeController({required isDarkMode}) : _themeData = isDarkMode ? darkTheme : lightTheme;
+  ThemeController({required isDarkMode}) : _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
 
   ThemeData _themeData;
 
@@ -11,11 +12,8 @@ class ThemeController extends ChangeNotifier {
   ThemeData get themeData => _themeData;
 
   void changeMode(bool isDarkMode){
-    _themeData = isDarkMode ? darkTheme : lightTheme;
+    _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
     UserPreferences.instance.darkMode = isDarkMode;
     notifyListeners();
   }
-
-  static ThemeData lightTheme = ThemeData.light();
-  static ThemeData darkTheme = ThemeData.dark();
 }
