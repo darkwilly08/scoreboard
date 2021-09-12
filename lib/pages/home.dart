@@ -1,6 +1,9 @@
+import 'package:anotador/controllers/locale_controller.dart';
+import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/widgets/drawer.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -54,7 +57,9 @@ class HomePage extends StatelessWidget {
         Column(
           children: [
             Builder(builder: (context) => _buildTopHeader(context)),
-            // Expanded(child: body)
+            ElevatedButton(onPressed: () async => await Provider.of<ThemeController>(context, listen: false).changeMode(false), child: const Text("toggle theme"),),
+            ElevatedButton(onPressed: () async => await Provider.of<LocaleController>(context, listen: false).changeLanguage('es'), child: const Text("toggle language"),),
+
           ],
         )
       // ],),

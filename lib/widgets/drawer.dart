@@ -43,11 +43,11 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _createItems() {
+  Widget _createItems(BuildContext context) {
     return Column(
       children: [
         _createDrawerItem(
-            icon: Icons.home, text: "Adquisición de datos", onTap: () {}),
+            icon: Icons.settings, text: AppLocalizations.of(context)!.settings, onTap: () {}),
       ],
     );
   }
@@ -69,7 +69,7 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        children: [_createHeader(context), _createItems(), _createFooter()],
+        children: [_createHeader(context), _createItems(context), _createFooter()],
       ),
     );
   }

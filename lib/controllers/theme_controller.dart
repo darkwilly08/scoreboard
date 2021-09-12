@@ -1,19 +1,33 @@
 import 'package:anotador/themes/app_theme.dart';
-import 'package:anotador/utils/user_preferences.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'package:anotador/utils/app_data.dart';
+
 class ThemeController extends ChangeNotifier {
-  ThemeController({required isDarkMode}) : _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
+  static const String darkModeKey = "darkMode";
 
-  ThemeData _themeData;
+  ThemeController() {
+    _themeData = _getThemeFromSharedPreferences();
+  }
 
-  /// Returns the current theme
+  late ThemeData _themeData;
+
   ThemeData get themeData => _themeData;
 
-  void changeMode(bool isDarkMode){
+  ThemeData _getThemeFromSharedPreferences() {
+    bool? isDarkMode = AppData.sharedPreferences.getBool(darkModeKey);
+    ThemeData themeData = AppTheme.darkTheme;
+    if(isDarkMode != null) {
+      themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
+    }
+
+    return themeData;
+  }
+
+  Future<void> changeMode(bool isDarkMode) async {
     _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
-    UserPreferences.instance.darkMode = isDarkMode;
+    await AppData.sharedPreferences.setBool(darkModeKey, isDarkMode);
     notifyListeners();
   }
 }
