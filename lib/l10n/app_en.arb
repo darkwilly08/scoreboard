@@ -6,5 +6,10 @@
     "title": "Scoreboard",
     "version": "Version",
     "home": "Home",
-    "settings": "Settings"
+    "settings": "Settings",
+    "interface": "Interface",
+    "language": "Language",
+    "theme": "Theme",
+    "light_theme": "Light",
+    "dark_theme": "Dark"
 }

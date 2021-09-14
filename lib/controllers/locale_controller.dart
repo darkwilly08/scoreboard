@@ -5,6 +5,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LocaleController extends ChangeNotifier {
   static const String languageKey = "lang";
+  final _isoLang = {
+    "en": "English",
+    "es": "Spanish"
+  };
 
   LocaleController(){
     _locale = _getLocaleFromSharedPreferences();
@@ -34,5 +38,9 @@ class LocaleController extends ChangeNotifier {
     _locale = _findLocale(language);
     await AppData.sharedPreferences.setString(languageKey, _locale.languageCode);
     notifyListeners();
+  }
+
+  String getLanguage() {
+    return _isoLang[_locale.languageCode]!;
   }
 }

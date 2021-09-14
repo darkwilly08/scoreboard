@@ -8,26 +8,27 @@ class ThemeController extends ChangeNotifier {
   static const String darkModeKey = "darkMode";
 
   ThemeController() {
-    _themeData = _getThemeFromSharedPreferences();
+    _initFromSharedPreferences();
   }
 
   late ThemeData _themeData;
+  late bool _darkMode;
+
+  bool get isDarkMode => _darkMode;
 
   ThemeData get themeData => _themeData;
 
-  ThemeData _getThemeFromSharedPreferences() {
-    bool? isDarkMode = AppData.sharedPreferences.getBool(darkModeKey);
-    ThemeData themeData = AppTheme.darkTheme;
-    if(isDarkMode != null) {
-      themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
-    }
+  void _initFromSharedPreferences() {
+    bool isDarkMode = AppData.sharedPreferences.getBool(darkModeKey) ?? true;
 
-    return themeData;
+    _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
+    _darkMode = isDarkMode;
   }
 
-  Future<void> changeMode(bool isDarkMode) async {
-    _themeData = isDarkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
-    await AppData.sharedPreferences.setBool(darkModeKey, isDarkMode);
+  Future<void> changeMode(bool darkMode) async {
+    _themeData = darkMode ? AppTheme.darkTheme : AppTheme.lightTheme;
+    _darkMode = darkMode;
+    await AppData.sharedPreferences.setBool(darkModeKey, darkMode);
     notifyListeners();
   }
 }

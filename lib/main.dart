@@ -1,5 +1,6 @@
 import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
+import 'package:anotador/pages/settings_page.dart';
 import 'package:anotador/splashes/splash.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
               theme: themeController.themeData,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const SplashLauncher(),
+              home: const SettingsScreen(),
             );
           },
         ));

@@ -38,6 +38,7 @@ dependencies:
   splash_screen_view: ^3.0.0
   shared_preferences: ^2.0.7
   provider: ^6.0.0
+  settings_ui: ^1.0.0
 
 dev_dependencies:
   flutter_test:
