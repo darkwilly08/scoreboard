@@ -5,33 +5,28 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LocaleController extends ChangeNotifier {
   static const String languageKey = "lang";
+  final defaultLang = 'en';
   final _isoLang = {
     "en": "English",
     "es": "Spanish"
   };
 
   LocaleController(){
-    _locale = _getLocaleFromSharedPreferences();
+    _initFromSharedPreferences();
   }
 
   late Locale _locale;
 
   Locale get locale => _locale;
 
-  Locale _getLocaleFromSharedPreferences() {
-   String? lang = AppData.sharedPreferences.getString(languageKey);
-   Locale locale;
-   if(lang == null){
-     locale = const Locale("en");
-   } else {
-     locale = _findLocale(lang);
-   }
-   return locale;
+  void _initFromSharedPreferences() {
+   String lang = AppData.sharedPreferences.getString(languageKey) ?? defaultLang;
+   _locale = _findLocale(lang);
   }
 
   Locale _findLocale(String language){
     List<Locale> locales = AppLocalizations.supportedLocales;
-    return locales.firstWhere((element) => element.languageCode == language, orElse: () => const Locale('en'));
+    return locales.firstWhere((element) => element.languageCode == language);
   }
 
   Future<void> changeLanguage(String language) async {

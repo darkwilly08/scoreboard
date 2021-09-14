@@ -8,7 +8,6 @@ import 'package:settings_ui/settings_ui.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
-
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,18 +26,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
           IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Scaffold.of(context).openDrawer(),
-          )
-          ,
+          ),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text(AppLocalizations.of(context)!.settings, style:  AppTheme.boldStyle,),
+              child: Text(
+                AppLocalizations.of(context)!.settings,
+                style: AppTheme.boldStyle,
+              ),
             ),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: const [
-              Image(image: AssetImage("assets/icons/scoreboard.png"), height: 38,),
+              Image(
+                image: AssetImage("assets/icons/scoreboard.png"),
+                height: 38,
+              ),
             ],
           )
         ],
@@ -49,23 +53,25 @@ class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildTopHeader(context),
-          Expanded(child: _buildSettingsList(context))
-        ],
-      )
-    );
+        body: Column(
+      children: [
+        _buildTopHeader(context),
+        Expanded(child: _buildSettingsList(context))
+      ],
+    ));
   }
 
   Widget _buildSettingsList(BuildContext context) {
+    String lang =
+        Provider.of<LocaleController>(context, listen: false).getLanguage();
 
-    String lang = Provider.of<LocaleController>(context, listen: false).getLanguage();
+    bool isDarkMode =
+        Provider.of<ThemeController>(context, listen: false).isDarkMode;
+    String themeName = isDarkMode
+        ? AppLocalizations.of(context)!.dark_theme
+        : AppLocalizations.of(context)!.light_theme;
 
-    bool isDarkMode = Provider.of<ThemeController>(context, listen: false).isDarkMode;
-    String themeName = isDarkMode ? AppLocalizations.of(context)!.dark_theme : AppLocalizations.of(context)!.light_theme;
-
-    return       SettingsList(
+    return SettingsList(
       lightBackgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
       // backgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
       darkBackgroundColor: AppTheme.darkTheme.scaffoldBackgroundColor,
