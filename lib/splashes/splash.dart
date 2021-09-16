@@ -1,5 +1,4 @@
 import 'package:anotador/pages/home.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:splash_screen_view/SplashScreenView.dart';
 
@@ -7,7 +6,6 @@ import '../main.dart';
 
 class SplashLauncher extends StatelessWidget {
   const SplashLauncher({Key? key}) : super(key: key);
-
 
   @override
   Widget build(BuildContext context) {

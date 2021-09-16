@@ -11,5 +11,6 @@
     "language": "Language",
     "theme": "Theme",
     "light_theme": "Light",
-    "dark_theme": "Dark"
+    "dark_theme": "Dark",
+    "languageSelector": "Select the language"
 }

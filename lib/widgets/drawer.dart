@@ -1,13 +1,14 @@
+import 'package:anotador/routes/routes.dart';
 import 'package:anotador/themes/app_theme.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppDrawer extends StatelessWidget {
-  AppDrawer({Key? key, Function(String)? onItemClicked}) : super(key: key);
+  AppDrawer({Key? key, required Function(String) this.onItemClicked})
+      : super(key: key);
 
-  Function(String)? onItemClicked;
+  final Function(String) onItemClicked;
 
   Widget _createHeader(BuildContext context) {
     return SizedBox(
@@ -18,11 +19,11 @@ class AppDrawer extends StatelessWidget {
               alignment: Alignment.topLeft,
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
-
                   children: [
-                    Text(AppLocalizations.of(context)!.title, style: AppTheme.drawerTitleStyle)
+                    Text(AppLocalizations.of(context)!.title,
+                        style: AppTheme.drawerTitleStyle)
                   ]),
-            ) ));
+            )));
   }
 
   Widget _createDrawerItem(
@@ -47,18 +48,23 @@ class AppDrawer extends StatelessWidget {
     return Column(
       children: [
         _createDrawerItem(
-            icon: Icons.settings, text: AppLocalizations.of(context)!.settings, onTap: () {}),
+            icon: Icons.settings,
+            text: AppLocalizations.of(context)!.settings,
+            onTap: () {
+              onItemClicked(Routes.settings);
+            }),
       ],
     );
   }
 
-  Widget _createFooter() {
-    return const Expanded(
+  Widget _createFooter(BuildContext context) {
+    return Expanded(
       child: Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
           padding: EdgeInsets.all(16.0),
-          child: Text('Versión 1.2.0'),
+          child: Text(
+              ' ${AppLocalizations.of(context)!.version} ${AppData.packageInfo.version}'),
         ),
       ),
     );
@@ -69,7 +75,11 @@ class AppDrawer extends StatelessWidget {
     return Drawer(
       child: Column(
         mainAxisSize: MainAxisSize.max,
-        children: [_createHeader(context), _createItems(context), _createFooter()],
+        children: [
+          _createHeader(context),
+          _createItems(context),
+          _createFooter(context)
+        ],
       ),
     );
   }

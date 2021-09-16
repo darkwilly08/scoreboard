@@ -1,6 +1,7 @@
 import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/pages/settings_page.dart';
+import 'package:anotador/routes/routes.dart';
 import 'package:anotador/splashes/splash.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
@@ -23,8 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiProvider(
         providers: [
-          ChangeNotifierProvider<ThemeController>(create: (_) => ThemeController()),
-          ChangeNotifierProvider<LocaleController>(create: (_) => LocaleController())
+          ChangeNotifierProvider<ThemeController>(
+              create: (_) => ThemeController()),
+          ChangeNotifierProvider<LocaleController>(
+              create: (_) => LocaleController())
         ],
         child: Consumer2<ThemeController, LocaleController>(
           builder: (_, themeController, localeController, __) {
@@ -35,7 +38,8 @@ class MyApp extends StatelessWidget {
               theme: themeController.themeData,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: const SettingsScreen(),
+              home: const SplashLauncher(),
+              routes: {Routes.settings: (context) => SettingsScreen()},
             );
           },
         ));

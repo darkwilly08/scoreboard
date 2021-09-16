@@ -1,10 +1,12 @@
 {
     "helloWorld": "Hola Mundo!",
+    "version": "Versión",
     "title": "Anotador",
     "settings": "Configuración",
     "interface": "Interfaz",
     "language": "Idioma",
     "theme": "Tema",
     "light_theme": "Claro",
-    "dark_theme": "Oscuro"
+    "dark_theme": "Oscuro",
+    "languageSelector": "Seleccione el idioma"
 }
