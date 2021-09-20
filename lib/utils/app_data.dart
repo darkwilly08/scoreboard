@@ -15,11 +15,22 @@ class AppData {
     database = openDatabase(join(await getDatabasesPath(), 'scoreboard.db'),
         onCreate: (Database db, version) async {
       await db.execute(
-        'CREATE TABLE ${Tables.User}(id integer primary key autoincrement, name text not null, initial text not null, favorite integer not null)',
+        'CREATE TABLE ${Tables.user}(id integer primary key autoincrement, name text not null, initial text not null, favorite integer not null)',
+      );
+      await db.execute(
+        'CREATE TABLE ${Tables.game}(id integer primary key autoincrement, name text not null, type_id integer not null, target_score int not null, target_score_wins integer not null, two_halves integer)',
+      );
+
+      await db.execute(
+        'CREATE TABLE ${Tables.match}(id integer primary key autoincrement, game_id integer not null, won_user_id integer not null, status_id integer not null, created_at TEXT not null, updated_at TEXT not null, end_at TEXT)',
+      );
+
+      await db.execute(
+        'CREATE TABLE ${Tables.match_player}(match_id integer not null, user_id integer not null, has_asterisk integer, asterisk_reason TEXT, status_id integer not null)',
       );
 
       await db.insert(
-        Tables.User,
+        Tables.user,
         User(id: 0, name: 'Me', initial: 'M', favorite: true).toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );

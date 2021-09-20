@@ -8,7 +8,7 @@ class UserRepository {
     final db = await AppData.database;
 
     int userId = await db.insert(
-      Tables.User,
+      Tables.user,
       user.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
@@ -22,7 +22,7 @@ class UserRepository {
     // Get a reference to the database.
     final db = await AppData.database;
 
-    final List<Map<String, dynamic>> maps = await db.query(Tables.User);
+    final List<Map<String, dynamic>> maps = await db.query(Tables.user);
 
     return List.generate(maps.length, (i) {
       return User(
@@ -37,6 +37,6 @@ class UserRepository {
   Future<void> delete(int userId) async {
     final db = await AppData.database;
 
-    await db.delete(Tables.User, where: 'id = ?', whereArgs: [userId]);
+    await db.delete(Tables.user, where: 'id = ?', whereArgs: [userId]);
   }
 }
