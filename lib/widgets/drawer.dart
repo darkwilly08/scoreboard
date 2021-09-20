@@ -1,5 +1,4 @@
 import 'package:anotador/routes/routes.dart';
-import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,12 +16,11 @@ class AppDrawer extends StatelessWidget {
             margin: EdgeInsets.zero,
             child: Align(
               alignment: Alignment.topLeft,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Text(AppLocalizations.of(context)!.title,
-                        style: AppTheme.drawerTitleStyle)
-                  ]),
+              child:
+                  Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+                Text(AppLocalizations.of(context)!.title,
+                    style: Theme.of(context).textTheme.headline6)
+              ]),
             )));
   }
 
@@ -52,6 +50,12 @@ class AppDrawer extends StatelessWidget {
             text: AppLocalizations.of(context)!.settings,
             onTap: () {
               onItemClicked(Routes.settings);
+            }),
+        _createDrawerItem(
+            icon: Icons.group_sharp,
+            text: AppLocalizations.of(context)!.players,
+            onTap: () {
+              onItemClicked(Routes.users);
             }),
       ],
     );

@@ -1,13 +1,34 @@
 import 'package:anotador/constants/const_variables.dart';
-import 'package:anotador/controllers/locale_controller.dart';
-import 'package:anotador/controllers/theme_controller.dart';
-import 'package:anotador/routes/routes.dart';
+import 'package:anotador/fragments/game_list.dart';
+import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/drawer.dart';
+import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeScreen extends StatefulWidget {
+  HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int _index = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return _HomePhoneView(this);
+  }
+
+  void handleToggleChanged(int index) {
+    setState(() {
+      this._index = index;
+    });
+  }
+}
+
+class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
+  const _HomePhoneView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildTopHeader(BuildContext context) {
     return Padding(
@@ -15,7 +36,7 @@ class HomePage extends StatelessWidget {
       child: Row(
         children: <Widget>[
           IconButton(
-            icon: const Icon(Icons.menu, color: Colors.white),
+            icon: const Icon(Icons.menu),
             onPressed: () => Scaffold.of(context).openDrawer(),
             iconSize: 32.0,
             padding: const EdgeInsets.all(0),
@@ -35,13 +56,22 @@ class HomePage extends StatelessWidget {
                 image: AssetImage(AssetsConstants.scoreboard),
                 height: 38,
               ),
-              // SizedBox(width: 8), // give it width
-              // Image(image: AssetImage("assets/images/icon-qm-iot.png"), height: 40,),
             ],
           )
         ],
       ),
     );
+  }
+
+  Widget _buildBody(BuildContext context) {
+    switch (state._index) {
+      case 0:
+        return GameListScreen();
+      case 1:
+        return Text("page 2");
+      default:
+        return Text("page not found");
+    }
   }
 
   void _drawerItemClicked(BuildContext context, String routeName) {
@@ -55,31 +85,23 @@ class HomePage extends StatelessWidget {
         drawer: AppDrawer(
           onItemClicked: (route) => _drawerItemClicked(context, route),
         ),
-        body:
-            // Stack(children: [
-            //   Container(
-            //     decoration: const BoxDecoration(
-            //       image: DecorationImage(image: AssetImage("assets/images/main-bg.jpg"), fit: BoxFit.cover,),
-            //     ),
-            //   ),
-            Column(
+        body: Column(
           children: [
             Builder(builder: (context) => _buildTopHeader(context)),
-            ElevatedButton(
-              onPressed: () async =>
-                  await Provider.of<ThemeController>(context, listen: false)
-                      .changeMode(false),
-              child: const Text("toggle theme"),
-            ),
-            ElevatedButton(
-              onPressed: () async =>
-                  await Provider.of<LocaleController>(context, listen: false)
-                      .changeLanguage('es'),
-              child: const Text("toggle language"),
-            ),
+            Container(
+                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                child: CustomToggleButton(
+                  firstBtnText: "Games",
+                  secondBtnText: "Stats",
+                  onChanged: state.handleToggleChanged,
+                )),
+            Expanded(
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 500),
+                child: _buildBody(context),
+              ),
+            )
           ],
-        )
-        // ],),
-        );
+        ));
   }
 }

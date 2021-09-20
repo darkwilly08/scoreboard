@@ -1,12 +1,48 @@
 {
-    "helloWorld": "Hola Mundo!",
-    "version": "Versión",
     "title": "Anotador",
+    "version": "Versión",
+    "home": "Inicio",
     "settings": "Configuración",
     "interface": "Interfaz",
     "language": "Idioma",
     "theme": "Tema",
     "light_theme": "Claro",
     "dark_theme": "Oscuro",
-    "languageSelector": "Seleccione el idioma"
+    "languageSelector": "Seleccione el idioma",
+    "players": "Jugadores",
+    "add_player": "Agregar jugador",
+    "input_name": "Nombre",
+    "input_initial": "Inicial",
+    "favorite": "Favorito",
+    "cancel": "Cancelar",
+    "save": "Guardar",
+    "error_field_mandatory": "Por favor complete este campo",
+    "edit_player": "Editar jugador",
+    "player_added_success": "¡El jugador {name} fue agregado con éxito!",
+    "@player_added_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    },
+    "player_edited_success": "¡El jugador {name} fue editado con éxito!",
+    "@player_edited_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    },
+    "player_removed_success": "El jugador {name} fue removido",
+    "@player_removed_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    }
 }

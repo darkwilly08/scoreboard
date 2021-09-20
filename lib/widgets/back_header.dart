@@ -4,7 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BackHeader extends StatelessWidget {
-  const BackHeader({Key? key}) : super(key: key);
+  final String title;
+  final Widget? trailing;
+
+  const BackHeader({Key? key, required this.title, this.trailing})
+      : super(key: key);
+
+  Widget _buildTrailing() {
+    return trailing ??
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: const [
+            Image(
+              image: AssetImage(AssetsConstants.scoreboard),
+              height: 38,
+            ),
+          ],
+        );
+  }
+
   Widget _buildTopHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0, top: 36.0, bottom: 0.0),
@@ -18,20 +36,12 @@ class BackHeader extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
               child: Text(
-                AppLocalizations.of(context)!.settings,
-                style: AppTheme.boldStyle,
+                title,
+                style: Theme.of(context).textTheme.headline6,
               ),
             ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: const [
-              Image(
-                image: AssetImage(AssetsConstants.scoreboard),
-                height: 38,
-              ),
-            ],
-          )
+          _buildTrailing()
         ],
       ),
     );

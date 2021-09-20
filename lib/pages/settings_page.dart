@@ -125,7 +125,12 @@ class _SettingsPhoneView
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-      children: [BackHeader(), Expanded(child: _buildSettingsList(context))],
+      children: [
+        BackHeader(
+          title: AppLocalizations.of(context)!.settings,
+        ),
+        Expanded(child: _buildSettingsList(context))
+      ],
     ));
   }
 }

@@ -1,8 +1,4 @@
 {
-    "helloWorld": "Hello World!",
-    "@helloWorld": {
-      "description": "The conventional newborn programmer greeting"
-    },
     "title": "Scoreboard",
     "version": "Version",
     "home": "Home",
@@ -12,5 +8,42 @@
     "theme": "Theme",
     "light_theme": "Light",
     "dark_theme": "Dark",
-    "languageSelector": "Select the language"
+    "languageSelector": "Select the language",
+    "players": "Players",
+    "add_player": "Add player",
+    "input_name": "Name",
+    "input_initial": "Initial",
+    "favorite": "Favorite",
+    "cancel": "Cancel",
+    "save": "Save",
+    "error_field_mandatory": "This field is mandatory",
+    "edit_player": "Edit player",
+    "player_added_success": "{name} was added successfuly!",
+    "@player_added_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    },
+    "player_edited_success": "{name} was edited successfuly!",
+    "@player_edited_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    },
+    "player_removed_success": "{name} deleted",
+    "@player_removed_success": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Wasp"
+            }
+        }
+    },
+    "cache_out": "out"
 }
