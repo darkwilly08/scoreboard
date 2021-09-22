@@ -1,7 +1,9 @@
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/pages/home.dart';
+import 'package:anotador/pages/match_preparation_page.dart';
 import 'package:anotador/pages/settings_page.dart';
 import 'package:anotador/pages/users_page.dart';
 import 'package:anotador/routes/routes.dart';
@@ -30,7 +32,9 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<LocaleController>(
               create: (_) => LocaleController()),
           ChangeNotifierProvider<UserController>(
-              create: (_) => UserController())
+              create: (_) => UserController()),
+          ChangeNotifierProvider<GameController>(
+              create: (_) => GameController())
         ],
         child: Consumer2<ThemeController, LocaleController>(
           builder: (_, themeController, localeController, __) {
@@ -44,7 +48,8 @@ class MyApp extends StatelessWidget {
                 home: HomeScreen(),
                 routes: {
                   Routes.settings: (context) => SettingsScreen(),
-                  Routes.users: (context) => UsersScreen()
+                  Routes.users: (context) => UsersScreen(),
+                  Routes.matchPreparation: (context) => MatchPreparationScreen()
                 });
           },
         ));

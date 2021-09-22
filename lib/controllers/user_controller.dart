@@ -1,6 +1,6 @@
 import 'package:anotador/model/User.dart';
 import 'package:anotador/repositories/user_repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class UserController extends ChangeNotifier {
   UserRepository _userRepository = UserRepository();

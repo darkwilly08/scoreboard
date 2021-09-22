@@ -4,20 +4,25 @@ import 'package:anotador/model/User.dart';
 import 'package:anotador/pages/add_user_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
+import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class UsersScreen extends StatefulWidget {
-  static const String routeName = "/users";
+class PickPlayersScreen extends StatefulWidget {
+  // static const String routeName = "/pickPlayers";
 
-  const UsersScreen({Key? key}) : super(key: key);
+  final void Function()? onPlayerClicked;
+
+  const PickPlayersScreen({Key? key, required this.onPlayerClicked})
+      : super(key: key);
 
   @override
-  _UserscreenState createState() => _UserscreenState();
+  _PickPlayerscreenState createState() => _PickPlayerscreenState();
 }
 
-class _UserscreenState extends State<UsersScreen> {
+class _PickPlayerscreenState extends State<PickPlayersScreen> {
+  List<User> _selectedUsers = [];
   late UserController _userController;
 
   @override
@@ -30,7 +35,7 @@ class _UserscreenState extends State<UsersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _UsersPhoneView(this);
+    return _PickPlayersPhoneView(this);
   }
 
   void handleAddPlayerBtn() {
@@ -38,23 +43,26 @@ class _UserscreenState extends State<UsersScreen> {
         context, MaterialPageRoute(builder: (context) => AddUserScreen()));
   }
 
-  void handleEditPlayerTap(User user, bool _) {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => AddUserScreen(
-                  user: user,
-                )));
+  void handleCancelBtn() {
+    Navigator.pop(context);
   }
 
-  Future<void> handleToggleFavorite(User user) async {
-    user.favorite = !user.favorite;
-    await _userController.EditPlayer(user);
+  void handleAcceptBtn() {
+    print(_selectedUsers.toString());
+  }
+
+  void handlePlayerTapped(User user, bool selected) {
+    if (selected) {
+      _selectedUsers.add(user);
+    } else {
+      _selectedUsers.removeWhere((element) => element.id == user.id);
+    }
   }
 }
 
-class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
-  const _UsersPhoneView(state, {Key? key}) : super(state, key: key);
+class _PickPlayersPhoneView
+    extends WidgetView<PickPlayersScreen, _PickPlayerscreenState> {
+  const _PickPlayersPhoneView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildUserList(BuildContext context) {
     return Consumer<UserController>(builder: (context, userController, _) {
@@ -65,8 +73,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
 
       return UserList(
         users: players,
-        onItemTapped: state.handleEditPlayerTap,
-        onFavoriteIconTapped: state.handleToggleFavorite,
+        onItemTapped: state.handlePlayerTapped,
       );
     });
   }
@@ -91,7 +98,20 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
           title: AppLocalizations.of(context)!.players,
           trailing: _buildTrailing(),
         ),
-        Expanded(child: _buildUserList(context))
+        Expanded(child: _buildUserList(context)),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            CustomTextButton(
+                onTap: () => state.handleCancelBtn(),
+                text: AppLocalizations.of(context)!.cancel),
+            CustomTextButton(
+                onTap: () {
+                  state.handleAcceptBtn();
+                },
+                text: AppLocalizations.of(context)!.save),
+          ],
+        )
       ],
     ));
   }

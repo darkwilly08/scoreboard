@@ -1,5 +1,8 @@
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
+import 'package:anotador/model/Game.dart';
 import 'package:anotador/patterns/widget_view.dart';
+import 'package:anotador/routes/routes.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -12,10 +15,13 @@ class GameListScreen extends StatefulWidget {
 
 class _GameScreenState extends State<GameListScreen> {
   late ThemeController _themeController;
+  late GameController _gameController;
 
   @override
   void initState() {
     _themeController = Provider.of<ThemeController>(context, listen: false);
+    _gameController = Provider.of<GameController>(context, listen: false);
+    _gameController.initGameList();
     super.initState();
   }
 
@@ -23,30 +29,24 @@ class _GameScreenState extends State<GameListScreen> {
   Widget build(BuildContext context) {
     return _GamesPhoneView(this);
   }
+
+  void handlePlayGameClicked(Game game) {
+    Navigator.pushNamed(
+      context,
+      Routes.matchPreparation,
+      arguments: game,
+    );
+  }
 }
 
 class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
   const _GamesPhoneView(state, {Key? key}) : super(state, key: key);
 
-  Widget _buildGameList(BuildContext context) {
-    return ListView.separated(
-        itemBuilder: (context, index) {
-          return makeListTile();
-        },
-        separatorBuilder: (context, index) => Container(
-              padding: EdgeInsets.symmetric(horizontal: 16.0),
-              child: Divider(
-                height: 1,
-              ),
-            ),
-        itemCount: 2);
-  }
-
-  Widget makeListTile() => Container(
+  Widget makeListTile(Game game) => Container(
           child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
         title: Text(
-          "Truco",
+          game.name,
           style: TextStyle(
               color: state._themeController.themeData.colorScheme.secondary,
               fontSize: 22.0),
@@ -58,7 +58,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
-                "20",
+                game.won.toString(),
                 style: state._themeController.themeData.textTheme.subtitle2,
               ),
               SizedBox(
@@ -72,7 +72,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
                 width: 10,
               ),
               Text(
-                "15",
+                game.lost.toString(),
                 style: state._themeController.themeData.textTheme.subtitle2,
               ),
               SizedBox(
@@ -89,17 +89,40 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
           heroTag: null,
           elevation: 1.0,
           backgroundColor: state._themeController.themeData.colorScheme.primary,
-          onPressed: () {},
+          onPressed: () {
+            state.handlePlayGameClicked(game);
+          },
           child: Icon(Icons.play_arrow,
               color: state._themeController.themeData.colorScheme.secondary),
         ),
         onTap: () {},
       ));
 
+  Widget _buildList(BuildContext context) {
+    return Consumer<GameController>(builder: (context, gameController, _) {
+      List<Widget> rows = [];
+      var games = gameController.games;
+      if (games == null) {
+        return CircularProgressIndicator();
+      }
+      if (games.isNotEmpty) {
+        games.forEach((game) {
+          rows.add(makeListTile(game));
+        });
+      } else {
+        return Text("data");
+      }
+
+      return ListView(
+        children: rows,
+      );
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: _buildGameList(context),
+      child: _buildList(context),
     );
   }
 }
