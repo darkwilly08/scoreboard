@@ -12,9 +12,9 @@ import 'package:provider/provider.dart';
 class PickPlayersScreen extends StatefulWidget {
   // static const String routeName = "/pickPlayers";
 
-  final void Function()? onPlayerClicked;
+  final void Function(List<User>)? onConfirmSelection;
 
-  const PickPlayersScreen({Key? key, required this.onPlayerClicked})
+  const PickPlayersScreen({Key? key, required this.onConfirmSelection})
       : super(key: key);
 
   @override
@@ -48,7 +48,10 @@ class _PickPlayerscreenState extends State<PickPlayersScreen> {
   }
 
   void handleAcceptBtn() {
-    print(_selectedUsers.toString());
+    if (widget.onConfirmSelection != null) {
+      widget.onConfirmSelection!(_selectedUsers);
+    }
+    Navigator.pop(context);
   }
 
   void handlePlayerTapped(User user, bool selected) {
@@ -109,7 +112,7 @@ class _PickPlayersPhoneView
                 onTap: () {
                   state.handleAcceptBtn();
                 },
-                text: AppLocalizations.of(context)!.save),
+                text: AppLocalizations.of(context)!.accept),
           ],
         )
       ],

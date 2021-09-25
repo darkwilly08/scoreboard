@@ -4,6 +4,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/drawer.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   HomeScreen({Key? key}) : super(key: key);
@@ -91,8 +92,8 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
             Container(
                 padding: EdgeInsets.symmetric(horizontal: 8.0),
                 child: CustomToggleButton(
-                  firstBtnText: "Games",
-                  secondBtnText: "Stats",
+                  firstBtnText: AppLocalizations.of(context)!.games,
+                  secondBtnText: AppLocalizations.of(context)!.stats,
                   onChanged: state.handleToggleChanged,
                 )),
             Expanded(

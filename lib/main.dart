@@ -1,5 +1,6 @@
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/locale_controller.dart';
+import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/pages/home.dart';
@@ -34,7 +35,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider<UserController>(
               create: (_) => UserController()),
           ChangeNotifierProvider<GameController>(
-              create: (_) => GameController())
+              create: (_) => GameController()),
+          ChangeNotifierProvider(create: (_) => MatchController())
         ],
         child: Consumer2<ThemeController, LocaleController>(
           builder: (_, themeController, localeController, __) {

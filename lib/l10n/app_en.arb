@@ -45,5 +45,25 @@
             }
         }
     },
-    "cache_out": "out"
+    "start": "Start",
+    "teams": "Teams",
+    "team": "Team",
+    "ffa": "FFA",
+    "new_match": "New match",
+    "empty_list": "{name} list is empty",
+    "@empty_list": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Opponents"
+            }
+        }
+    },
+    "games": "Games",
+    "stats": "Stats",
+    "accept": "Accept",
+    "rules": "Rules",
+    "target_score_wins":"Target score wins",
+    "target_score": "Target score",
+    "cout": "out"
 }

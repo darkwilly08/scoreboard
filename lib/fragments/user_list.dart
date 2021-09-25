@@ -3,6 +3,7 @@ import 'package:anotador/model/User.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/box_tile.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class PlayerTile extends StatefulWidget {
@@ -130,7 +131,10 @@ class _UserListView extends WidgetView<UserList, _UserListState> {
       );
     }
 
-    return Text("data");
+    return Center(
+      child: Text(AppLocalizations.of(context)!
+          .empty_list(AppLocalizations.of(context)!.players)),
+    );
   }
 
   @override

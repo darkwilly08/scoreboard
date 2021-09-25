@@ -44,5 +44,25 @@
                 "example": "Wasp"
             }
         }
-    }
+    },
+    "start": "Comenzar",
+    "teams": "Equipos",
+    "team": "Equipo",
+    "ffa": "Oponentes",
+    "new_match": "Nueva partida",
+    "empty_list": "La lista {name} está vacia",
+    "@empty_list": {
+        "placeholders": {
+            "name": {
+                "type": "String",
+                "example": "Opponents"
+            }
+        }
+    },
+    "games": "Juegos",
+    "stats": "Estad",
+    "accept": "Aceptar",
+    "rules": "Reglas",
+    "target_score_wins":"El primero que llega gana",
+    "target_score": "Puntaje"
 }
