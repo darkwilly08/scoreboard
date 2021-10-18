@@ -3,6 +3,7 @@ import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/controllers/user_controller.dart';
+import 'package:anotador/model/Game.dart';
 import 'package:anotador/pages/home.dart';
 import 'package:anotador/pages/match_preparation_page.dart';
 import 'package:anotador/pages/settings_page.dart';
@@ -41,18 +42,24 @@ class MyApp extends StatelessWidget {
         child: Consumer2<ThemeController, LocaleController>(
           builder: (_, themeController, localeController, __) {
             return MaterialApp(
-                locale: localeController.locale,
-                onGenerateTitle: (BuildContext context) =>
-                    AppLocalizations.of(context)!.title,
-                theme: themeController.themeData,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
-                supportedLocales: AppLocalizations.supportedLocales,
-                home: HomeScreen(),
-                routes: {
+              locale: localeController.locale,
+              onGenerateTitle: (BuildContext context) =>
+                  AppLocalizations.of(context)!.title,
+              theme: themeController.themeData,
+              localizationsDelegates: AppLocalizations.localizationsDelegates,
+              supportedLocales: AppLocalizations.supportedLocales,
+              home: HomeScreen(),
+              onGenerateRoute: (RouteSettings routeSettings) {
+                var routes = <String, WidgetBuilder>{
                   Routes.settings: (context) => SettingsScreen(),
                   Routes.users: (context) => UsersScreen(),
-                  Routes.matchPreparation: (context) => MatchPreparationScreen()
-                });
+                  Routes.matchPreparation: (context) => MatchPreparationScreen(
+                      selectedGame: routeSettings.arguments as Game)
+                };
+                WidgetBuilder builder = routes[routeSettings.name]!;
+                return MaterialPageRoute(builder: (ctx) => builder(ctx));
+              },
+            );
           },
         ));
   }

@@ -1,4 +1,5 @@
 import 'package:anotador/controllers/match_controller.dart';
+import 'package:anotador/model/Match.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/player_board.dart';
@@ -34,21 +35,6 @@ class _NormalMatchView
     extends WidgetView<NormalMatchScreen, _NormalMatchScreenState> {
   const _NormalMatchView(state, {Key? key}) : super(state, key: key);
 
-  // Widget _buildUserList(BuildContext context) {
-  //   return Consumer<UserController>(builder: (context, userController, _) {
-  //     var players = userController.players;
-  //     if (players == null) {
-  //       return CircularProgressIndicator();
-  //     }
-
-  //     return UserList(
-  //       users: players,
-  //       onItemTapped: state.handleEditPlayerTap,
-  //       onFavoriteIconTapped: state.handleToggleFavorite,
-  //     );
-  //   });
-  // }
-
   Widget _buildBoard() {
     List<Widget> playerBoard = [];
     for (int i = 0; i < state._matchController.match!.players.length; i++) {
@@ -59,13 +45,6 @@ class _NormalMatchView
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: playerBoard,
     );
-
-    // return GridView.count(
-    //   // childAspectRatio: 1,
-    //   crossAxisCount: 2,
-    //   shrinkWrap: false,
-    //   children: playerBoard,
-    // );
   }
 
   Widget _buildPlayerBoard(int index) {
@@ -77,41 +56,64 @@ class _NormalMatchView
     );
   }
 
+  Widget _buildMatchEndedBanner(BuildContext context) {
+    final mb = MaterialBanner(
+      content: Text(
+        "Wasp won the match!",
+        style: Theme.of(context)
+            .textTheme
+            .headline5!
+            .copyWith(color: Colors.black),
+      ),
+      leading: CircleAvatar(child: Icon(Icons.emoji_events)),
+      backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
+      actions: [
+        TextButton(
+            onPressed: null,
+            child: Text(
+              "RE MATCH",
+              style: TextStyle(color: Colors.black),
+            )),
+        TextButton(
+            onPressed: null,
+            child: Text(
+              "KEEP PLAYING",
+              style: TextStyle(color: Colors.black),
+            )),
+        TextButton(
+            onPressed: null,
+            child: Text(
+              "EXIT",
+              style: TextStyle(color: Colors.black),
+            ))
+      ],
+    );
+    return Selector<MatchController, int>(
+        selector: (_, controller) => controller.match!.status.id,
+        builder: (_, matchStatusId, __) {
+          if (matchStatusId == MatchStatus.ENDED) {
+            return mb;
+          }
+
+          return SizedBox();
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     state.widthPlayerBoard = MediaQuery.of(context).size.width / 2;
-    state.heightPlayerBoard = MediaQuery.of(context).size.height - 500;
     return Scaffold(
         body: Column(
       children: [
         BackHeader(
           title: AppLocalizations.of(context)!.players,
         ),
-        MaterialBanner(
-          content: Text(
-            "Wasp won the match!",
-            style: Theme.of(context)
-                .textTheme
-                .headline5!
-                .copyWith(color: Colors.black),
-          ),
-          leading: CircleAvatar(child: Icon(Icons.emoji_events)),
-          backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
-          actions: [
-            TextButton(
-                onPressed: null,
-                child: Text(
-                  "RE MATCH",
-                  style: TextStyle(color: Colors.black),
-                )),
-            TextButton(
-                onPressed: null,
-                child: Text(
-                  "KEEP PLAYING",
-                  style: TextStyle(color: Colors.black),
-                ))
-          ],
-        ),
+        Selector<MatchController, int>(
+            selector: (_, controller) => controller.match!.status.id,
+            builder: (_, data, __) {
+              print('statusssssssssssss is ');
+              return _buildMatchEndedBanner(context);
+            }),
         Expanded(child: _buildBoard()),
       ],
     ));

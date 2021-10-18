@@ -1,6 +1,7 @@
 class AppConstants {
   AppConstants._();
   static const isoLang = {"en": "English", "es": "Spanish"};
+  static const dbDateTimeFormat = "yyyy-MM-dd HH:mm";
 }
 
 class PreferenceKeys {

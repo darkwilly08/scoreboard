@@ -25,18 +25,15 @@ class UserRepository {
     final List<Map<String, dynamic>> maps = await db.query(Tables.user);
 
     return List.generate(maps.length, (i) {
-      return User(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        initial: maps[i]['initial'],
-        favorite: maps[i]['favorite'] > 0,
-      );
+      var json = maps[i];
+      return User.fromJson(json);
     });
   }
 
   Future<void> delete(int userId) async {
     final db = await AppData.database;
 
-    await db.delete(Tables.user, where: 'id = ?', whereArgs: [userId]);
+    await db.delete(Tables.user,
+        where: '${Tables.user}_id = ?', whereArgs: [userId]);
   }
 }

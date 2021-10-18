@@ -1,3 +1,5 @@
+import 'package:anotador/repositories/tables.dart';
+
 class Game {
   int? id;
   String name;
@@ -17,21 +19,29 @@ class Game {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
-      'type_id': type.id,
-      'target_score': targetScore,
-      'target_score_wins': targetScoreWins ? 1 : 0,
+      '${Tables.game}_id': id,
+      '${Tables.game}_name': name,
+      '${Tables.game}_type_id': type.id,
+      '${Tables.game}_target_score': targetScore,
+      '${Tables.game}_target_score_wins': targetScoreWins ? 1 : 0,
     };
   }
 
   factory Game.fromJson(Map<String, dynamic> json) {
-    return Game(
-      id: json['id'],
-      name: json['name'],
-      targetScore: json['target_score'],
-      targetScoreWins: json['target_score_wins'] > 0,
-    );
+    int typeId = json['${Tables.game}_type_id'];
+    switch (typeId) {
+      case GameType.NORMAL:
+        return Game(
+          id: json['${Tables.game}_id'],
+          name: json['${Tables.game}_name'],
+          targetScore: json['${Tables.game}_target_score'],
+          targetScoreWins: json['${Tables.game}_target_score_wins'] > 0,
+        );
+      case GameType.TRUCO:
+        return TrucoGame.fromJson(json);
+      default:
+        throw Exception("game type not valid");
+    }
   }
 }
 
@@ -53,22 +63,22 @@ class TrucoGame extends Game {
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
-      'name': name,
-      'type_id': type.id,
-      'target_score': targetScore,
-      'target_score_wins': targetScoreWins ? 1 : 0,
-      'two_halves': twoHalves ? 1 : 0
+      '${Tables.game}_id': id,
+      '${Tables.game}_name': name,
+      '${Tables.game}_type_id': type.id,
+      '${Tables.game}_target_score': targetScore,
+      '${Tables.game}_target_score_wins': targetScoreWins ? 1 : 0,
+      '${Tables.game}_two_halves': twoHalves ? 1 : 0
     };
   }
 
   factory TrucoGame.fromJson(Map<String, dynamic> json) {
     return TrucoGame(
-        id: json['id'],
-        name: json['name'],
-        targetScore: json['target_score'],
-        targetScoreWins: json['target_score_wins'] > 0,
-        twoHalves: json['two_halves'] > 0);
+        id: json['${Tables.game}_id'],
+        name: json['${Tables.game}_name'],
+        targetScore: json['${Tables.game}_target_score'],
+        targetScoreWins: json['${Tables.game}_target_score_wins'] > 0,
+        twoHalves: json['${Tables.game}_two_halves'] > 0);
   }
 }
 

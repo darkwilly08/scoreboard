@@ -3,4 +3,5 @@ class Tables {
   static const String game = "game";
   static const String match = "match";
   static const String match_player = "match_player";
+  static const String player_score = "player_score";
 }

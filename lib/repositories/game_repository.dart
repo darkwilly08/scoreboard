@@ -19,23 +19,13 @@ class GameRepository {
   }
 
   Future<List<Game>> games() async {
-    // Get a reference to the database.
     final db = await AppData.database;
 
     final List<Map<String, dynamic>> maps = await db.query(Tables.game);
 
     return List.generate(maps.length, (i) {
       var json = maps[i];
-      int typeId = json['type_id'];
-
-      switch (typeId) {
-        case GameType.NORMAL:
-          return Game.fromJson(json);
-        case GameType.TRUCO:
-          return TrucoGame.fromJson(json);
-        default:
-          throw Exception("game type not valid");
-      }
+      return Game.fromJson(json);
     });
   }
 }

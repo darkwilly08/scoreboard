@@ -16,19 +16,23 @@ class AppData {
     database = openDatabase(join(await getDatabasesPath(), 'scoreboard.db'),
         onCreate: (Database db, version) async {
       await db.execute(
-        'CREATE TABLE ${Tables.user}(id integer primary key autoincrement, name text not null, initial text not null, favorite integer not null)',
+        'CREATE TABLE ${Tables.user}(${Tables.user}_id integer primary key autoincrement, ${Tables.user}_name text not null, ${Tables.user}_initial text not null, ${Tables.user}_favorite integer not null)',
       );
       await db.execute(
-        'CREATE TABLE ${Tables.game}(id integer primary key autoincrement, name text not null, type_id integer not null, target_score int not null, target_score_wins integer not null, two_halves integer)',
+        'CREATE TABLE ${Tables.game}(${Tables.game}_id integer primary key autoincrement, ${Tables.game}_name text not null, ${Tables.game}_type_id integer not null, ${Tables.game}_target_score int not null, ${Tables.game}_target_score_wins integer not null, ${Tables.game}_two_halves integer)',
       );
 
-      // await db.execute(
-      //   'CREATE TABLE ${Tables.match}(id integer primary key autoincrement, game_id integer not null, won_user_id integer not null, status_id integer not null, created_at TEXT not null, updated_at TEXT not null, end_at TEXT)',
-      // );
+      await db.execute(
+        'CREATE TABLE ${Tables.match}(${Tables.match}_id integer primary key autoincrement, ${Tables.match}_game_id integer not null, ${Tables.match}_won_user_id integer, ${Tables.match}_status_id integer not null, ${Tables.match}_created_at TEXT not null, ${Tables.match}_updated_at TEXT not null, ${Tables.match}_end_at TEXT, FOREIGN KEY(${Tables.match}_game_id) REFERENCES ${Tables.game}(${Tables.game}_id), FOREIGN KEY(${Tables.match}_won_user_id) REFERENCES ${Tables.user}(${Tables.user}_id))',
+      );
 
-      // await db.execute(
-      //   'CREATE TABLE ${Tables.match_player}(match_id integer not null, user_id integer not null, has_asterisk integer, asterisk_reason TEXT, status_id integer not null)',
-      // );
+      await db.execute(
+        'CREATE TABLE ${Tables.match_player}(${Tables.match_player}_id integer primary key autoincrement, ${Tables.match_player}_match_id integer not null, ${Tables.match_player}_user_id integer not null, ${Tables.match_player}_has_asterisk integer not null, ${Tables.match_player}_asterisk_reason TEXT, ${Tables.match_player}_status_id integer not null, FOREIGN KEY(${Tables.match_player}_match_id) REFERENCES ${Tables.match}(${Tables.match}_id), FOREIGN KEY(${Tables.match_player}_user_id) REFERENCES ${Tables.user}(${Tables.user}_id))',
+      );
+
+      await db.execute(
+        'CREATE TABLE ${Tables.player_score}(${Tables.player_score}_match_player_id integer not null, ${Tables.player_score}_score integer not null, FOREIGN KEY(${Tables.player_score}_match_player_id) REFERENCES ${Tables.match_player}(${Tables.match_player}_id))',
+      );
 
       await db.insert(
         Tables.user,

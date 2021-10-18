@@ -1,6 +1,7 @@
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/Game.dart';
+import 'package:anotador/model/Match.dart';
 import 'package:anotador/model/User.dart';
 import 'package:anotador/pages/match_types/normal_match_page.dart';
 import 'package:anotador/pages/pick_players_page.dart';
@@ -8,6 +9,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
+import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -17,7 +19,10 @@ import 'package:settings_ui/settings_ui.dart';
 
 class MatchPreparationScreen extends StatefulWidget {
   static const String routeName = "/match/preparation";
-  MatchPreparationScreen({Key? key}) : super(key: key);
+  final Game selectedGame;
+
+  MatchPreparationScreen({Key? key, required this.selectedGame})
+      : super(key: key);
 
   @override
   _MatchPreparationScreenState createState() => _MatchPreparationScreenState();
@@ -25,22 +30,53 @@ class MatchPreparationScreen extends StatefulWidget {
 
 class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   late ThemeController _themeController;
+  late MatchController _matchController;
   int _index = 0;
   List<User>? ffaList;
   List<User>? teamA;
   List<User>? teamB;
-  late Game selectedGame;
 
   @override
   void initState() {
     _themeController = Provider.of<ThemeController>(context, listen: false);
-
+    _matchController = Provider.of<MatchController>(context, listen: false);
+    checkMatchInProgress();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return _MatchPreparationPhoneView(this);
+  }
+
+  Future<void> checkMatchInProgress() async {
+    var m = await _matchController
+        .getMatchInProgressByGameId(widget.selectedGame.id!);
+    if (m != null) {
+      _showMessageDialog(m, context);
+    }
+  }
+
+  _showMessageDialog(Match m, BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("There's a match in progress"),
+          content: Text("Do you want to continue the ongoing match?"),
+          actions: <Widget>[
+            CustomTextButton(
+                onTap: () => handleContinueMatch(m),
+                text: AppLocalizations.of(context)!.accept),
+            CustomTextButton(
+                onTap: () => Navigator.of(context).pop(),
+                text: AppLocalizations.of(context)!.cancel),
+          ],
+        ),
+      );
+
+  void handleContinueMatch(Match match) {
+    _matchController.continueMatch(match);
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NormalMatchScreen()));
   }
 
   void handleAddPlayerBtnToFFA() {
@@ -86,8 +122,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   void handleStartBtn() {
-    var matchController = Provider.of<MatchController>(context, listen: false);
-    matchController.start(selectedGame, ffaList!);
+    _matchController.start(widget.selectedGame, ffaList!);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => NormalMatchScreen()));
   }
@@ -98,8 +133,6 @@ class _MatchPreparationPhoneView
   const _MatchPreparationPhoneView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildSettingsList(BuildContext context) {
-    state.selectedGame = ModalRoute.of(context)!.settings.arguments as Game;
-
     return SettingsList(
       shrinkWrap: true,
       lightBackgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
@@ -110,7 +143,7 @@ class _MatchPreparationPhoneView
           tiles: [
             SettingsTile(
               title: AppLocalizations.of(context)!.target_score,
-              subtitle: state.selectedGame.targetScore.toString(),
+              subtitle: widget.selectedGame.targetScore.toString(),
               leading: Icon(Icons.adjust),
               onPressed: (BuildContext context) {
                 // _showSingleChoiceDialog(context, langCode);
@@ -119,7 +152,7 @@ class _MatchPreparationPhoneView
             SettingsTile.switchTile(
               title: AppLocalizations.of(context)!.target_score_wins,
               leading: Icon(Icons.emoji_events),
-              switchValue: state.selectedGame.targetScoreWins,
+              switchValue: widget.selectedGame.targetScoreWins,
               onToggle: (bool value) {
                 // state.handleThemeModeChanged(value);
               },

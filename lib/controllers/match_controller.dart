@@ -1,10 +1,11 @@
 import 'package:anotador/model/Game.dart';
 import 'package:anotador/model/Match.dart';
 import 'package:anotador/model/User.dart';
+import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
 
 class MatchController extends ChangeNotifier {
-  // MatchRepository _matchRepository = MatchRepository();
+  MatchRepository _matchRepository = MatchRepository();
   Match? _match;
 
   Match? get match => _match;
@@ -19,7 +20,17 @@ class MatchController extends ChangeNotifier {
         updatedAt: DateTime.now(),
         statusId: MatchStatus.CREATED);
 
-    // await _matchRepository.insert(_match);
+    await _matchRepository.insert(_match!);
+    notifyListeners();
+  }
+
+  Future<Match?> getMatchInProgressByGameId(int gameId) async {
+    return _matchRepository.getMatchByStatusAndGameId(
+        MatchStatus.IN_PROGRES, gameId);
+  }
+
+  void continueMatch(Match match) {
+    _match = match;
     notifyListeners();
   }
 
@@ -36,7 +47,10 @@ class MatchController extends ChangeNotifier {
   }
 
   Future<void> addResult(MatchPlayer player, int value) async {
-    player.addResult(value);
+    bool wasAdded = await player.addResult(value);
+    if (wasAdded) {
+      await _matchRepository.addScore(player, player.scoreList.last);
+    }
 
     if (_match!.status.id == MatchStatus.ENDED) {
       if (player.user.id == _match!.wonPlayer!.id) {
@@ -61,6 +75,7 @@ class MatchController extends ChangeNotifier {
       notifyListeners();
     } else {
       _match!.status.id = MatchStatus.IN_PROGRES;
+      _matchRepository.setStatus(_match!.id!, MatchStatus.IN_PROGRES);
     }
   }
 }
