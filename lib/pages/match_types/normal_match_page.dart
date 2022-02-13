@@ -1,14 +1,17 @@
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/model/Match.dart';
+import 'package:anotador/model/match.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
+import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/player_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class NormalMatchScreen extends StatefulWidget {
-  NormalMatchScreen({Key? key}) : super(key: key);
+  static const String routeName = "/match/normal";
+
+  const NormalMatchScreen({Key? key}) : super(key: key);
 
   @override
   _NormalMatchScreenState createState() => _NormalMatchScreenState();
@@ -29,6 +32,45 @@ class _NormalMatchScreenState extends State<NormalMatchScreen> {
   Widget build(BuildContext context) {
     return _NormalMatchView(this);
   }
+
+  Future<bool?> handleBackClicked() async {
+    return await _showMessageDialog(context);
+  }
+
+  _showMessageDialog(BuildContext context) => showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text("Are you sure?"),
+          content: Text("The match will be available to continue it later"),
+          actions: <Widget>[
+            CustomTextButton(
+                onTap: () => Navigator.pop(context, true),
+                text: AppLocalizations.of(context)!.accept),
+            CustomTextButton(
+                onTap: () => Navigator.pop(context, false),
+                text: AppLocalizations.of(context)!.cancel),
+          ],
+        ),
+      );
+
+  Future<bool> _onWillPop() async {
+    bool? isConfirmed = await handleBackClicked();
+    if (isConfirmed != null && isConfirmed) {
+      return true;
+    }
+    return false;
+  }
+
+  Future<void> handleBackArrow() async {
+    bool? isConfirmed = await handleBackClicked();
+    if (isConfirmed != null && isConfirmed) {
+      Navigator.pop(context);
+    }
+  }
+
+  void handleExitBtn() {
+    Navigator.pop(context);
+  }
 }
 
 class _NormalMatchView
@@ -36,36 +78,36 @@ class _NormalMatchView
   const _NormalMatchView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildBoard() {
-    List<Widget> playerBoard = [];
-    for (int i = 0; i < state._matchController.match!.players.length; i++) {
-      playerBoard.add(_buildPlayerBoard(i));
+    List<Widget> teamBoardList = [];
+    for (int i = 0; i < state._matchController.match!.teams!.length; i++) {
+      teamBoardList.add(_buildTeamBoard(i));
     }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: playerBoard,
+      children: teamBoardList,
     );
   }
 
-  Widget _buildPlayerBoard(int index) {
-    return Container(
+  Widget _buildTeamBoard(int index) {
+    return SizedBox(
       width: state.widthPlayerBoard,
-      child: PlayerBoard(
-        player: state._matchController.match!.players[index],
+      child: TeamBoard(
+        team: state._matchController.match!.teams![index],
       ),
     );
   }
 
-  Widget _buildMatchEndedBanner(BuildContext context) {
-    final mb = MaterialBanner(
+  Widget _buildMatchEndedBanner(Team team, BuildContext context) {
+    return MaterialBanner(
       content: Text(
-        "Wasp won the match!",
+        "${team.name} won the match!",
         style: Theme.of(context)
             .textTheme
             .headline5!
             .copyWith(color: Colors.black),
       ),
-      leading: CircleAvatar(child: Icon(Icons.emoji_events)),
+      leading: const CircleAvatar(child: Icon(Icons.emoji_events)),
       backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
       actions: [
         TextButton(
@@ -81,41 +123,55 @@ class _NormalMatchView
               style: TextStyle(color: Colors.black),
             )),
         TextButton(
-            onPressed: null,
+            onPressed: state.handleExitBtn,
             child: Text(
               "EXIT",
               style: TextStyle(color: Colors.black),
             ))
       ],
     );
-    return Selector<MatchController, int>(
-        selector: (_, controller) => controller.match!.status.id,
-        builder: (_, matchStatusId, __) {
-          if (matchStatusId == MatchStatus.ENDED) {
-            return mb;
-          }
-
-          return SizedBox();
-        });
   }
 
   @override
   Widget build(BuildContext context) {
-    state.widthPlayerBoard = MediaQuery.of(context).size.width / 2;
-    return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
-          title: AppLocalizations.of(context)!.players,
-        ),
-        Selector<MatchController, int>(
-            selector: (_, controller) => controller.match!.status.id,
-            builder: (_, data, __) {
-              print('statusssssssssssss is ');
-              return _buildMatchEndedBanner(context);
+    state.widthPlayerBoard = MediaQuery.of(context).size.width /
+        state._matchController.match!.teams!.length;
+    return WillPopScope(
+        child: Scaffold(
+            body: Column(
+          children: [
+            BackHeader(
+              title: AppLocalizations.of(context)!.players,
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: () => state.handleBackArrow(),
+              ),
+            ),
+            Consumer<MatchController>(builder: (context, matchController, _) {
+              final m = matchController.match!;
+              final aux = m.teams!
+                  .where((element) => element.status.id == TeamStatus.WON);
+              if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
+                final wonTeam = aux.single;
+                return _buildMatchEndedBanner(wonTeam, context);
+              }
+              return const SizedBox.shrink();
             }),
-        Expanded(child: _buildBoard()),
-      ],
-    ));
+            // Selector<MatchController, int>(
+            //     selector: (_, controller) => controller.match!.status.id,
+            //     builder: (_, data, __) {
+            //       final m = state._matchController.match!;
+            //       final aux = m.teams!
+            //           .where((element) => element.status.id == TeamStatus.WON);
+            //       if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
+            //         final wonTeam = aux.single;
+            //         return _buildMatchEndedBanner(wonTeam, context);
+            //       }
+            //       return const SizedBox.shrink();
+            //     }),
+            Expanded(child: _buildBoard()),
+          ],
+        )),
+        onWillPop: state._onWillPop);
   }
 }

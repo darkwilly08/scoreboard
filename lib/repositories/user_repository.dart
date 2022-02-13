@@ -1,4 +1,4 @@
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:sqflite/sqflite.dart';

@@ -36,12 +36,12 @@ class AppTheme {
       cardColor: surfaceColor,
       dialogBackgroundColor: surfaceColor,
       floatingActionButtonTheme:
-          FloatingActionButtonThemeData(foregroundColor: backgroundColor),
-      colorScheme: ColorScheme.dark().copyWith(
-          primary: surfaceColor,
-          primaryVariant: backgroundColor,
-          secondary: secondaryColor,
+          const FloatingActionButtonThemeData(foregroundColor: backgroundColor),
+      colorScheme: const ColorScheme.dark().copyWith(
+          primary: secondaryDarkerColor,
+          primaryVariant: surfaceColor,
+          secondary: secondaryDarkerColor,
           secondaryVariant: secondaryDarkerColor),
       textTheme: Typography.whiteHelsinki.apply(bodyColor: fontColor),
-      iconTheme: IconThemeData().copyWith(color: fontColor));
+      iconTheme: const IconThemeData().copyWith(color: fontColor));
 }

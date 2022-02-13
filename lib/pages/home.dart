@@ -32,8 +32,9 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
   const _HomePhoneView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildTopHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, top: 36.0, bottom: 0.0),
+    return SafeArea(
+        child: Padding(
+      padding: const EdgeInsets.only(right: 8.0, bottom: 0.0),
       child: Row(
         children: <Widget>[
           IconButton(
@@ -61,7 +62,7 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
           )
         ],
       ),
-    );
+    ));
   }
 
   Widget _buildBody(BuildContext context) {

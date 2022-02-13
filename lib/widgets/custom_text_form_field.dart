@@ -1,17 +1,18 @@
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter/services.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField(
       {Key? key,
-      String? this.hintText,
-      String? this.labelText,
-      bool? this.readonly,
-      Function(String)? this.onChanged,
-      String? Function(String?)? this.validator,
-      int? this.maxLength,
-      String? this.initialValue})
+      this.hintText,
+      this.labelText,
+      this.readonly,
+      this.onChanged,
+      this.validator,
+      this.maxLength,
+      this.initialValue,
+      this.textInputType,
+      this.inputFormatters})
       : super(key: key);
 
   final String? hintText;
@@ -21,23 +22,21 @@ class CustomTextFormField extends StatelessWidget {
   final String? Function(String?)? validator;
   final int? maxLength;
   final String? initialValue;
+  final TextInputType? textInputType;
+  final List<TextInputFormatter>? inputFormatters;
 
   @override
   Widget build(BuildContext context) {
-    var themeData =
-        Provider.of<ThemeController>(context, listen: false).themeData;
     return TextFormField(
-      cursorColor: themeData.colorScheme.secondary,
       decoration: InputDecoration(
-          hintText: hintText,
-          labelText: labelText,
-          fillColor: themeData.colorScheme.primary,
-          filled: true),
+          hintText: hintText, labelText: labelText, filled: true),
       readOnly: readonly ?? false,
       onChanged: onChanged,
       validator: validator,
       maxLength: maxLength,
       initialValue: initialValue,
+      keyboardType: textInputType,
+      inputFormatters: inputFormatters,
     );
   }
 }

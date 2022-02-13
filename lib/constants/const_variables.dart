@@ -13,4 +13,6 @@ class PreferenceKeys {
 class AssetsConstants {
   AssetsConstants._();
   static const scoreboard = 'assets/icons/scoreboard.png';
+  static const trucoLine = 'assets/una_linea.png';
+  static const auxLine = 'assets/aux_line.png';
 }

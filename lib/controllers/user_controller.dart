@@ -1,4 +1,4 @@
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 

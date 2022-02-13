@@ -1,5 +1,5 @@
 import 'package:anotador/controllers/user_controller.dart';
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';

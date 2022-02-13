@@ -3,9 +3,11 @@ import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/controllers/user_controller.dart';
-import 'package:anotador/model/Game.dart';
+import 'package:anotador/model/game.dart';
 import 'package:anotador/pages/home.dart';
 import 'package:anotador/pages/match_preparation_page.dart';
+import 'package:anotador/pages/match_types/normal_match_page.dart';
+import 'package:anotador/pages/match_types/truco_match_page.dart';
 import 'package:anotador/pages/settings_page.dart';
 import 'package:anotador/pages/users_page.dart';
 import 'package:anotador/routes/routes.dart';
@@ -51,10 +53,12 @@ class MyApp extends StatelessWidget {
               home: HomeScreen(),
               onGenerateRoute: (RouteSettings routeSettings) {
                 var routes = <String, WidgetBuilder>{
-                  Routes.settings: (context) => SettingsScreen(),
-                  Routes.users: (context) => UsersScreen(),
+                  Routes.settings: (context) => const SettingsScreen(),
+                  Routes.users: (context) => const UsersScreen(),
                   Routes.matchPreparation: (context) => MatchPreparationScreen(
-                      selectedGame: routeSettings.arguments as Game)
+                      selectedGame: routeSettings.arguments as Game),
+                  Routes.normalMatch: (context) => const NormalMatchScreen(),
+                  Routes.trucoMatch: (context) => const TrucoMatchScreen()
                 };
                 WidgetBuilder builder = routes[routeSettings.name]!;
                 return MaterialPageRoute(builder: (ctx) => builder(ctx));

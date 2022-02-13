@@ -1,6 +1,6 @@
-import 'package:anotador/model/Game.dart';
-import 'package:anotador/model/Match.dart';
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/game.dart';
+import 'package:anotador/model/match.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -12,13 +12,14 @@ class MatchController extends ChangeNotifier {
 
   MatchController();
 
-  Future<void> start(Game game, List<User> users) async {
+  Future<void> start(Game game, bool isFFA, List<Team> teams) async {
     _match = Match(
         game: game,
-        users: users,
         createdAt: DateTime.now(),
         updatedAt: DateTime.now(),
-        statusId: MatchStatus.CREATED);
+        statusId: MatchStatus.CREATED,
+        isFFA: isFFA,
+        teams: teams);
 
     await _matchRepository.insert(_match!);
     notifyListeners();
@@ -39,43 +40,48 @@ class MatchController extends ChangeNotifier {
       throw Exception("match is not initilized");
     }
 
-    _match!.players.add(
-        MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
+    // _match!.players.add(
+    //     MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
 
     // await _matchRepository.addPlayer(_match);
     notifyListeners();
   }
 
-  Future<void> addResult(MatchPlayer player, int value) async {
-    bool wasAdded = await player.addResult(value);
+  Future<void> cancelMatchesByGameId(int gameId) async {
+    await _matchRepository.cancelMatchesByGameId(gameId);
+  }
+
+  Future<void> addResult(Team team, int value) async {
+    bool wasAdded = await team.addResult(value);
     if (wasAdded) {
-      await _matchRepository.addScore(player, player.scoreList.last);
+      await _matchRepository.addScore(team, team.scoreList.last);
     }
 
-    if (_match!.status.id == MatchStatus.ENDED) {
-      if (player.user.id == _match!.wonPlayer!.id) {
-        _match!.status.id = MatchStatus.IN_PROGRES;
-        _match!.endAt = null;
-        _match!.wonPlayer = null;
-        notifyListeners();
-      } else {
-        return; //you can keep playing but
-      }
-    }
+    // if (_match!.status.id == MatchStatus.ENDED) {
+    //   if (player.user.id == _match!.wonPlayer!.id) {
+    //     _match!.status.id = MatchStatus.IN_PROGRES;
+    //     _match!.endAt = null;
+    //     _match!.wonPlayer = null;
+    //     notifyListeners();
+    //   } else {
+    //     return; //you can keep playing but
+    //   }
+    // }
 
-    if (player.status.id == PlayerStatus.WON ||
-        ((_match!.players.length -
-                _match!.players
-                    .where((p) => p.status.id == PlayerStatus.LOST)
+    if (team.status.id == TeamStatus.WON ||
+        ((_match!.teams!.length -
+                _match!.teams!
+                    .where((p) => p.status.id == TeamStatus.LOST)
                     .length) ==
             1)) {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
-      _match!.wonPlayer = player.user;
+      _matchRepository.setTeamStatusByMatch(_match!);
       notifyListeners();
     } else {
       _match!.status.id = MatchStatus.IN_PROGRES;
-      _matchRepository.setStatus(_match!.id!, MatchStatus.IN_PROGRES);
     }
+
+    await _matchRepository.update(_match!);
   }
 }

@@ -1,17 +1,18 @@
-import 'package:anotador/model/Game.dart';
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/game.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/date_helper.dart';
 
 class Match {
   int? id;
   Game game;
-  User? wonPlayer;
+  // User? wonPlayer; //hay que sacarlo de aca
   DateTime createdAt;
   DateTime updatedAt;
   DateTime? endAt;
+  bool isFFA;
   late MatchStatus status;
-  late List<MatchPlayer> players;
+  List<Team>? teams;
 
   Match(
       {this.id,
@@ -19,26 +20,26 @@ class Match {
       required this.createdAt,
       required this.updatedAt,
       required int statusId,
-      List<User>? users,
-      this.endAt,
-      this.wonPlayer}) {
-    this.status = MatchStatus(statusId);
+      required this.isFFA,
+      this.teams,
+      this.endAt}) {
+    status = MatchStatus(statusId);
 
-    if (users != null) {
-      this.players = [];
-      for (var user in users) {
-        MatchPlayer player = MatchPlayer(
-            match: this, user: user, statusId: PlayerStatus.PLAYING);
-        this.players.add(player);
-      }
-    }
+    // if (users != null) {
+    //   this.teams = [];
+    //   for (var user in users) {
+    //     MatchPlayer player = MatchPlayer(
+    //         match: this, user: user, statusId: PlayerStatus.PLAYING);
+    //     this.players.add(player);
+    //   }
+    // }
   }
 
   Map<String, dynamic> toMap() {
     return {
       '${Tables.match}_id': id,
       '${Tables.match}_game_id': game.id,
-      '${Tables.match}_won_user_id': wonPlayer != null ? wonPlayer!.id : null,
+      '${Tables.match}_ffa': isFFA ? 1 : 0,
       '${Tables.match}_status_id': status.id,
       '${Tables.match}_created_at': DateUtils.instance.toDB(createdAt),
       '${Tables.match}_updated_at': DateUtils.instance.toDB(updatedAt),
@@ -52,15 +53,15 @@ class Match {
       id: json[0]['${Tables.match}_id'],
       game: Game.fromJson(json[0]),
       statusId: json[0]["${Tables.match}_status_id"],
-      wonPlayer: json[0]['${Tables.match}_won_user_id'],
+      isFFA: json[0]['${Tables.match}_ffa'] > 0,
       createdAt:
           DateUtils.instance.fromDB(json[0]['${Tables.match}_created_at']),
       updatedAt:
           DateUtils.instance.fromDB(json[0]['${Tables.match}_updated_at']),
     );
 
-    m.players = List.generate(json.length, (i) {
-      return MatchPlayer.fromJson(m, json[i]);
+    m.teams = List.generate(json.length, (i) {
+      return Team.fromJson(m, json[i]);
     });
 
     return m;
@@ -75,31 +76,33 @@ class MatchStatus {
 
   int id;
 
-  MatchStatus(int this.id);
+  MatchStatus(this.id);
 }
 
-class MatchPlayer {
+class Team {
   static const int PLAYING = 1;
   static const int WON = 2;
   static const int LOST = 3;
 
   int? id;
-  Match match;
-  User user;
+  Match? match;
+  String name;
+
   bool hasAsterisk = false;
   String? asteriskReason;
-  late PlayerStatus status;
+  late TeamStatus status;
   List<int> scoreList = [];
+  List<Player> players = [];
 
-  MatchPlayer(
+  Team(
       {this.id,
-      required this.match,
-      required this.user,
+      this.match,
+      required this.name,
       bool? asterisk,
       this.asteriskReason,
       required int statusId}) {
-    this.status = PlayerStatus(statusId);
-    this.scoreList.add(0);
+    status = TeamStatus(statusId);
+    scoreList.add(0);
     if (asterisk != null) {
       hasAsterisk = asterisk;
     }
@@ -107,64 +110,98 @@ class MatchPlayer {
 
   Map<String, dynamic> toMap() {
     return {
-      '${Tables.match_player}_id': id,
-      '${Tables.match_player}_match_id': match.id,
-      '${Tables.match_player}_user_id': user.id,
-      '${Tables.match_player}_has_asterisk': hasAsterisk ? 1 : 0,
-      '${Tables.match_player}_asterisk_reason': asteriskReason,
-      '${Tables.match_player}_status_id': status.id,
+      '${Tables.team}_id': id,
+      '${Tables.team}_match_id': match!.id,
+      '${Tables.team}_name': name,
+      '${Tables.team}_has_asterisk': hasAsterisk ? 1 : 0,
+      '${Tables.team}_asterisk_reason': asteriskReason,
+      '${Tables.team}_status_id': status.id,
     };
   }
 
-  factory MatchPlayer.fromJson(Match match, Map<String, dynamic> json) {
-    return MatchPlayer(
-        id: json['${Tables.match_player}_id'],
+  factory Team.fromJson(Match match, Map<String, dynamic> json) {
+    var t = Team(
+        id: json['${Tables.team}_id'],
         match: match,
-        user: User.fromJson(json),
-        statusId: json['${Tables.match_player}_status_id']);
+        name: json['${Tables.team}_name'],
+        statusId: json['${Tables.team}_status_id'],
+        asterisk: json['${Tables.team}_has_asterisk'] > 0,
+        asteriskReason: json['${Tables.team}_asterisk_reason']);
+
+    t.players = List.generate(json.length, (i) {
+      return Player.fromJson(t, json[i]);
+    });
+
+    return t;
   }
 
   int get lastScore => scoreList.last;
 
   bool _isValid(int score) {
-    if (this.match.game.targetScore > score) {
+    if (match!.game.targetScore > score) {
       return true;
     }
     return false;
   }
 
   Future<bool> addResult(int value) async {
-    bool targetScoreWins = this.match.game.targetScoreWins;
+    bool targetScoreWins = match!.game.targetScoreWins;
     int lastScore = this.lastScore;
-    int statusId = this.status.id;
+    int statusId = status.id;
 
     int newScore = lastScore + value;
 
-    if (statusId != PlayerStatus.PLAYING && _isValid(newScore)) {
-      this.scoreList.add(newScore);
-      this.status.id = PlayerStatus.PLAYING;
-      return false; //the player is back on match, maybe a bad score loaded and then restored it
+    if (statusId != TeamStatus.PLAYING && _isValid(newScore)) {
+      scoreList.add(newScore);
+      status.id = TeamStatus.PLAYING;
+      return false; //the team is back on match, maybe a bad score loaded and then restored it
     }
 
-    if (statusId != PlayerStatus.PLAYING) {
-      return false; //the player already won or lost
+    if (statusId != TeamStatus.PLAYING) {
+      return false; //the team already won or lost
     }
 
     if (!_isValid(newScore)) {
-      this.status.id = targetScoreWins ? PlayerStatus.WON : PlayerStatus.LOST;
+      status.id = targetScoreWins ? TeamStatus.WON : TeamStatus.LOST;
     }
 
-    this.scoreList.add(newScore);
+    scoreList.add(newScore);
     return true;
   }
 }
 
-class PlayerStatus {
+class TeamStatus {
   static const int PLAYING = 1;
   static const int WON = 2;
   static const int LOST = 3;
 
   int id;
 
-  PlayerStatus(int this.id);
+  TeamStatus(int this.id);
+}
+
+class Player {
+  int? id;
+  Team team;
+  User user;
+
+  Player({this.id, required this.team, required this.user});
+
+  factory Player.fromJson(Team team, Map<String, dynamic> json) {
+    var t = Player(
+      id: json['${Tables.team_player}_id'],
+      team: team,
+      user: User.fromJson(json),
+    );
+
+    return t;
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '${Tables.team_player}_id': id,
+      '${Tables.team_player}_team_id': team.id,
+      '${Tables.team_player}_user_id': user.id
+    };
+  }
 }

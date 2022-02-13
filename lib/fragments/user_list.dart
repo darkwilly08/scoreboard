@@ -1,5 +1,5 @@
 import 'package:anotador/controllers/theme_controller.dart';
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/box_tile.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +35,7 @@ class _PlayerTileState extends State<PlayerTile> {
           Icons.star,
           color: widget.user.favorite
               ? _themeController.themeData.colorScheme.secondary
-              : _themeController.themeData.colorScheme.primaryVariant,
+              : _themeController.themeData.colorScheme.background,
         ),
         onPressed: () => onFavorite(widget.user),
       );
@@ -64,7 +64,7 @@ class _PlayerTileState extends State<PlayerTile> {
             widget.user.initial,
             style: TextStyle(
                 fontSize: 20,
-                color: _themeController.themeData.colorScheme.primary),
+                color: _themeController.themeData.colorScheme.background),
           ),
         ),
         trailing: _buildTrailing(),

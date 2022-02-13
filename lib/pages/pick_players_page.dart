@@ -1,6 +1,6 @@
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/fragments/user_list.dart';
-import 'package:anotador/model/User.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/pages/add_user_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';

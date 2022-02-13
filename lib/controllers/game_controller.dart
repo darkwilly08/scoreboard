@@ -1,4 +1,4 @@
-import 'package:anotador/model/Game.dart';
+import 'package:anotador/model/game.dart';
 import 'package:anotador/repositories/game_repository.dart';
 import 'package:flutter/material.dart';
 
@@ -27,6 +27,7 @@ class GameController extends ChangeNotifier {
       return;
     }
     _games = await _gameRepository.games();
+    await _gameRepository.setSummarizedStats(_games!);
     // _players!.sort(sortPlayers);
     notifyListeners();
   }

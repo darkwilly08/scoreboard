@@ -8,13 +8,19 @@ class Game {
   late GameType type;
   int won = 0;
   int lost = 0;
+  int? npMinVal;
+  int? npMaxVal;
+  int? npStep;
 
   Game(
       {this.id,
       required this.name,
       required this.targetScore,
-      required this.targetScoreWins}) {
-    this.type = GameType(GameType.NORMAL);
+      required this.targetScoreWins,
+      this.npMaxVal,
+      this.npMinVal,
+      this.npStep}) {
+    type = GameType(GameType.NORMAL);
   }
 
   Map<String, dynamic> toMap() {
@@ -24,6 +30,9 @@ class Game {
       '${Tables.game}_type_id': type.id,
       '${Tables.game}_target_score': targetScore,
       '${Tables.game}_target_score_wins': targetScoreWins ? 1 : 0,
+      '${Tables.game}_np_min_val': npMinVal,
+      '${Tables.game}_np_max_val': npMaxVal,
+      '${Tables.game}_np_step': npStep,
     };
   }
 
@@ -32,11 +41,13 @@ class Game {
     switch (typeId) {
       case GameType.NORMAL:
         return Game(
-          id: json['${Tables.game}_id'],
-          name: json['${Tables.game}_name'],
-          targetScore: json['${Tables.game}_target_score'],
-          targetScoreWins: json['${Tables.game}_target_score_wins'] > 0,
-        );
+            id: json['${Tables.game}_id'],
+            name: json['${Tables.game}_name'],
+            targetScore: json['${Tables.game}_target_score'],
+            targetScoreWins: json['${Tables.game}_target_score_wins'] > 0,
+            npMinVal: json['${Tables.game}_np_min_val'],
+            npMaxVal: json['${Tables.game}_np_max_val'],
+            npStep: json['${Tables.game}_np_step']);
       case GameType.TRUCO:
         return TrucoGame.fromJson(json);
       default:

@@ -1,8 +1,9 @@
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
-import 'package:anotador/model/Game.dart';
+import 'package:anotador/model/game.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/routes/routes.dart';
+import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -85,15 +86,11 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
             ],
           ),
         ),
-        trailing: FloatingActionButton(
-          heroTag: null,
-          elevation: 1.0,
-          backgroundColor: state._themeController.themeData.colorScheme.primary,
-          onPressed: () {
+        trailing: CustomFloatingActionButton(
+          onTap: () {
             state.handlePlayGameClicked(game);
           },
-          child: Icon(Icons.play_arrow,
-              color: state._themeController.themeData.colorScheme.secondary),
+          iconData: Icons.play_arrow,
         ),
         onTap: () {},
       ));

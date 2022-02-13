@@ -1,13 +1,12 @@
 import 'package:anotador/constants/const_variables.dart';
-import 'package:anotador/themes/app_theme.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class BackHeader extends StatelessWidget {
   final String title;
   final Widget? trailing;
+  final Widget? leading;
 
-  const BackHeader({Key? key, required this.title, this.trailing})
+  const BackHeader({Key? key, required this.title, this.trailing, this.leading})
       : super(key: key);
 
   Widget _buildTrailing() {
@@ -17,21 +16,29 @@ class BackHeader extends StatelessWidget {
           children: const [
             Image(
               image: AssetImage(AssetsConstants.scoreboard),
-              height: 38,
+              height: 36.0,
             ),
           ],
         );
   }
 
+  Widget _buildLeading(BuildContext context) {
+    return leading ??
+        IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () => Navigator.pop(context),
+        );
+  }
+
   Widget _buildTopHeader(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(right: 8.0, top: 36.0, bottom: 0.0),
+    print(AppBar().preferredSize.height);
+    return SafeArea(
+        // height: Scaffold.of(context).appBarMaxHeight,
+        child: Padding(
+      padding: EdgeInsets.only(right: 8.0),
       child: Row(
         children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
+          _buildLeading(context),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.only(left: 8.0),
@@ -44,7 +51,7 @@ class BackHeader extends StatelessWidget {
           _buildTrailing()
         ],
       ),
-    );
+    ));
   }
 
   @override

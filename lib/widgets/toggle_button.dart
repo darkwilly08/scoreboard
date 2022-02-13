@@ -66,7 +66,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     } else {
       btn = Container(
         decoration: BoxDecoration(
-            color: _themeController.themeData.colorScheme.primary,
+            color: _themeController.themeData.colorScheme.primaryVariant,
             borderRadius: BorderRadius.circular(16.0)),
         padding: padding,
         child: Text(text, style: selectedTextStyle),
