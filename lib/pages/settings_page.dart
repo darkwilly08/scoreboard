@@ -5,9 +5,9 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SettingsScreen extends StatefulWidget {
   static const String routeName = "/settings";
@@ -81,11 +81,12 @@ class _SettingsPhoneView
         });
   }
 
-  Widget _buildSettingsList(BuildContext context) {
-    String langCode = state._localeController.locale.languageCode;
-    String lang = state._localeController.getLanguage();
+  Widget _buildSettingsList(BuildContext context,
+      ThemeController themeController, LocaleController localeController) {
+    String langCode = localeController.locale.languageCode;
+    String lang = localeController.getLanguage();
 
-    bool darkMode = state._themeController.isDarkMode;
+    bool darkMode = themeController.isDarkMode;
 
     String themeName = darkMode
         ? AppLocalizations.of(context)!.dark_theme
@@ -129,7 +130,12 @@ class _SettingsPhoneView
         BackHeader(
           title: AppLocalizations.of(context)!.settings,
         ),
-        Expanded(child: _buildSettingsList(context))
+        Consumer2<ThemeController, LocaleController>(
+            builder: (context, themeController, localeController, _) {
+          return Expanded(
+              child: _buildSettingsList(
+                  context, themeController, localeController));
+        })
       ],
     ));
   }
