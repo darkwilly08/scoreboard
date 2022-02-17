@@ -1,3 +1,5 @@
+import 'package:anotador/constants/const_variables.dart';
+import 'package:anotador/model/truco/truco_score.dart';
 import 'package:anotador/repositories/tables.dart';
 
 class Game {
@@ -72,6 +74,12 @@ class TrucoGame extends Game {
     this.type = GameType(GameType.TRUCO);
   }
 
+  TrucoScore get scoreInfo {
+    return AppConstants.trucoPossibleScores
+        .firstWhere((element) => element.points == targetScore);
+  }
+
+  @override
   Map<String, dynamic> toMap() {
     return {
       '${Tables.game}_id': id,
@@ -98,5 +106,5 @@ class GameType {
   static const int TRUCO = 2;
 
   int id;
-  GameType(int this.id);
+  GameType(this.id);
 }

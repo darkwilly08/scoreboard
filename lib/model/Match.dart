@@ -137,6 +137,14 @@ class Team {
 
   int get lastScore => scoreList.last;
 
+  bool? areGood() {
+    if (match!.game is TrucoGame && (match!.game as TrucoGame).twoHalves) {
+      return lastScore > match!.game.targetScore;
+    }
+
+    return null;
+  }
+
   bool _isValid(int score) {
     if (match!.game.targetScore > score) {
       return true;

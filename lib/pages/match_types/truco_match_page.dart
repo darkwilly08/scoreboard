@@ -83,6 +83,12 @@ class _TrucoMatchView
       teamBoardList.add(_buildTeamBoard(i));
     }
 
+    teamBoardList.insert(
+        1,
+        VerticalDivider(
+          width: 1,
+          color: Colors.white,
+        ));
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: teamBoardList,
@@ -91,7 +97,7 @@ class _TrucoMatchView
 
   Widget _buildTeamBoard(int index) {
     return SizedBox(
-      width: state.widthPlayerBoard,
+      width: state.widthPlayerBoard - 10,
       child: TrucoBoard(
         team: state._matchController.match!.teams![index],
       ),
