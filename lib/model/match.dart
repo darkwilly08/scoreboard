@@ -6,7 +6,6 @@ import 'package:anotador/utils/date_helper.dart';
 class Match {
   int? id;
   Game game;
-  // User? wonPlayer; //hay que sacarlo de aca
   DateTime createdAt;
   DateTime updatedAt;
   DateTime? endAt;

@@ -13,8 +13,10 @@ class PickPlayersScreen extends StatefulWidget {
   // static const String routeName = "/pickPlayers";
 
   final void Function(List<User>)? onConfirmSelection;
+  final List<User>? unavailableUsers;
 
-  const PickPlayersScreen({Key? key, required this.onConfirmSelection})
+  const PickPlayersScreen(
+      {Key? key, required this.onConfirmSelection, this.unavailableUsers})
       : super(key: key);
 
   @override
@@ -75,7 +77,11 @@ class _PickPlayersPhoneView
       }
 
       return UserList(
-        users: players,
+        users: players
+            .where((u) => widget.unavailableUsers == null
+                ? true
+                : !widget.unavailableUsers!.contains(u))
+            .toList(),
         onItemTapped: state.handlePlayerTapped,
       );
     });

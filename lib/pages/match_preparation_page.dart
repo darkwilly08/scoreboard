@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
@@ -33,8 +35,10 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   late MatchController _matchController;
   int _index = 0;
   List<User>? ffaList;
-  List<User>? teamA;
-  List<User>? teamB;
+  List<User>? playersTeamA;
+  List<User>? playersTeamB;
+  late String teamAName = AppLocalizations.of(context)!.team + " A";
+  late String teamBName = AppLocalizations.of(context)!.team + " B";
 
   @override
   void initState() {
@@ -77,12 +81,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   void handleContinueMatch(Match match) {
     Navigator.of(context).pop();
     _matchController.continueMatch(match);
-    if (widget.selectedGame.type.id == GameType.NORMAL) {
-      Navigator.pushReplacementNamed(context, Routes.normalMatch);
-    } else {
-      //truco
-      Navigator.pushReplacementNamed(context, Routes.trucoMatch);
-    }
+    goToMatch();
   }
 
   void handleCancelMatchesByGameId() async {
@@ -90,56 +89,78 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     await _matchController.cancelMatchesByGameId(widget.selectedGame.id!);
   }
 
-  void handleAddPlayerBtnToFFA() {
+  void handleAddPlayerBtn(
+      List<User>? unavailablePlayers, Function(List<User>?) onPlayers) {
     Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                PickPlayersScreen(onConfirmSelection: (players) {
-                  setState(() {
-                    ffaList = players;
-                  });
-                })));
+            builder: (context) => PickPlayersScreen(
+                unavailableUsers: unavailablePlayers,
+                onConfirmSelection: onPlayers)));
+  }
+
+  void handleAddPlayerBtnToFFA() {
+    handleAddPlayerBtn(null, (players) => setState(() => ffaList = players));
   }
 
   void handleAddPlayerBtnToTeamA() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                PickPlayersScreen(onConfirmSelection: (players) {
-                  setState(() {
-                    teamA = players;
-                  });
-                })));
+    handleAddPlayerBtn(
+        playersTeamB, (players) => setState(() => playersTeamA = players));
   }
 
   void handleAddPlayerBtnToTeamB() {
-    Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) =>
-                PickPlayersScreen(onConfirmSelection: (players) {
-                  setState(() {
-                    teamB = players;
-                  });
-                })));
+    handleAddPlayerBtn(
+        playersTeamA, (players) => setState(() => playersTeamB = players));
   }
 
   void handleToggleChanged(int index) {
     setState(() {
+      ffaList = null;
+      playersTeamA = null;
+      playersTeamB = null;
       _index = index;
     });
   }
 
+  List<Team>? _createTeams() {
+    List<Team> teams = [];
+    if (ffaList != null) {
+      teams = ffaList!.map((u) {
+        var team = Team(name: u.name, statusId: TeamStatus.PLAYING);
+        team.players.add(Player(team: team, user: u));
+        return team;
+      }).toList();
+    } else if (playersTeamA != null && playersTeamB != null) {
+      //TODO improve this to handle N teams
+      var teamA = Team(name: teamAName, statusId: TeamStatus.PLAYING);
+      teamA.players =
+          playersTeamA!.map((u) => Player(team: teamA, user: u)).toList();
+      var teamB = Team(name: teamBName, statusId: TeamStatus.PLAYING);
+      teamB.players =
+          playersTeamB!.map((u) => Player(team: teamB, user: u)).toList();
+
+      teams.add(teamA);
+      teams.add(teamB);
+    }
+
+    if (teams.isEmpty) return null;
+
+    return teams;
+  }
+
   void handleStartBtn() {
-    var teams = ffaList!.map((u) {
-      var team = Team(name: u.name, statusId: TeamStatus.PLAYING);
-      team.players.add(Player(team: team, user: u));
-      return team;
-    }).toList();
+    var teams = _createTeams();
+
+    if (teams == null) {
+      //TODO: show error message.. complete players
+      return;
+    }
 
     _matchController.start(widget.selectedGame, true, teams);
+    goToMatch();
+  }
+
+  void goToMatch() {
     if (widget.selectedGame.type.id == GameType.NORMAL) {
       Navigator.pushReplacementNamed(context, Routes.normalMatch);
     } else {
@@ -167,7 +188,7 @@ class _MatchPreparationPhoneView
               subtitle: widget.selectedGame.targetScore.toString(),
               leading: const Icon(Icons.adjust),
               onPressed: (BuildContext context) {
-                // _showSingleChoiceDialog(context, langCode);
+                //TODO _showSingleChoiceDialog(context, langCode);
               },
             ),
             SettingsTile.switchTile(
@@ -175,7 +196,7 @@ class _MatchPreparationPhoneView
               leading: const Icon(Icons.emoji_events),
               switchValue: widget.selectedGame.targetScoreWins,
               onToggle: (bool value) {
-                // state.handleThemeModeChanged(value);
+                //TODO state.handleThemeModeChanged(value);
               },
             ),
           ],
@@ -185,14 +206,14 @@ class _MatchPreparationPhoneView
   }
 
   Widget _buildListHeader(
-      String title, Function() onAction, BuildContext context) {
+      String title, void Function() onAction, BuildContext context) {
     return Row(
       children: [
         Text(
           title,
           style: Theme.of(context).textTheme.headline6,
         ),
-        Spacer(),
+        const Spacer(),
         CustomFloatingActionButton(
           onTap: onAction,
           iconData: Icons.add,
@@ -205,7 +226,7 @@ class _MatchPreparationPhoneView
       List<User>? elements, String emptyMsg, BuildContext context) {
     if (elements == null || elements.isEmpty) {
       return Padding(
-        padding: EdgeInsets.symmetric(vertical: 16.0),
+        padding: const EdgeInsets.symmetric(vertical: 16.0),
         child: Text(emptyMsg),
       );
     } else {
@@ -218,7 +239,7 @@ class _MatchPreparationPhoneView
   Widget _buildFFASection(BuildContext context) {
     var playersStr = AppLocalizations.of(context)!.players;
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -231,30 +252,30 @@ class _MatchPreparationPhoneView
   }
 
   Widget _buildTeamASection(BuildContext context) {
-    var teamAStr = AppLocalizations.of(context)!.team + " A";
+    var teamAName = AppLocalizations.of(context)!.team + " A";
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildListHeader(teamAStr, state.handleAddPlayerBtnToTeamA, context),
-          _buildListBody(state.teamA,
-              AppLocalizations.of(context)!.empty_list(teamAStr), context)
+          _buildListHeader(teamAName, state.handleAddPlayerBtnToTeamA, context),
+          _buildListBody(state.playersTeamA,
+              AppLocalizations.of(context)!.empty_list(teamAName), context)
         ],
       ),
     );
   }
 
   Widget _buildTeamBSection(BuildContext context) {
-    var teamBStr = AppLocalizations.of(context)!.team + " B";
+    var teamBName = AppLocalizations.of(context)!.team + " B";
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildListHeader(teamBStr, state.handleAddPlayerBtnToTeamB, context),
-          _buildListBody(state.teamB,
-              AppLocalizations.of(context)!.empty_list(teamBStr), context)
+          _buildListHeader(teamBName, state.handleAddPlayerBtnToTeamB, context),
+          _buildListBody(state.playersTeamB,
+              AppLocalizations.of(context)!.empty_list(teamBName), context)
         ],
       ),
     );
@@ -290,7 +311,7 @@ class _MatchPreparationPhoneView
               child: _buildSettingsList(context),
             ),
             Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: CustomToggleButton(
                 firstBtnText: AppLocalizations.of(context)!.ffa,
                 secondBtnText: AppLocalizations.of(context)!.teams,
