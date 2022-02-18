@@ -103,14 +103,12 @@ class _TrucoBoardState extends State<TrucoBoard> {
 
   List<Widget> _drawScore(
       BoxConstraints constraints, TrucoGame game, int score) {
-    final int squareQuantity = game.twoHalves
-        ? game.scoreInfo.squareQuantity ~/ 2
-        : game.scoreInfo.squareQuantity;
+    final int squareQuantity = game.scoreInfo.squareQuantity;
     final int pointsBySquare = game.scoreInfo.pointsBySquare;
     final double squareHeight = (constraints.maxHeight / squareQuantity) - 3;
 
     int lastSquarePoints = score % pointsBySquare;
-    int squareFilled = score ~/ pointsBySquare;
+    int squareFilled = (score / pointsBySquare).ceil();
 
     List<Widget> squares = [];
     for (int i = 0; i < squareFilled; i++) {
