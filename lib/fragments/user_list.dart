@@ -11,12 +11,14 @@ class PlayerTile extends StatefulWidget {
 
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
+  final bool? isTapped;
 
   const PlayerTile(
       {Key? key,
       required this.user,
       required this.onItemTapped,
-      this.onFavoriteIconTapped})
+      this.onFavoriteIconTapped,
+      this.isTapped})
       : super(key: key);
 
   @override
@@ -82,7 +84,7 @@ class _PlayerTileState extends State<PlayerTile> {
   @override
   void initState() {
     _themeController = Provider.of<ThemeController>(context, listen: false);
-
+    _isSelected = widget.isTapped ?? false;
     super.initState();
   }
 
@@ -94,11 +96,16 @@ class _PlayerTileState extends State<PlayerTile> {
 
 class UserList extends StatefulWidget {
   final List<User>? users;
+  final List<User>? preSelectedUsers;
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
 
   const UserList(
-      {Key? key, this.users, this.onItemTapped, this.onFavoriteIconTapped})
+      {Key? key,
+      this.users,
+      this.preSelectedUsers,
+      this.onItemTapped,
+      this.onFavoriteIconTapped})
       : super(key: key);
 
   @override
@@ -124,6 +131,8 @@ class _UserListView extends WidgetView<UserList, _UserListState> {
           user: user,
           onItemTapped: widget.onItemTapped,
           onFavoriteIconTapped: widget.onFavoriteIconTapped,
+          isTapped:
+              widget.preSelectedUsers?.where((u) => u.id == user.id).isNotEmpty,
         ));
       }
 

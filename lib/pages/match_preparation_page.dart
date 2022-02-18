@@ -89,28 +89,30 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     await _matchController.cancelMatchesByGameId(widget.selectedGame.id!);
   }
 
-  void handleAddPlayerBtn(
+  void handleAddPlayerBtn(List<User>? alreadySelectedPlayers,
       List<User>? unavailablePlayers, Function(List<User>?) onPlayers) {
     Navigator.push(
         context,
         MaterialPageRoute(
             builder: (context) => PickPlayersScreen(
+                preSelectedUsers: alreadySelectedPlayers,
                 unavailableUsers: unavailablePlayers,
                 onConfirmSelection: onPlayers)));
   }
 
   void handleAddPlayerBtnToFFA() {
-    handleAddPlayerBtn(null, (players) => setState(() => ffaList = players));
+    handleAddPlayerBtn(
+        ffaList, null, (players) => setState(() => ffaList = players));
   }
 
   void handleAddPlayerBtnToTeamA() {
-    handleAddPlayerBtn(
-        playersTeamB, (players) => setState(() => playersTeamA = players));
+    handleAddPlayerBtn(playersTeamA, playersTeamB,
+        (players) => setState(() => playersTeamA = players));
   }
 
   void handleAddPlayerBtnToTeamB() {
-    handleAddPlayerBtn(
-        playersTeamA, (players) => setState(() => playersTeamB = players));
+    handleAddPlayerBtn(playersTeamB, playersTeamA,
+        (players) => setState(() => playersTeamB = players));
   }
 
   void handleToggleChanged(int index) {
@@ -330,8 +332,16 @@ class _MatchPreparationPhoneView
               decoration: BoxDecoration(
                   color: Theme.of(context).colorScheme.secondaryVariant,
                   borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      topRight: Radius.circular(8.0))),
+                      topLeft: Radius.circular(60.0),
+                      topRight: Radius.circular(60.0)),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.6),
+                      spreadRadius: 3,
+                      blurRadius: 10,
+                      offset: Offset(0, -1), // changes position of shadow
+                    ),
+                  ]),
               child: Center(
                 child: Text(
                   AppLocalizations.of(context)!.start,

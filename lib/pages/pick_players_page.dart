@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/fragments/user_list.dart';
 import 'package:anotador/model/user.dart';
@@ -14,9 +16,13 @@ class PickPlayersScreen extends StatefulWidget {
 
   final void Function(List<User>)? onConfirmSelection;
   final List<User>? unavailableUsers;
+  final List<User>? preSelectedUsers;
 
   const PickPlayersScreen(
-      {Key? key, required this.onConfirmSelection, this.unavailableUsers})
+      {Key? key,
+      required this.onConfirmSelection,
+      this.unavailableUsers,
+      this.preSelectedUsers})
       : super(key: key);
 
   @override
@@ -32,6 +38,11 @@ class _PickPlayerscreenState extends State<PickPlayersScreen> {
     _userController = Provider.of<UserController>(context, listen: false);
 
     _userController.initPlayerList();
+
+    if (widget.preSelectedUsers != null) {
+      _selectedUsers.addAll(widget.preSelectedUsers!);
+    }
+
     super.initState();
   }
 
@@ -75,7 +86,7 @@ class _PickPlayersPhoneView
       if (players == null) {
         return CircularProgressIndicator();
       }
-
+      log(state._selectedUsers.length.toString());
       return UserList(
         users: players
             .where((u) => widget.unavailableUsers == null
@@ -83,6 +94,7 @@ class _PickPlayersPhoneView
                 : !widget.unavailableUsers!.contains(u))
             .toList(),
         onItemTapped: state.handlePlayerTapped,
+        preSelectedUsers: widget.preSelectedUsers,
       );
     });
   }
