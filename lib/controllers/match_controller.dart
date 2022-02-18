@@ -5,7 +5,7 @@ import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
 
 class MatchController extends ChangeNotifier {
-  MatchRepository _matchRepository = MatchRepository();
+  final MatchRepository _matchRepository = MatchRepository();
   Match? _match;
 
   Match? get match => _match;

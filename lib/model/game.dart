@@ -71,7 +71,7 @@ class TrucoGame extends Game {
             name: name,
             targetScore: targetScore,
             targetScoreWins: targetScoreWins) {
-    this.type = GameType(GameType.TRUCO);
+    type = GameType(GameType.TRUCO);
   }
 
   TrucoScore get scoreInfo {

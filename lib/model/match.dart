@@ -24,15 +24,7 @@ class Match {
       this.teams,
       this.endAt}) {
     status = MatchStatus(statusId);
-
-    // if (users != null) {
-    //   this.teams = [];
-    //   for (var user in users) {
-    //     MatchPlayer player = MatchPlayer(
-    //         match: this, user: user, statusId: PlayerStatus.PLAYING);
-    //     this.players.add(player);
-    //   }
-    // }
+    teams?.forEach((element) => element.match = this);
   }
 
   Map<String, dynamic> toMap() {
@@ -185,7 +177,7 @@ class TeamStatus {
 
   int id;
 
-  TeamStatus(int this.id);
+  TeamStatus(this.id);
 }
 
 class Player {

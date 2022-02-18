@@ -22,7 +22,7 @@ class PickPlayersScreen extends StatefulWidget {
 }
 
 class _PickPlayerscreenState extends State<PickPlayersScreen> {
-  List<User> _selectedUsers = [];
+  final List<User> _selectedUsers = [];
   late UserController _userController;
 
   @override

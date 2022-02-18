@@ -21,7 +21,7 @@ class MatchPreparationScreen extends StatefulWidget {
   static const String routeName = "/match/preparation";
   final Game selectedGame;
 
-  MatchPreparationScreen({Key? key, required this.selectedGame})
+  const MatchPreparationScreen({Key? key, required this.selectedGame})
       : super(key: key);
 
   @override

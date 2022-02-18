@@ -12,7 +12,7 @@ class PlayerTile extends StatefulWidget {
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
 
-  PlayerTile(
+  const PlayerTile(
       {Key? key,
       required this.user,
       required this.onItemTapped,
@@ -51,7 +51,7 @@ class _PlayerTileState extends State<PlayerTile> {
 
   Card makeListTile() => Card(
       elevation: 4.0,
-      margin: new EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+      margin: EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       child: Container(
           child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
@@ -97,7 +97,8 @@ class UserList extends StatefulWidget {
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
 
-  UserList({Key? key, this.users, this.onItemTapped, this.onFavoriteIconTapped})
+  const UserList(
+      {Key? key, this.users, this.onItemTapped, this.onFavoriteIconTapped})
       : super(key: key);
 
   @override
@@ -118,13 +119,13 @@ class _UserListView extends WidgetView<UserList, _UserListState> {
     List<Widget> items = [];
     var users = widget.users;
     if (users != null && users.isNotEmpty) {
-      users.forEach((user) {
+      for (var user in users) {
         items.add(PlayerTile(
           user: user,
           onItemTapped: widget.onItemTapped,
           onFavoriteIconTapped: widget.onFavoriteIconTapped,
         ));
-      });
+      }
 
       return ListView(
         children: items,

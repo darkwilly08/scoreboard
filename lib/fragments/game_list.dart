@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameListScreen extends StatefulWidget {
-  GameListScreen({Key? key}) : super(key: key);
+  const GameListScreen({Key? key}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -103,9 +103,9 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
         return CircularProgressIndicator();
       }
       if (games.isNotEmpty) {
-        games.forEach((game) {
+        for (var game in games) {
           rows.add(makeListTile(game));
-        });
+        }
       } else {
         return Text("data");
       }

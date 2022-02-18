@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class TeamBoard extends StatefulWidget {
   final Team team;
-  TeamBoard({Key? key, required this.team}) : super(key: key);
+  const TeamBoard({Key? key, required this.team}) : super(key: key);
 
   @override
   _TeamBoardState createState() => _TeamBoardState();
@@ -21,7 +21,7 @@ class TeamBoard extends StatefulWidget {
 
 class _TeamBoardState extends State<TeamBoard> {
   late MatchController _matchController;
-  ScrollController _scrollController = new ScrollController();
+  final ScrollController _scrollController = ScrollController();
   int? _numberField;
   int _currentValue = 10;
 
