@@ -27,4 +27,5 @@ class AssetsConstants {
   static const scoreboard = 'assets/icons/scoreboard.png';
   static const trucoLine = 'assets/one_line.png';
   static const auxLine = 'assets/one_line_rotated.png';
+  static const lighter = 'assets/lighter.png';
 }

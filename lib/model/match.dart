@@ -130,7 +130,7 @@ class Team {
 
   bool? areGood() {
     if (match!.game is TrucoGame && (match!.game as TrucoGame).twoHalves) {
-      return lastScore > match!.game.targetScore;
+      return lastScore > match!.game.targetScore / 2;
     }
 
     return null;

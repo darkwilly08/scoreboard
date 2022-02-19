@@ -8,7 +8,7 @@ import 'package:provider/provider.dart';
 
 class TrucoBoard extends StatefulWidget {
   final Team team;
-  TrucoBoard({Key? key, required this.team}) : super(key: key);
+  const TrucoBoard({Key? key, required this.team}) : super(key: key);
 
   @override
   _TrucoBoardState createState() => _TrucoBoardState();
@@ -26,6 +26,12 @@ class _TrucoBoardState extends State<TrucoBoard> {
   void handleAddScoreBtn() {
     setState(() {
       _matchController.addResult(widget.team, 1);
+    });
+  }
+
+  void handleRemoveScoreBtn() {
+    setState(() {
+      _matchController.addResult(widget.team, -1);
     });
   }
 
@@ -66,7 +72,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
   Widget _drawSquarePoints(int pointsToDraw, double squareHeight) {
     double spaceBetween = 10;
     squareHeight = squareHeight > 120 ? 120 : squareHeight;
-    return Container(
+    return SizedBox(
       height: squareHeight,
       width: squareHeight,
       child: Padding(
@@ -154,20 +160,29 @@ class _TrucoBoardState extends State<TrucoBoard> {
         Text(getSubtitle(areGood)),
         Expanded(
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: _drawScore(constraints, tGame, currentScore),
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: handleAddScoreBtn,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: _drawScore(constraints, tGame, currentScore),
+                  ),
                 );
               })),
         ),
         Padding(
-          padding: EdgeInsets.only(bottom: 16, top: 8),
-          child: CustomFloatingActionButton(
-              onTap: handleAddScoreBtn, iconData: Icons.add),
+          padding: const EdgeInsets.only(bottom: 16, top: 8),
+          child: GestureDetector(
+            onTap: handleRemoveScoreBtn,
+            child: const Image(
+              height: 45,
+              image: AssetImage(AssetsConstants.lighter),
+            ),
+          ),
         )
       ],
     );
