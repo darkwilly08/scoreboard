@@ -24,6 +24,7 @@ class _TeamBoardState extends State<TeamBoard> {
   final ScrollController _scrollController = ScrollController();
   int? _numberField;
   int _currentValue = 10;
+  bool _isAddAction = true;
 
   @override
   void initState() {
@@ -45,7 +46,7 @@ class _TeamBoardState extends State<TeamBoard> {
     Navigator.pop(context);
     int value = _currentValue;
     if (_numberField != null) {
-      value = _numberField!;
+      value = _isAddAction ? _numberField! : -1 * _numberField!;
     }
     setState(() {
       _matchController.addResult(widget.team, value);
@@ -55,7 +56,8 @@ class _TeamBoardState extends State<TeamBoard> {
   _showMessageDialog(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          insetPadding: const EdgeInsets.symmetric(horizontal: 10),
+          contentPadding: const EdgeInsets.only(top: 8.0),
+          insetPadding: const EdgeInsets.symmetric(horizontal: 8.0),
           title: Text(widget.team.name),
           content: SizedBox(
             width: MediaQuery.of(context).size.width,
@@ -63,12 +65,37 @@ class _TeamBoardState extends State<TeamBoard> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CustomTextFormField(
-                    textInputType: TextInputType.number,
-                    onChanged: (val) => _numberField = int.tryParse(val),
-                    inputFormatters: <TextInputFormatter>[
-                      FilteringTextInputFormatter.digitsOnly
-                    ]),
+                Row(
+                  children: [
+                    StatefulBuilder(builder: (context, sbSetState) {
+                      return _isAddAction
+                          ? IconButton(
+                              color: Theme.of(context).colorScheme.secondary,
+                              onPressed: () {
+                                setState(() => _isAddAction = false);
+                                sbSetState(() => _isAddAction = false);
+                              },
+                              icon: Icon(Icons.add))
+                          : IconButton(
+                              color: Theme.of(context).colorScheme.secondary,
+                              onPressed: () {
+                                setState(() => _isAddAction = true);
+                                sbSetState(() => _isAddAction = true);
+                              },
+                              icon: Icon(Icons.remove));
+                    }),
+                    Expanded(
+                        child: Padding(
+                      padding: const EdgeInsets.only(right: 16.0),
+                      child: CustomTextFormField(
+                          textInputType: TextInputType.number,
+                          onChanged: (val) => _numberField = int.tryParse(val),
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ]),
+                    ))
+                  ],
+                ),
                 StatefulBuilder(
                   builder: (context, sbSetState) {
                     if (widget.team.match?.game.npMinVal == null) {
@@ -122,6 +149,7 @@ class _TeamBoardState extends State<TeamBoard> {
               onTap: () {
                 _numberField = null;
                 _currentValue = widget.team.match?.game.npMinVal ?? 0;
+                _isAddAction = true;
                 _showMessageDialog(context);
               },
               iconData: Icons.add),
