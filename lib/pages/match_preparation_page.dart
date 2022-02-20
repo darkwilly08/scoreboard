@@ -177,6 +177,7 @@ class _MatchPreparationPhoneView
   const _MatchPreparationPhoneView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildSettingsList(BuildContext context) {
+    //TODO editable game settings before start the match
     return SettingsList(
       shrinkWrap: true,
       lightBackgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
