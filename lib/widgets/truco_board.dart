@@ -1,8 +1,10 @@
+import 'dart:typed_data';
+
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
-import 'package:anotador/widgets/custom_floating_action_button.dart';
+import 'package:anotador/utils/audio_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -16,20 +18,32 @@ class TrucoBoard extends StatefulWidget {
 
 class _TrucoBoardState extends State<TrucoBoard> {
   late MatchController _matchController;
+  late Uint8List removeAudio;
+  late Uint8List addAudio;
+  final AudioHelper _audioHelper =
+      AudioHelper(); //reuse the same instance to avoid delays creating the object each time
 
   @override
   void initState() {
     _matchController = Provider.of<MatchController>(context, listen: false);
+    _cacheAudios();
     super.initState();
   }
 
+  void _cacheAudios() async {
+    removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
+    addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);
+  }
+
   void handleAddScoreBtn() {
+    _audioHelper.playLocal(addAudio);
     setState(() {
       _matchController.addResult(widget.team, 1);
     });
   }
 
   void handleRemoveScoreBtn() {
+    _audioHelper.playLocal(removeAudio);
     setState(() {
       _matchController.addResult(widget.team, -1);
     });
@@ -133,7 +147,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
     }
 
     if (game.twoHalves) {
-      squares.insert(3, const Divider(color: Colors.white));
+      squares.insert(squareQuantity ~/ 2, const Divider(color: Colors.white));
     }
 
     return squares;
@@ -179,9 +193,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
           child: GestureDetector(
             onTap: handleRemoveScoreBtn,
             child: const Image(
-              height: 45,
-              image: AssetImage(AssetsConstants.lighter),
-            ),
+                height: 45, image: AssetImage(AssetsConstants.lighter)),
           ),
         )
       ],
