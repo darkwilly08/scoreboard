@@ -143,9 +143,16 @@ class Team {
     return false;
   }
 
+  Future<bool> removeLast() async {
+    if (scoreList.length > 1) {
+      scoreList.removeLast();
+      return true;
+    }
+    return false;
+  }
+
   Future<bool> addResult(int value) async {
     bool targetScoreWins = match!.game.targetScoreWins;
-    int lastScore = this.lastScore;
     int statusId = status.id;
 
     int newScore = lastScore + value;

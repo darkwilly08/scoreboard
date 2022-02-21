@@ -36,7 +36,7 @@ class AppData {
       );
 
       await db.execute(
-        'CREATE TABLE ${Tables.team_score}(${Tables.team_score}_team_id integer not null, ${Tables.team_score}_score integer not null, FOREIGN KEY(${Tables.team_score}_team_id) REFERENCES ${Tables.team}(${Tables.team}_id))',
+        'CREATE TABLE ${Tables.team_score}(${Tables.team_score}_team_id integer not null, ${Tables.team_score}_score integer not null, ${Tables.team_score}_created_at TEXT not null, FOREIGN KEY(${Tables.team_score}_team_id) REFERENCES ${Tables.team}(${Tables.team}_id))',
       );
 
       await db.insert(

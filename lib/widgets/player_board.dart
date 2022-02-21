@@ -1,4 +1,4 @@
-import 'dart:ui';
+import 'dart:developer';
 
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/match.dart';
@@ -10,6 +10,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class TeamBoard extends StatefulWidget {
   final Team team;
@@ -23,7 +24,7 @@ class _TeamBoardState extends State<TeamBoard> {
   late MatchController _matchController;
   final ScrollController _scrollController = ScrollController();
   int? _numberField;
-  int _currentValue = 10;
+  late int _currentValue;
   bool _isAddAction = true;
 
   @override
@@ -50,6 +51,12 @@ class _TeamBoardState extends State<TeamBoard> {
     }
     setState(() {
       _matchController.addResult(widget.team, value);
+    });
+  }
+
+  void handleRemoveLastScoreBtn() {
+    setState(() {
+      _matchController.removeLatestResult(widget.team);
     });
   }
 
@@ -136,12 +143,67 @@ class _TeamBoardState extends State<TeamBoard> {
         Expanded(
             child: ListView(
           controller: _scrollController,
-          children: widget.team.scoreList
-              .map((score) => Text(
-                    score.toString(),
-                    textAlign: TextAlign.center,
-                  ))
-              .toList(),
+          children: widget.team.scoreList.mapIndexed((idx, score) {
+            if (idx > 0 && idx == widget.team.scoreList.length - 1) {
+              final int scoreDiff = (score - widget.team.scoreList[idx - 1]);
+              final String diffStr =
+                  scoreDiff > 0 ? "(+$scoreDiff)" : "(-${scoreDiff.abs()})";
+              return Column(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.zero,
+                    child: Text(
+                      diffStr,
+                      textAlign: TextAlign.start,
+                      style: TextStyle(
+                          color: scoreDiff > 0
+                              ? Theme.of(context)
+                                  .colorScheme
+                                  .secondary
+                                  .withOpacity(0.4)
+                              : Colors.red.withOpacity(0.4),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 13),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: handleRemoveLastScoreBtn,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(left: 20),
+                          child: Text(
+                            score.toString(),
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 20,
+                          child: Icon(
+                            Icons.clear,
+                            size: 16,
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              );
+            } else {
+              return Text(
+                score.toString(),
+                textAlign: TextAlign.center,
+                style: TextStyle(fontWeight: FontWeight.w300),
+              );
+            }
+          }).toList(),
         )),
         Padding(
           padding: EdgeInsets.all(8.0),

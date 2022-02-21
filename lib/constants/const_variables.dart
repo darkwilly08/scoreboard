@@ -3,7 +3,7 @@ import 'package:anotador/model/truco/truco_score.dart';
 class AppConstants {
   AppConstants._();
   static const isoLang = {"en": "English", "es": "Spanish"};
-  static const dbDateTimeFormat = "yyyy-MM-dd HH:mm";
+  static const dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss.SSS";
   static const trucoPossibleScores = [
     TrucoScore(points: 9, pointsBySquare: 3),
     TrucoScore(points: 10, pointsBySquare: 5),

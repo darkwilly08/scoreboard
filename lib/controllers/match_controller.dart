@@ -51,6 +51,13 @@ class MatchController extends ChangeNotifier {
     await _matchRepository.cancelMatchesByGameId(gameId);
   }
 
+  Future<void> removeLatestResult(Team team) async {
+    bool wasRemoved = await team.removeLast();
+    if (wasRemoved) {
+      await _matchRepository.removeLastScore(team);
+    }
+  }
+
   Future<void> addResult(Team team, int value) async {
     bool wasAdded = await team.addResult(value);
     if (wasAdded) {
@@ -68,7 +75,7 @@ class MatchController extends ChangeNotifier {
     //   }
     // }
 
-    if (team.status.id == TeamStatus.WON ||
+    if (team.status.id == TeamStatus.WON || /* or all lost except you */
         ((_match!.teams!.length -
                 _match!.teams!
                     .where((p) => p.status.id == TeamStatus.LOST)
