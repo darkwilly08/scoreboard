@@ -2,6 +2,7 @@ import 'package:anotador/model/truco/truco_score.dart';
 
 class AppConstants {
   AppConstants._();
+  static const fontFamily = "Nexa";
   static const isoLang = {"en": "English", "es": "Spanish"};
   static const dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss.SSS";
   static const trucoPossibleScores = [

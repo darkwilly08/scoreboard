@@ -1,3 +1,4 @@
+import 'package:anotador/constants/const_variables.dart';
 import 'package:flutter/material.dart';
 
 class AppTheme {
@@ -19,7 +20,6 @@ class AppTheme {
       cardColor: lightSurfaceColor,
       dialogBackgroundColor: lightSurfaceColor,
       toggleableActiveColor: lightSecondaryColor,
-      accentColor: lightSecondaryColor,
       floatingActionButtonTheme:
           FloatingActionButtonThemeData(foregroundColor: lightBackgroundColor),
       colorScheme: ColorScheme.light().copyWith(
@@ -28,7 +28,11 @@ class AppTheme {
         secondary: lightSecondaryColor,
         secondaryVariant: lightSecondaryDarkerColor,
       ),
-      textTheme: Typography.blackCupertino);
+      textTheme:
+          Typography.blackCupertino.apply(fontFamily: AppConstants.fontFamily),
+      primaryTextTheme: ThemeData.light().textTheme.apply(
+            fontFamily: AppConstants.fontFamily,
+          ));
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
       backgroundColor: backgroundColor,
       scaffoldBackgroundColor: backgroundColor,
@@ -42,6 +46,10 @@ class AppTheme {
           primaryVariant: surfaceColor,
           secondary: secondaryDarkerColor,
           secondaryVariant: secondaryDarkerColor),
-      textTheme: Typography.whiteHelsinki.apply(bodyColor: fontColor),
+      textTheme: Typography.whiteHelsinki
+          .apply(bodyColor: fontColor, fontFamily: AppConstants.fontFamily),
+      primaryTextTheme: ThemeData.light().textTheme.apply(
+            fontFamily: AppConstants.fontFamily,
+          ),
       iconTheme: const IconThemeData().copyWith(color: fontColor));
 }
