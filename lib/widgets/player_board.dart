@@ -5,6 +5,7 @@ import 'package:anotador/model/match.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/custom_text_form_field.dart';
+import 'package:anotador/widgets/game_title.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -139,7 +140,7 @@ class _TeamBoardState extends State<TeamBoard> {
     executeAfterBuild();
     return Column(
       children: [
-        Text(widget.team.name),
+        GameTitle(title: widget.team.name),
         Expanded(
             child: ListView(
           controller: _scrollController,

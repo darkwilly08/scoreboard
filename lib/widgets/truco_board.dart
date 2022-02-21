@@ -5,6 +5,7 @@ import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
 import 'package:anotador/utils/audio_helper.dart';
+import 'package:anotador/widgets/game_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -90,7 +91,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
       height: squareHeight,
       width: squareHeight,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Stack(
           children: [
             Visibility(
@@ -153,7 +154,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
     return squares;
   }
 
-  String getSubtitle(bool? areGood) {
+  String areGoodDesc(bool? areGood) {
     if (areGood == null) {
       return "";
     } else if (areGood == false) {
@@ -170,8 +171,10 @@ class _TrucoBoardState extends State<TrucoBoard> {
     final currentScore = widget.team.lastScore;
     return Column(
       children: [
-        Text(widget.team.name + " - " + currentScore.toString()),
-        Text(getSubtitle(areGood)),
+        GameTitle(
+          title: widget.team.name,
+          subtitle: currentScore.toString() + " " + areGoodDesc(areGood),
+        ),
         Expanded(
           child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
