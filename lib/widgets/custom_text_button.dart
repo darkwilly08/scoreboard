@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CustomTextButton extends StatelessWidget {
-  const CustomTextButton(
-      {Key? key, required Function() this.onTap, required String this.text})
+  const CustomTextButton({Key? key, required this.onTap, required this.text})
       : super(key: key);
 
   final Function() onTap;
@@ -12,12 +11,10 @@ class CustomTextButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var themeData =
-        Provider.of<ThemeController>(context, listen: false).themeData;
     return TextButton(
         onPressed: onTap,
         style: TextButton.styleFrom(
-          primary: themeData.colorScheme.secondary,
+          primary: Theme.of(context).colorScheme.secondary,
         ),
         child: Text(
           text.toUpperCase(),

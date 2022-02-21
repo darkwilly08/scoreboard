@@ -55,7 +55,7 @@ class _SettingsPhoneView
           return AlertDialog(
               title: Text(AppLocalizations.of(context)!.languageSelector),
               content: SingleChildScrollView(
-                child: Container(
+                child: SizedBox(
                   width: double.infinity,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -93,25 +93,29 @@ class _SettingsPhoneView
         : AppLocalizations.of(context)!.light_theme;
 
     return SettingsList(
-      lightBackgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
-      darkBackgroundColor: AppTheme.darkTheme.scaffoldBackgroundColor,
+      darkTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+      lightTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
       sections: [
         SettingsSection(
-          title: AppLocalizations.of(context)!.interface,
+          title: Text(AppLocalizations.of(context)!.interface,
+              style: TextStyle(
+                  color: Theme.of(state.context).colorScheme.secondary)),
           tiles: [
             SettingsTile(
-              title: AppLocalizations.of(context)!.language,
-              subtitle: lang,
-              leading: Icon(Icons.language),
+              title: Text(AppLocalizations.of(context)!.language),
+              value: Text(lang),
+              leading: const Icon(Icons.language),
               onPressed: (BuildContext context) {
                 _showSingleChoiceDialog(context, langCode);
               },
             ),
             SettingsTile.switchTile(
-              title: AppLocalizations.of(context)!.theme,
-              subtitle: themeName,
-              leading: Icon(Icons.color_lens_rounded),
-              switchValue: darkMode,
+              title: Text(AppLocalizations.of(context)!.theme),
+              description: Text(themeName),
+              leading: const Icon(Icons.color_lens_rounded),
+              initialValue: darkMode,
               onToggle: (bool value) {
                 state.handleThemeModeChanged(value);
               },

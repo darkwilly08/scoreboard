@@ -84,9 +84,8 @@ class _PickPlayersPhoneView
     return Consumer<UserController>(builder: (context, userController, _) {
       var players = userController.players;
       if (players == null) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
-      log(state._selectedUsers.length.toString());
       return UserList(
         users: players
             .where((u) => widget.unavailableUsers == null
@@ -103,9 +102,10 @@ class _PickPlayersPhoneView
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: Icon(Icons.search), onPressed: () => null),
+        IconButton(icon: const Icon(Icons.search), onPressed: () => null),
         IconButton(
-            icon: Icon(Icons.add), onPressed: () => state.handleAddPlayerBtn()),
+            icon: const Icon(Icons.add),
+            onPressed: () => state.handleAddPlayerBtn()),
       ],
     );
   }

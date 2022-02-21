@@ -1,6 +1,4 @@
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 class CustomToggleButton extends StatefulWidget {
   final String firstBtnText;
@@ -10,7 +8,7 @@ class CustomToggleButton extends StatefulWidget {
   final bool? isFirstBtnSelected;
   final Function(int index)? onChanged;
 
-  CustomToggleButton(
+  const CustomToggleButton(
       {Key? key,
       required this.firstBtnText,
       this.firstBtnIcon,
@@ -25,8 +23,6 @@ class CustomToggleButton extends StatefulWidget {
 }
 
 class _CustomToggleButtonState extends State<CustomToggleButton> {
-  late ThemeController _themeController;
-
   bool isFirstBtnSelected = true;
   late ButtonStyle selectedBtnStyle;
   late EdgeInsetsGeometry padding;
@@ -44,17 +40,14 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
 
   @override
   void initState() {
-    _themeController = Provider.of<ThemeController>(context, listen: false);
-
-    padding = EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
+    padding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0);
     isFirstBtnSelected = widget.isFirstBtnSelected ?? true;
     super.initState();
   }
 
   Widget _buildBtnSelected(String text, IconData? iconData) {
     TextStyle selectedTextStyle = TextStyle(
-        color: _themeController.themeData.colorScheme.secondary,
-        fontSize: 18.0);
+        color: Theme.of(context).colorScheme.secondary, fontSize: 18.0);
 
     Widget btn;
     if (iconData != null) {
@@ -66,7 +59,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     } else {
       btn = Container(
         decoration: BoxDecoration(
-            color: _themeController.themeData.colorScheme.primaryVariant,
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(16.0)),
         padding: padding,
         child: Text(text, style: selectedTextStyle),
@@ -112,7 +105,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     return Row(
       children: [
         btn1,
-        SizedBox(
+        const SizedBox(
           width: 10,
         ),
         btn2

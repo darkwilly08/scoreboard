@@ -35,10 +35,10 @@ dependencies:
   intl: ^0.17.0
   cupertino_icons: ^1.0.2
   splash_screen_view: ^3.0.0
-  shared_preferences: ^2.0.7
-  provider: ^6.0.0
-  settings_ui: ^1.0.0
-  package_info: ^2.0.2
+  shared_preferences: ^2.0.13
+  provider: ^6.0.2
+  settings_ui: ^2.0.2
+  package_info_plus: ^1.4.0
   sqflite: ^2.0.0+4
   path: ^1.8.0
   numberpicker: ^2.1.1

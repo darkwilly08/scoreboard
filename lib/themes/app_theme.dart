@@ -20,13 +20,13 @@ class AppTheme {
       cardColor: lightSurfaceColor,
       dialogBackgroundColor: lightSurfaceColor,
       toggleableActiveColor: lightSecondaryColor,
-      floatingActionButtonTheme:
-          FloatingActionButtonThemeData(foregroundColor: lightBackgroundColor),
-      colorScheme: ColorScheme.light().copyWith(
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+          foregroundColor: lightBackgroundColor),
+      colorScheme: const ColorScheme.light().copyWith(
         primary: lightSurfaceColor,
-        primaryVariant: lightBackgroundColor,
         secondary: lightSecondaryColor,
-        secondaryVariant: lightSecondaryDarkerColor,
+        secondaryContainer: secondaryDarkerColor,
+        primaryContainer: lightSurfaceColor,
       ),
       textTheme:
           Typography.blackCupertino.apply(fontFamily: AppConstants.fontFamily),
@@ -43,9 +43,9 @@ class AppTheme {
           const FloatingActionButtonThemeData(foregroundColor: backgroundColor),
       colorScheme: const ColorScheme.dark().copyWith(
           primary: secondaryDarkerColor,
-          primaryVariant: surfaceColor,
+          primaryContainer: surfaceColor,
           secondary: secondaryDarkerColor,
-          secondaryVariant: secondaryDarkerColor),
+          secondaryContainer: secondaryDarkerColor),
       textTheme: Typography.whiteHelsinki
           .apply(bodyColor: fontColor, fontFamily: AppConstants.fontFamily),
       primaryTextTheme: ThemeData.light().textTheme.apply(

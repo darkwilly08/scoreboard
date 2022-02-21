@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
@@ -14,7 +12,6 @@ import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -65,8 +62,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: Text("There's a match in progress"),
-          content: Text("Do you want to continue the ongoing match?"),
+          title: const Text("There's a match in progress"),
+          content: const Text("Do you want to continue the ongoing match?"),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => handleContinueMatch(m),
@@ -180,24 +177,29 @@ class _MatchPreparationPhoneView
     //TODO editable game settings before start the match
     return SettingsList(
       shrinkWrap: true,
-      lightBackgroundColor: AppTheme.lightTheme.scaffoldBackgroundColor,
-      darkBackgroundColor: AppTheme.darkTheme.scaffoldBackgroundColor,
+      darkTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+      lightTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
       sections: [
         SettingsSection(
-          title: AppLocalizations.of(context)!.rules,
+          title: Text(
+            AppLocalizations.of(context)!.rules,
+            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+          ),
           tiles: [
             SettingsTile(
-              title: AppLocalizations.of(context)!.target_score,
-              subtitle: widget.selectedGame.targetScore.toString(),
+              title: Text(AppLocalizations.of(context)!.target_score),
+              value: Text(widget.selectedGame.targetScore.toString()),
               leading: const Icon(Icons.adjust),
               onPressed: (BuildContext context) {
                 //TODO _showSingleChoiceDialog(context, langCode);
               },
             ),
             SettingsTile.switchTile(
-              title: AppLocalizations.of(context)!.target_score_wins,
+              title: Text(AppLocalizations.of(context)!.target_score_wins),
               leading: const Icon(Icons.emoji_events),
-              switchValue: widget.selectedGame.targetScoreWins,
+              initialValue: widget.selectedGame.targetScoreWins,
               onToggle: (bool value) {
                 //TODO state.handleThemeModeChanged(value);
               },
@@ -272,7 +274,7 @@ class _MatchPreparationPhoneView
   Widget _buildTeamBSection(BuildContext context) {
     var teamBName = AppLocalizations.of(context)!.team + " B";
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -297,7 +299,7 @@ class _MatchPreparationPhoneView
       case 1:
         return _buldTeamsSection(context);
       default:
-        return Text("page not found");
+        return const Text("page not found");
     }
   }
 
@@ -310,9 +312,7 @@ class _MatchPreparationPhoneView
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             BackHeader(title: AppLocalizations.of(context)!.new_match),
-            Flexible(
-              child: _buildSettingsList(context),
-            ),
+            _buildSettingsList(context),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: CustomToggleButton(
@@ -331,8 +331,8 @@ class _MatchPreparationPhoneView
               height: 50,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondaryVariant,
-                  borderRadius: BorderRadius.only(
+                  color: Theme.of(context).colorScheme.secondary,
+                  borderRadius: const BorderRadius.only(
                       topLeft: Radius.circular(60.0),
                       topRight: Radius.circular(60.0)),
                   boxShadow: [
@@ -340,7 +340,7 @@ class _MatchPreparationPhoneView
                       color: Colors.grey.withOpacity(0.6),
                       spreadRadius: 3,
                       blurRadius: 10,
-                      offset: Offset(0, -1), // changes position of shadow
+                      offset: const Offset(0, -1), // changes position of shadow
                     ),
                   ]),
               child: Center(
@@ -348,7 +348,7 @@ class _MatchPreparationPhoneView
                   AppLocalizations.of(context)!.start,
                   style: TextStyle(
                       fontSize: 20,
-                      color: Theme.of(context).colorScheme.primaryVariant),
+                      color: Theme.of(context).colorScheme.primaryContainer),
                 ),
               ),
             ),

@@ -7,7 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
-  HomeScreen({Key? key}) : super(key: key);
+  static const String routeName = "/";
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -23,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void handleToggleChanged(int index) {
     setState(() {
-      this._index = index;
+      _index = index;
     });
   }
 }
@@ -68,11 +69,11 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
   Widget _buildBody(BuildContext context) {
     switch (state._index) {
       case 0:
-        return GameListScreen();
+        return const GameListScreen();
       case 1:
-        return Text("page 2");
+        return const Text("page 2");
       default:
-        return Text("page not found");
+        return const Text("page not found");
     }
   }
 
@@ -91,7 +92,7 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
           children: [
             Builder(builder: (context) => _buildTopHeader(context)),
             Container(
-                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: CustomToggleButton(
                   firstBtnText: AppLocalizations.of(context)!.games,
                   secondBtnText: AppLocalizations.of(context)!.stats,

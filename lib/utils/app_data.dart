@@ -1,7 +1,7 @@
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
-import 'package:package_info/package_info.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sqflite/sqflite.dart';

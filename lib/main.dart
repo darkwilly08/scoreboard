@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
               theme: themeController.themeData,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: HomeScreen(),
+              home: const HomeScreen(),
               onGenerateRoute: (RouteSettings routeSettings) {
                 var routes = <String, WidgetBuilder>{
                   Routes.settings: (context) => const SettingsScreen(),
