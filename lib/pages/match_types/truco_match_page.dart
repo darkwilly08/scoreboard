@@ -148,7 +148,7 @@ class _TrucoMatchView
             body: Column(
           children: [
             BackHeader(
-              title: AppLocalizations.of(context)!.players,
+              title: state._matchController.match!.game.name,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () => state.handleBackArrow(),
