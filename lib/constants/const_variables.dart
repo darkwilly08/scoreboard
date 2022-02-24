@@ -1,9 +1,13 @@
+import 'package:anotador/model/custom_locale.dart';
 import 'package:anotador/model/truco/truco_score.dart';
 
 class AppConstants {
   AppConstants._();
   static const fontFamily = "Nexa";
-  static const isoLang = {"en": "English", "es": "Spanish"};
+  static const languages = [
+    CustomLocale(languageCode: "en", languageName: "English"),
+    CustomLocale(languageCode: "es", languageName: "Spanish")
+  ];
   static const dbDateTimeFormat = "yyyy-MM-dd HH:mm:ss.SSS";
   static const trucoPossibleScores = [
     TrucoScore(points: 9, pointsBySquare: 3),
