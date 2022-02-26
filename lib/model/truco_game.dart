@@ -16,7 +16,8 @@ class TrucoGame extends Game {
             id: id,
             name: name,
             targetScore: targetScore,
-            targetScoreWins: targetScoreWins) {
+            targetScoreWins: targetScoreWins,
+            isNegativeAllowed: false) {
     type = GameType(GameType.TRUCO);
   }
 
@@ -27,14 +28,9 @@ class TrucoGame extends Game {
 
   @override
   Map<String, dynamic> toMap() {
-    return {
-      '${Tables.game}_id': id,
-      '${Tables.game}_name': name,
-      '${Tables.game}_type_id': type.id,
-      '${Tables.game}_target_score': targetScore,
-      '${Tables.game}_target_score_wins': targetScoreWins ? 1 : 0,
-      '${Tables.game}_two_halves': twoHalves ? 1 : 0
-    };
+    final def = super.toMap();
+    def.putIfAbsent('${Tables.game}_two_halves', () => twoHalves ? 1 : 0);
+    return def;
   }
 
   factory TrucoGame.fromJson(Map<String, dynamic> json) {

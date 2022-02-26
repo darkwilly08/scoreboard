@@ -7,6 +7,7 @@ class Game {
   String name;
   int targetScore;
   bool targetScoreWins;
+  bool isNegativeAllowed;
   late GameType type;
   int won = 0;
   int lost = 0;
@@ -19,6 +20,7 @@ class Game {
       required this.name,
       required this.targetScore,
       required this.targetScoreWins,
+      required this.isNegativeAllowed,
       this.npMaxVal,
       this.npMinVal,
       this.npStep}) {
@@ -32,6 +34,7 @@ class Game {
       '${Tables.game}_type_id': type.id,
       '${Tables.game}_target_score': targetScore,
       '${Tables.game}_target_score_wins': targetScoreWins ? 1 : 0,
+      '${Tables.game}_is_negative_allowed': isNegativeAllowed ? 1 : 0,
       '${Tables.game}_np_min_val': npMinVal,
       '${Tables.game}_np_max_val': npMaxVal,
       '${Tables.game}_np_step': npStep,
@@ -47,6 +50,7 @@ class Game {
             name: json['${Tables.game}_name'],
             targetScore: json['${Tables.game}_target_score'],
             targetScoreWins: json['${Tables.game}_target_score_wins'] > 0,
+            isNegativeAllowed: json['${Tables.game}_is_negative_allowed'] > 0,
             npMinVal: json['${Tables.game}_np_min_val'],
             npMaxVal: json['${Tables.game}_np_max_val'],
             npStep: json['${Tables.game}_np_step']);

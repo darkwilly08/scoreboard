@@ -21,7 +21,7 @@ class AppData {
       );
 
       await db.execute(
-        'CREATE TABLE ${Tables.game}(${Tables.game}_id integer primary key autoincrement, ${Tables.game}_name text not null, ${Tables.game}_type_id integer not null, ${Tables.game}_target_score int not null, ${Tables.game}_target_score_wins integer not null, ${Tables.game}_two_halves integer, ${Tables.game}_np_min_val integer, ${Tables.game}_np_max_val integer, ${Tables.game}_np_step integer)',
+        'CREATE TABLE ${Tables.game}(${Tables.game}_id integer primary key autoincrement, ${Tables.game}_name text not null, ${Tables.game}_type_id integer not null, ${Tables.game}_target_score int not null, ${Tables.game}_target_score_wins integer not null, ${Tables.game}_is_negative_allowed integer not null, ${Tables.game}_two_halves integer, ${Tables.game}_np_min_val integer, ${Tables.game}_np_max_val integer, ${Tables.game}_np_step integer)',
       );
 
       await db.execute(
@@ -52,6 +52,7 @@ class AppData {
                   name: "Uno",
                   targetScore: 201,
                   targetScoreWins: false,
+                  isNegativeAllowed: true,
                   npMinVal: 0,
                   npMaxVal: 100,
                   npStep: 1)
@@ -63,6 +64,7 @@ class AppData {
                   name: "Diez Mil",
                   targetScore: 10000,
                   targetScoreWins: true,
+                  isNegativeAllowed: true,
                   npMinVal: 200,
                   npMaxVal: 1000,
                   npStep: 50)
