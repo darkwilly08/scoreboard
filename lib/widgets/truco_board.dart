@@ -31,20 +31,21 @@ class _TrucoBoardState extends State<TrucoBoard> {
     super.initState();
   }
 
+  // kill
   void _cacheAudios() async {
     removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
     addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);
   }
 
   void handleAddScoreBtn() {
-    _audioHelper.playLocal(addAudio);
+    _audioHelper.playLocal(AssetsConstants.pointAdded);
     setState(() {
       _matchController.addResult(widget.team, 1);
     });
   }
 
   void handleRemoveScoreBtn() {
-    _audioHelper.playLocal(removeAudio);
+    _audioHelper.playLocal(AssetsConstants.pointRemoved);
     setState(() {
       _matchController.addResult(widget.team, -1);
     });
