@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class GameListScreen extends StatefulWidget {
-  GameListScreen({Key? key}) : super(key: key);
+  const GameListScreen({Key? key}) : super(key: key);
 
   @override
   _GameScreenState createState() => _GameScreenState();
@@ -45,41 +45,42 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
 
   Widget makeListTile(Game game) => Container(
           child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
         title: Text(
           game.name,
           style: TextStyle(
-              color: state._themeController.themeData.colorScheme.secondary,
+              color: Theme.of(state.context).colorScheme.secondary,
               fontSize: 22.0),
         ),
         subtitle: Container(
-          margin: EdgeInsets.only(top: 8.0),
+          margin: const EdgeInsets.only(top: 8.0),
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Text(
                 game.won.toString(),
-                style: state._themeController.themeData.textTheme.subtitle2,
+                style: Theme.of(state.context).textTheme.subtitle2,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
-              Icon(
+              const Icon(
                 Icons.thumb_up_alt_outlined,
                 size: 18.0,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 10,
               ),
               Text(
                 game.lost.toString(),
-                style: state._themeController.themeData.textTheme.subtitle2,
+                style: Theme.of(state.context).textTheme.subtitle2,
               ),
-              SizedBox(
+              const SizedBox(
                 width: 5,
               ),
-              Icon(
+              const Icon(
                 Icons.thumb_down_alt_outlined,
                 size: 18.0,
               )
@@ -100,14 +101,14 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
       List<Widget> rows = [];
       var games = gameController.games;
       if (games == null) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
       if (games.isNotEmpty) {
-        games.forEach((game) {
+        for (var game in games) {
           rows.add(makeListTile(game));
-        });
+        }
       } else {
-        return Text("data");
+        return const Text("data");
       }
 
       return ListView(

@@ -1,30 +1,40 @@
+import 'dart:io';
+
 import 'package:anotador/constants/const_variables.dart';
+import 'package:anotador/model/custom_locale.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 class LocaleController extends ChangeNotifier {
-  static const _defaultLang = 'en';
-
   LocaleController() {
     _initFromSharedPreferences();
   }
 
-  late Locale _locale;
+  late CustomLocale _locale;
 
-  Locale get locale => _locale;
+  CustomLocale get customLocale => _locale;
+  Locale get locale => Locale(_locale.languageCode);
+
+  CustomLocale _findLocale(String languageCode) {
+    return AppConstants.languages.firstWhere(
+        (l) => l.languageCode == languageCode,
+        orElse: () => AppConstants.languages.first);
+  }
+
+  CustomLocale _getDefaultLang() {
+    String platformLang = Platform.localeName.length >= 2
+        ? Platform.localeName.substring(0, 2)
+        : 'en';
+
+    return _findLocale(platformLang);
+  }
 
   void _initFromSharedPreferences() {
     String lang =
         AppData.sharedPreferences.getString(PreferenceKeys.languageKey) ??
-            _defaultLang;
-    _locale = _findLocale(lang);
-  }
+            _getDefaultLang().languageCode;
 
-  Locale _findLocale(String language) {
-    List<Locale> locales = AppLocalizations.supportedLocales;
-    return locales.firstWhere((element) => element.languageCode == language);
+    _locale = _findLocale(lang);
   }
 
   Future<void> changeLanguage(String language) async {
@@ -32,9 +42,5 @@ class LocaleController extends ChangeNotifier {
     await AppData.sharedPreferences
         .setString(PreferenceKeys.languageKey, _locale.languageCode);
     notifyListeners();
-  }
-
-  String getLanguage() {
-    return AppConstants.isoLang[_locale.languageCode]!;
   }
 }

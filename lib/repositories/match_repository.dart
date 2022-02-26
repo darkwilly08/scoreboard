@@ -57,10 +57,27 @@ class MatchRepository {
         where: '${Tables.match}_id = ${match.id}');
   }
 
+  Future<int> removeLastScore(Team team) async {
+    final db = await AppData.database;
+    int result = await db.rawDelete('''
+          delete from ${Tables.team_score} 
+          where ${Tables.team_score}_team_id = ${team.id} 
+          and ${Tables.team_score}_created_at = (
+            select max(${Tables.team_score}_created_at)
+            from ${Tables.team_score}
+            where ${Tables.team_score}_team_id = ${team.id} 
+          )
+        
+        ''');
+
+    return result;
+  }
+
   Future<int> addScore(Team team, int score) async {
+    String createdAt = DateUtils.instance.toDB(DateTime.now());
     final db = await AppData.database;
     int result = await db.rawInsert(
-        "insert into ${Tables.team_score} (${Tables.team_score}_team_id, ${Tables.team_score}_score) values (${team.id}, $score)");
+        "insert into ${Tables.team_score} (${Tables.team_score}_team_id, ${Tables.team_score}_score, ${Tables.team_score}_created_at) values (${team.id}, $score, '$createdAt')");
     await db.rawUpdate(
         "update ${Tables.team} set ${Tables.team}_status_id = ${team.status.id} where ${Tables.team}_id = ${team.id}");
     return result;

@@ -31,11 +31,9 @@ class BackHeader extends StatelessWidget {
   }
 
   Widget _buildTopHeader(BuildContext context) {
-    print(AppBar().preferredSize.height);
     return SafeArea(
-        // height: Scaffold.of(context).appBarMaxHeight,
         child: Padding(
-      padding: EdgeInsets.only(right: 8.0),
+      padding: const EdgeInsets.only(right: 8.0),
       child: Row(
         children: <Widget>[
           _buildLeading(context),

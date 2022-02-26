@@ -40,8 +40,9 @@ class _TrucoMatchScreenState extends State<TrucoMatchScreen> {
   _showMessageDialog(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: Text("Are you sure?"),
-          content: Text("The match will be available to continue it later"),
+          title: const Text("Are you sure?"),
+          content:
+              const Text("The match will be available to continue it later"),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => Navigator.pop(context, true),
@@ -85,7 +86,7 @@ class _TrucoMatchView
 
     teamBoardList.insert(
         1,
-        VerticalDivider(
+        const VerticalDivider(
           width: 1,
           color: Colors.white,
         ));
@@ -114,15 +115,15 @@ class _TrucoMatchView
             .copyWith(color: Colors.black),
       ),
       leading: const CircleAvatar(child: Icon(Icons.emoji_events)),
-      backgroundColor: Theme.of(context).colorScheme.secondaryVariant,
+      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       actions: [
-        TextButton(
+        const TextButton(
             onPressed: null,
             child: Text(
               "RE MATCH",
               style: TextStyle(color: Colors.black),
             )),
-        TextButton(
+        const TextButton(
             onPressed: null,
             child: Text(
               "KEEP PLAYING",
@@ -130,7 +131,7 @@ class _TrucoMatchView
             )),
         TextButton(
             onPressed: state.handleExitBtn,
-            child: Text(
+            child: const Text(
               "EXIT",
               style: TextStyle(color: Colors.black),
             ))
@@ -147,7 +148,7 @@ class _TrucoMatchView
             body: Column(
           children: [
             BackHeader(
-              title: AppLocalizations.of(context)!.players,
+              title: state._matchController.match!.game.name,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () => state.handleBackArrow(),

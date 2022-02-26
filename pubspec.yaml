@@ -1,9 +1,9 @@
 name: anotador
-description: A new Flutter project.
+description: Keep score during all you card/dice games and get performance stats for each game
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -15,7 +15,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.0.0+1
+version: 1.0.2+3
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -32,40 +32,43 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-
   intl: ^0.17.0
   cupertino_icons: ^1.0.2
   splash_screen_view: ^3.0.0
-  shared_preferences: ^2.0.7
-  provider: ^6.0.0
-  settings_ui: ^1.0.0
-  package_info: ^2.0.2
+  shared_preferences: ^2.0.13
+  provider: ^6.0.2
+  settings_ui: ^2.0.2
+  package_info_plus: ^1.4.0
   sqflite: ^2.0.0+4
   path: ^1.8.0
   numberpicker: ^2.1.1
   flutter_svg: ^1.0.3
+  audioplayers: ^0.20.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
 
   flutter_lints: ^1.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
-# The following section is specific to Flutter.
 flutter:
-
-  # The following line ensures that the Material Icons font is
-  # included with your application, so that you can use the icons in
-  # the material Icons class.
   uses-material-design: true
   generate: true
 
-  # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/icons/scoreboard.png
-    - assets/one_line.png
-    - assets/one_line_rotated.png
+    - assets/icons/
+    - assets/images/
+    - assets/audios/
+
+  fonts:
+    - family: Nexa
+      fonts:
+        - asset: assets/fonts/nexa/bold.otf
+          weight: 700
+        - asset: assets/fonts/nexa/regular.otf
+          weight: 400
+        - asset: assets/fonts/nexa/light.otf
+          weight: 300

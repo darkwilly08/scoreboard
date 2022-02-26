@@ -1,3 +1,4 @@
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
 import 'package:anotador/model/user.dart';
@@ -5,12 +6,18 @@ import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
 
 class MatchController extends ChangeNotifier {
-  MatchRepository _matchRepository = MatchRepository();
+  GameController? _gameController;
+  final MatchRepository _matchRepository = MatchRepository();
   Match? _match;
 
   Match? get match => _match;
 
   MatchController();
+
+  MatchController update(GameController? gameController) {
+    _gameController = gameController;
+    return this;
+  }
 
   Future<void> start(Game game, bool isFFA, List<Team> teams) async {
     _match = Match(
@@ -51,6 +58,13 @@ class MatchController extends ChangeNotifier {
     await _matchRepository.cancelMatchesByGameId(gameId);
   }
 
+  Future<void> removeLatestResult(Team team) async {
+    bool wasRemoved = await team.removeLast();
+    if (wasRemoved) {
+      await _matchRepository.removeLastScore(team);
+    }
+  }
+
   Future<void> addResult(Team team, int value) async {
     bool wasAdded = await team.addResult(value);
     if (wasAdded) {
@@ -68,7 +82,7 @@ class MatchController extends ChangeNotifier {
     //   }
     // }
 
-    if (team.status.id == TeamStatus.WON ||
+    if (team.status.id == TeamStatus.WON || /* or all lost except you */
         ((_match!.teams!.length -
                 _match!.teams!
                     .where((p) => p.status.id == TeamStatus.LOST)
@@ -77,6 +91,7 @@ class MatchController extends ChangeNotifier {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
       _matchRepository.setTeamStatusByMatch(_match!);
+      _gameController?.refreshStats();
       notifyListeners();
     } else {
       _match!.status.id = MatchStatus.IN_PROGRES;

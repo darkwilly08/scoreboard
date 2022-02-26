@@ -1,14 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
-import 'package:anotador/widgets/custom_floating_action_button.dart';
+import 'package:anotador/utils/audio_helper.dart';
+import 'package:anotador/widgets/game_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class TrucoBoard extends StatefulWidget {
   final Team team;
-  TrucoBoard({Key? key, required this.team}) : super(key: key);
+  const TrucoBoard({Key? key, required this.team}) : super(key: key);
 
   @override
   _TrucoBoardState createState() => _TrucoBoardState();
@@ -16,16 +19,34 @@ class TrucoBoard extends StatefulWidget {
 
 class _TrucoBoardState extends State<TrucoBoard> {
   late MatchController _matchController;
+  late Uint8List removeAudio;
+  late Uint8List addAudio;
+  final AudioHelper _audioHelper =
+      AudioHelper(); //reuse the same instance to avoid delays creating the object each time
 
   @override
   void initState() {
     _matchController = Provider.of<MatchController>(context, listen: false);
+    _cacheAudios();
     super.initState();
   }
 
+  void _cacheAudios() async {
+    removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
+    addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);
+  }
+
   void handleAddScoreBtn() {
+    _audioHelper.playLocal(addAudio);
     setState(() {
       _matchController.addResult(widget.team, 1);
+    });
+  }
+
+  void handleRemoveScoreBtn() {
+    _audioHelper.playLocal(removeAudio);
+    setState(() {
+      _matchController.addResult(widget.team, -1);
     });
   }
 
@@ -66,11 +87,11 @@ class _TrucoBoardState extends State<TrucoBoard> {
   Widget _drawSquarePoints(int pointsToDraw, double squareHeight) {
     double spaceBetween = 10;
     squareHeight = squareHeight > 120 ? 120 : squareHeight;
-    return Container(
+    return SizedBox(
       height: squareHeight,
       width: squareHeight,
       child: Padding(
-        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
         child: Stack(
           children: [
             Visibility(
@@ -127,13 +148,13 @@ class _TrucoBoardState extends State<TrucoBoard> {
     }
 
     if (game.twoHalves) {
-      squares.insert(3, const Divider(color: Colors.white));
+      squares.insert(squareQuantity ~/ 2, const Divider(color: Colors.white));
     }
 
     return squares;
   }
 
-  String getSubtitle(bool? areGood) {
+  String areGoodDesc(bool? areGood) {
     if (areGood == null) {
       return "";
     } else if (areGood == false) {
@@ -150,24 +171,33 @@ class _TrucoBoardState extends State<TrucoBoard> {
     final currentScore = widget.team.lastScore;
     return Column(
       children: [
-        Text(widget.team.name + " - " + currentScore.toString()),
-        Text(getSubtitle(areGood)),
+        GameTitle(
+          title: widget.team.name,
+          subtitle: currentScore.toString() + " " + areGoodDesc(areGood),
+        ),
         Expanded(
           child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
               child: LayoutBuilder(
                   builder: (BuildContext context, BoxConstraints constraints) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: _drawScore(constraints, tGame, currentScore),
+                return GestureDetector(
+                  behavior: HitTestBehavior.translucent,
+                  onTap: handleAddScoreBtn,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: _drawScore(constraints, tGame, currentScore),
+                  ),
                 );
               })),
         ),
         Padding(
-          padding: EdgeInsets.only(bottom: 16, top: 8),
-          child: CustomFloatingActionButton(
-              onTap: handleAddScoreBtn, iconData: Icons.add),
+          padding: const EdgeInsets.only(bottom: 16, top: 8),
+          child: GestureDetector(
+            onTap: handleRemoveScoreBtn,
+            child: const Image(
+                height: 45, image: AssetImage(AssetsConstants.lighter)),
+          ),
         )
       ],
     );

@@ -3,18 +3,16 @@ import 'package:anotador/repositories/game_repository.dart';
 import 'package:flutter/material.dart';
 
 class GameController extends ChangeNotifier {
-  GameRepository _gameRepository = GameRepository();
+  final GameRepository _gameRepository = GameRepository();
   List<Game>? _games;
 
   List<Game>? get games => _games;
 
   GameController();
 
-  Future<void> AddGame(Game newGame) async {
+  Future<void> addGame(Game newGame) async {
     Game game = await _gameRepository.insert(newGame);
-    if (_games == null) {
-      _games = [];
-    }
+    _games ??= [];
 
     _games!.add(game);
 
@@ -29,6 +27,11 @@ class GameController extends ChangeNotifier {
     _games = await _gameRepository.games();
     await _gameRepository.setSummarizedStats(_games!);
     // _players!.sort(sortPlayers);
+    notifyListeners();
+  }
+
+  Future<void> refreshStats() async {
+    await _gameRepository.setSummarizedStats(_games!);
     notifyListeners();
   }
 }

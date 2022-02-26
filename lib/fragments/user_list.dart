@@ -1,22 +1,22 @@
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/box_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:provider/provider.dart';
 
 class PlayerTile extends StatefulWidget {
   final User user;
 
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
+  final bool? isTapped;
 
-  PlayerTile(
+  const PlayerTile(
       {Key? key,
       required this.user,
       required this.onItemTapped,
-      this.onFavoriteIconTapped})
+      this.onFavoriteIconTapped,
+      this.isTapped})
       : super(key: key);
 
   @override
@@ -24,7 +24,6 @@ class PlayerTile extends StatefulWidget {
 }
 
 class _PlayerTileState extends State<PlayerTile> {
-  late ThemeController _themeController;
   bool _isSelected = false;
 
   Widget? _buildTrailing() {
@@ -34,8 +33,8 @@ class _PlayerTileState extends State<PlayerTile> {
         icon: Icon(
           Icons.star,
           color: widget.user.favorite
-              ? _themeController.themeData.colorScheme.secondary
-              : _themeController.themeData.colorScheme.background,
+              ? Theme.of(context).colorScheme.secondary
+              : Theme.of(context).colorScheme.background,
         ),
         onPressed: () => onFavorite(widget.user),
       );
@@ -43,7 +42,7 @@ class _PlayerTileState extends State<PlayerTile> {
       return _isSelected
           ? Icon(
               Icons.check,
-              color: _themeController.themeData.colorScheme.secondary,
+              color: Theme.of(context).colorScheme.secondary,
             )
           : null;
     }
@@ -51,20 +50,20 @@ class _PlayerTileState extends State<PlayerTile> {
 
   Card makeListTile() => Card(
       elevation: 4.0,
-      margin: new EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
       child: Container(
           child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
         title: Text(
           widget.user.name,
-          style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
         ),
         leading: BoxTile(
           child: Text(
             widget.user.initial,
             style: TextStyle(
-                fontSize: 20,
-                color: _themeController.themeData.colorScheme.background),
+                fontSize: 20, color: Theme.of(context).colorScheme.background),
           ),
         ),
         trailing: _buildTrailing(),
@@ -81,8 +80,7 @@ class _PlayerTileState extends State<PlayerTile> {
 
   @override
   void initState() {
-    _themeController = Provider.of<ThemeController>(context, listen: false);
-
+    _isSelected = widget.isTapped ?? false;
     super.initState();
   }
 
@@ -94,10 +92,16 @@ class _PlayerTileState extends State<PlayerTile> {
 
 class UserList extends StatefulWidget {
   final List<User>? users;
+  final List<User>? preSelectedUsers;
   final void Function(User, bool)? onItemTapped;
   final void Function(User)? onFavoriteIconTapped;
 
-  UserList({Key? key, this.users, this.onItemTapped, this.onFavoriteIconTapped})
+  const UserList(
+      {Key? key,
+      this.users,
+      this.preSelectedUsers,
+      this.onItemTapped,
+      this.onFavoriteIconTapped})
       : super(key: key);
 
   @override
@@ -118,13 +122,15 @@ class _UserListView extends WidgetView<UserList, _UserListState> {
     List<Widget> items = [];
     var users = widget.users;
     if (users != null && users.isNotEmpty) {
-      users.forEach((user) {
+      for (var user in users) {
         items.add(PlayerTile(
           user: user,
           onItemTapped: widget.onItemTapped,
           onFavoriteIconTapped: widget.onFavoriteIconTapped,
+          isTapped:
+              widget.preSelectedUsers?.where((u) => u.id == user.id).isNotEmpty,
         ));
-      });
+      }
 
       return ListView(
         children: items,

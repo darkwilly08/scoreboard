@@ -39,7 +39,11 @@ class MyApp extends StatelessWidget {
               create: (_) => UserController()),
           ChangeNotifierProvider<GameController>(
               create: (_) => GameController()),
-          ChangeNotifierProvider(create: (_) => MatchController())
+          ChangeNotifierProxyProvider<GameController, MatchController>(
+            update: (context, gameController, matchController) =>
+                matchController!.update(gameController),
+            create: (BuildContext context) => MatchController(),
+          )
         ],
         child: Consumer2<ThemeController, LocaleController>(
           builder: (_, themeController, localeController, __) {
@@ -50,7 +54,7 @@ class MyApp extends StatelessWidget {
               theme: themeController.themeData,
               localizationsDelegates: AppLocalizations.localizationsDelegates,
               supportedLocales: AppLocalizations.supportedLocales,
-              home: HomeScreen(),
+              home: const HomeScreen(),
               onGenerateRoute: (RouteSettings routeSettings) {
                 var routes = <String, WidgetBuilder>{
                   Routes.settings: (context) => const SettingsScreen(),

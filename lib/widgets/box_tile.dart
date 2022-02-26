@@ -10,9 +10,9 @@ class BoxTile extends StatelessWidget {
       width: 40,
       height: 40,
       decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.secondaryVariant,
+          color: Theme.of(context).colorScheme.secondary,
           borderRadius: BorderRadius.circular(20)),
-      padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 0.0),
+      padding: const EdgeInsets.symmetric(horizontal: 5.0, vertical: 0.0),
       child: Center(child: child),
     );
   }

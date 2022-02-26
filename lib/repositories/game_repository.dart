@@ -60,7 +60,6 @@ class GameRepository {
     ''');
 
     for (var scoreTable in resultMap) {
-      print(scoreTable);
       var game = games.firstWhere((g) => g.id == scoreTable['game_id']);
       int scoreCount = scoreTable['score_count'] as int;
       if (scoreTable['is_me'] as int > 0) {

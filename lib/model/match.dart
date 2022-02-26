@@ -6,7 +6,6 @@ import 'package:anotador/utils/date_helper.dart';
 class Match {
   int? id;
   Game game;
-  // User? wonPlayer; //hay que sacarlo de aca
   DateTime createdAt;
   DateTime updatedAt;
   DateTime? endAt;
@@ -24,15 +23,7 @@ class Match {
       this.teams,
       this.endAt}) {
     status = MatchStatus(statusId);
-
-    // if (users != null) {
-    //   this.teams = [];
-    //   for (var user in users) {
-    //     MatchPlayer player = MatchPlayer(
-    //         match: this, user: user, statusId: PlayerStatus.PLAYING);
-    //     this.players.add(player);
-    //   }
-    // }
+    teams?.forEach((element) => element.match = this);
   }
 
   Map<String, dynamic> toMap() {
@@ -139,7 +130,7 @@ class Team {
 
   bool? areGood() {
     if (match!.game is TrucoGame && (match!.game as TrucoGame).twoHalves) {
-      return lastScore > match!.game.targetScore;
+      return lastScore > match!.game.targetScore / 2;
     }
 
     return null;
@@ -152,9 +143,16 @@ class Team {
     return false;
   }
 
+  Future<bool> removeLast() async {
+    if (scoreList.length > 1) {
+      scoreList.removeLast();
+      return true;
+    }
+    return false;
+  }
+
   Future<bool> addResult(int value) async {
     bool targetScoreWins = match!.game.targetScoreWins;
-    int lastScore = this.lastScore;
     int statusId = status.id;
 
     int newScore = lastScore + value;
@@ -185,7 +183,7 @@ class TeamStatus {
 
   int id;
 
-  TeamStatus(int this.id);
+  TeamStatus(this.id);
 }
 
 class Player {

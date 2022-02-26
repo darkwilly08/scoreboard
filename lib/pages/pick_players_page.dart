@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/fragments/user_list.dart';
 import 'package:anotador/model/user.dart';
@@ -13,8 +15,14 @@ class PickPlayersScreen extends StatefulWidget {
   // static const String routeName = "/pickPlayers";
 
   final void Function(List<User>)? onConfirmSelection;
+  final List<User>? unavailableUsers;
+  final List<User>? preSelectedUsers;
 
-  const PickPlayersScreen({Key? key, required this.onConfirmSelection})
+  const PickPlayersScreen(
+      {Key? key,
+      required this.onConfirmSelection,
+      this.unavailableUsers,
+      this.preSelectedUsers})
       : super(key: key);
 
   @override
@@ -22,7 +30,7 @@ class PickPlayersScreen extends StatefulWidget {
 }
 
 class _PickPlayerscreenState extends State<PickPlayersScreen> {
-  List<User> _selectedUsers = [];
+  final List<User> _selectedUsers = [];
   late UserController _userController;
 
   @override
@@ -30,6 +38,11 @@ class _PickPlayerscreenState extends State<PickPlayersScreen> {
     _userController = Provider.of<UserController>(context, listen: false);
 
     _userController.initPlayerList();
+
+    if (widget.preSelectedUsers != null) {
+      _selectedUsers.addAll(widget.preSelectedUsers!);
+    }
+
     super.initState();
   }
 
@@ -71,12 +84,16 @@ class _PickPlayersPhoneView
     return Consumer<UserController>(builder: (context, userController, _) {
       var players = userController.players;
       if (players == null) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
-
       return UserList(
-        users: players,
+        users: players
+            .where((u) => widget.unavailableUsers == null
+                ? true
+                : !widget.unavailableUsers!.contains(u))
+            .toList(),
         onItemTapped: state.handlePlayerTapped,
+        preSelectedUsers: widget.preSelectedUsers,
       );
     });
   }
@@ -85,9 +102,10 @@ class _PickPlayersPhoneView
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: Icon(Icons.search), onPressed: () => null),
+        IconButton(icon: const Icon(Icons.search), onPressed: () => null),
         IconButton(
-            icon: Icon(Icons.add), onPressed: () => state.handleAddPlayerBtn()),
+            icon: const Icon(Icons.add),
+            onPressed: () => state.handleAddPlayerBtn()),
       ],
     );
   }
