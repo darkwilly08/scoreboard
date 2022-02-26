@@ -1,9 +1,11 @@
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
+import 'package:anotador/model/custom_locale.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
+import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +38,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   void handleLanguageChanged(String code) {
     _localeController.changeLanguage(code);
-    Navigator.pop(context);
   }
 
   void handleThemeModeChanged(bool darkMode) {
@@ -48,44 +49,19 @@ class _SettingsPhoneView
     extends WidgetView<SettingsScreen, _SettingsScreenState> {
   const _SettingsPhoneView(state, {Key? key}) : super(state, key: key);
 
-  _showSingleChoiceDialog(BuildContext context, String currentLangCode) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-              title: Text(AppLocalizations.of(context)!.languageSelector),
-              content: SingleChildScrollView(
-                child: SizedBox(
-                  width: double.infinity,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: AppConstants.isoLang
-                        .map((langCode, langDesc) {
-                          return MapEntry(
-                              langCode,
-                              RadioListTile(
-                                value: langCode,
-                                title: Text(langDesc),
-                                groupValue: currentLangCode,
-                                selected: currentLangCode == langCode,
-                                onChanged: (String? code) {
-                                  state.handleLanguageChanged(code!);
-                                },
-                              ));
-                        })
-                        .values
-                        .toList(),
-                  ),
-                ),
-              ));
-        });
+  _showLanguagePickerDialog(BuildContext context, CustomLocale selected) async {
+    var dialog = SingleChoiceDialog<CustomLocale>(
+        title: Text(AppLocalizations.of(context)!.languageSelector),
+        items: AppConstants.languages,
+        selected: selected);
+    CustomLocale? locale = await dialog.show(context);
+    if (locale != null) {
+      state.handleLanguageChanged(locale.languageCode);
+    }
   }
 
   Widget _buildSettingsList(BuildContext context,
       ThemeController themeController, LocaleController localeController) {
-    String langCode = localeController.locale.languageCode;
-    String lang = localeController.getLanguage();
-
     bool darkMode = themeController.isDarkMode;
 
     String themeName = darkMode
@@ -105,10 +81,11 @@ class _SettingsPhoneView
           tiles: [
             SettingsTile(
               title: Text(AppLocalizations.of(context)!.language),
-              value: Text(lang),
+              value: Text(localeController.customLocale.languageName),
               leading: const Icon(Icons.language),
               onPressed: (BuildContext context) {
-                _showSingleChoiceDialog(context, langCode);
+                _showLanguagePickerDialog(
+                    context, localeController.customLocale);
               },
             ),
             SettingsTile.switchTile(

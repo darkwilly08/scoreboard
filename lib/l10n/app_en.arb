@@ -64,6 +64,5 @@
     "accept": "Accept",
     "rules": "Rules",
     "target_score_wins":"Target score wins",
-    "target_score": "Target score",
-    "cout": "out"
+    "target_score": "Target score"
 }
