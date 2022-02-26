@@ -1,7 +1,8 @@
+import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/truco/truco_score.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
@@ -10,6 +11,8 @@ import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
+import 'package:anotador/widgets/dialogs/input_dialog.dart';
+import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,7 +31,6 @@ class MatchPreparationScreen extends StatefulWidget {
 }
 
 class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
-  late ThemeController _themeController;
   late MatchController _matchController;
   int _index = 0;
   List<User>? ffaList;
@@ -39,7 +41,6 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
 
   @override
   void initState() {
-    _themeController = Provider.of<ThemeController>(context, listen: false);
     _matchController = Provider.of<MatchController>(context, listen: false);
     checkMatchInProgress();
     super.initState();
@@ -112,6 +113,10 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         (players) => setState(() => playersTeamB = players));
   }
 
+  void handleRulesTargetScoreChanged(int targetScore) {}
+  void handleRulesTargetScoreWinsChanged(bool targetScoreWins) {}
+  void handleRulesDropdownOptionsChanged(int npMin, int npMax, int npStep) {}
+
   void handleToggleChanged(int index) {
     setState(() {
       ffaList = null;
@@ -173,9 +178,34 @@ class _MatchPreparationPhoneView
     extends WidgetView<MatchPreparationScreen, _MatchPreparationScreenState> {
   const _MatchPreparationPhoneView(state, {Key? key}) : super(state, key: key);
 
+  _showTargetScoreInputDialog(BuildContext context) async {
+    var dialog = InputDialog(
+        title: Text(AppLocalizations.of(context)!.target_score),
+        isNumber: true,
+        val: widget.selectedGame.targetScore.toString());
+    String? valStr = await dialog.show(context);
+
+    int? score = valStr != null ? int.tryParse(valStr) : null;
+    if (score != null) {
+      state.handleRulesTargetScoreChanged(score);
+    }
+  }
+
+  _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
+    var dialog = SingleChoiceDialog<TrucoScore>(
+        title: Text(AppLocalizations.of(context)!.target_score),
+        items: AppConstants.trucoPossibleScores,
+        selected: (widget.selectedGame as TrucoGame).scoreInfo);
+    TrucoScore? trucoScore = await dialog.show(context);
+    if (trucoScore != null) {
+      // state.handleLanguageChanged(locale.languageCode);
+    }
+  }
+
   Widget _buildSettingsList(BuildContext context) {
     //TODO editable game settings before start the match
     return SettingsList(
+      contentPadding: const EdgeInsetsDirectional.all(0),
       shrinkWrap: true,
       darkTheme: SettingsThemeData(
           settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
@@ -183,6 +213,7 @@ class _MatchPreparationPhoneView
           settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
       sections: [
         SettingsSection(
+          margin: EdgeInsetsDirectional.zero,
           title: Text(
             AppLocalizations.of(context)!.rules,
             style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -193,17 +224,36 @@ class _MatchPreparationPhoneView
               value: Text(widget.selectedGame.targetScore.toString()),
               leading: const Icon(Icons.adjust),
               onPressed: (BuildContext context) {
-                //TODO _showSingleChoiceDialog(context, langCode);
+                if (widget.selectedGame is TrucoGame) {
+                  _showTrucoScoreSingleChoiceDialog(context);
+                } else {
+                  _showTargetScoreInputDialog(context);
+                }
               },
             ),
             SettingsTile.switchTile(
               title: Text(AppLocalizations.of(context)!.target_score_wins),
               leading: const Icon(Icons.emoji_events),
               initialValue: widget.selectedGame.targetScoreWins,
-              onToggle: (bool value) {
-                //TODO state.handleThemeModeChanged(value);
-              },
+              onToggle: widget.selectedGame is! TrucoGame
+                  ? (val) => state.handleRulesTargetScoreWinsChanged
+                  : null,
             ),
+            widget.selectedGame is! TrucoGame
+                ? SettingsTile(
+                    title: const Text("Scoring dropdown"),
+                    leading: const Icon(Icons.list_alt),
+                    onPressed: (BuildContext context) {
+                      //TODO _showSingleChoiceDialog(context, langCode);
+                      //state.handleRulesDropdownOptionsChanged(targetScore)
+                    },
+                  )
+                : SettingsTile.switchTile(
+                    title: const Text("Two Halves"),
+                    leading: const Icon(Icons.splitscreen),
+                    initialValue: (widget.selectedGame as TrucoGame).twoHalves,
+                    onToggle: null,
+                  )
           ],
         ),
       ],
