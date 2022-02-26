@@ -1,5 +1,9 @@
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/match_status.dart';
+import 'package:anotador/model/player.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/app_data.dart';

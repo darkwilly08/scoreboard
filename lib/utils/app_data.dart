@@ -1,4 +1,5 @@
 import 'package:anotador/model/game.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:package_info_plus/package_info_plus.dart';

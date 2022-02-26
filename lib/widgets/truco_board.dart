@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/model/game.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/utils/audio_helper.dart';
 import 'package:anotador/widgets/game_title.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,6 @@ class _TrucoBoardState extends State<TrucoBoard> {
     super.initState();
   }
 
-  // kill
   void _cacheAudios() async {
     removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
     addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);

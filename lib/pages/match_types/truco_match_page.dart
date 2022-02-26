@@ -1,5 +1,7 @@
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/match_status.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';

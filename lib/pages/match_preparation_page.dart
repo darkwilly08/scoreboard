@@ -1,7 +1,11 @@
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
+import 'package:anotador/model/game_type.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/player.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';

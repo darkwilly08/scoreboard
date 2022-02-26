@@ -1,6 +1,9 @@
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/match_status.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';

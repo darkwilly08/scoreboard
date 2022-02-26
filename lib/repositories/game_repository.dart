@@ -1,5 +1,5 @@
 import 'package:anotador/model/game.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:sqflite/sqflite.dart';
