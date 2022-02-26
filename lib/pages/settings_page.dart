@@ -55,7 +55,9 @@ class _SettingsPhoneView
         items: AppConstants.languages,
         selected: selected);
     CustomLocale? locale = await dialog.show(context);
-    state.handleLanguageChanged(locale!.languageCode);
+    if (locale != null) {
+      state.handleLanguageChanged(locale.languageCode);
+    }
   }
 
   Widget _buildSettingsList(BuildContext context,
