@@ -27,9 +27,7 @@ class UserController extends ChangeNotifier {
 
   Future<void> AddPlayer(User newPlayer) async {
     User player = await _userRepository.insertUser(newPlayer);
-    if (_players == null) {
-      _players = [];
-    }
+    _players ??= [];
 
     _players!.add(player);
 
@@ -37,8 +35,8 @@ class UserController extends ChangeNotifier {
   }
 
   Future<void> EditPlayer(User editedPlayer) async {
-    await _userRepository.insertUser(
-        editedPlayer); //id is not empty, is really modifying one user
+    // Id is not empty, is really modifying one user
+    await _userRepository.insertUser(editedPlayer);
 
     var pOnList =
         _players!.where((player) => player.id == editedPlayer.id).single;
