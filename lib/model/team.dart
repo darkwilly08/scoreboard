@@ -21,11 +21,11 @@ class Team {
 
   Team(
       {this.id,
-        this.match,
-        required this.name,
-        bool? asterisk,
-        this.asteriskReason,
-        required int statusId}) {
+      this.match,
+      required this.name,
+      bool? asterisk,
+      this.asteriskReason,
+      required int statusId}) {
     status = TeamStatus(statusId);
     scoreList.add(0);
     if (asterisk != null) {
@@ -70,16 +70,20 @@ class Team {
     return null;
   }
 
-  bool _isValid(int score) {
-    if (match!.game.targetScore > score) {
-      return true;
-    }
-    return false;
+  bool _isValidScore(int score) {
+    return !match!.game.isNegativeAllowed ? score >= 0 : true;
+  }
+
+  bool _hasReachedTargetScore(int score) {
+    return score >= match!.game.targetScore;
   }
 
   Future<bool> removeLast() async {
     if (scoreList.length > 1) {
       scoreList.removeLast();
+      if (status.id != TeamStatus.PLAYING) {
+        status.id = TeamStatus.PLAYING;
+      }
       return true;
     }
     return false;
@@ -87,25 +91,18 @@ class Team {
 
   Future<bool> addResult(int value) async {
     bool targetScoreWins = match!.game.targetScoreWins;
-    int statusId = status.id;
 
     int newScore = lastScore + value;
 
-    if (statusId != TeamStatus.PLAYING && _isValid(newScore)) {
+    if (_isValidScore(newScore)) {
+      if (_hasReachedTargetScore(newScore) && status.id == TeamStatus.PLAYING) {
+        status.id = targetScoreWins ? TeamStatus.WON : TeamStatus.LOST;
+      } else {
+        status.id = TeamStatus.PLAYING;
+      }
       scoreList.add(newScore);
-      status.id = TeamStatus.PLAYING;
-      return false; //the team is back on match, maybe a bad score loaded and then restored it
+      return true;
     }
-
-    if (statusId != TeamStatus.PLAYING) {
-      return false; //the team already won or lost
-    }
-
-    if (!_isValid(newScore)) {
-      status.id = targetScoreWins ? TeamStatus.WON : TeamStatus.LOST;
-    }
-
-    scoreList.add(newScore);
-    return true;
+    return false;
   }
 }

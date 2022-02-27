@@ -21,8 +21,8 @@ class _TrucoBoardState extends State<TrucoBoard> {
   late MatchController _matchController;
   late Uint8List removeAudio;
   late Uint8List addAudio;
-  final AudioHelper _audioHelper =
-      AudioHelper(); //reuse the same instance to avoid delays creating the object each time
+  // Reuse the same instance to avoid delays creating the object each time
+  final AudioHelper _audioHelper = AudioHelper();
 
   @override
   void initState() {
@@ -46,7 +46,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
   void handleRemoveScoreBtn() {
     _audioHelper.playLocal(AssetsConstants.pointRemoved);
     setState(() {
-      _matchController.addResult(widget.team, -1);
+      _matchController.removeLatestResult(widget.team);
     });
   }
 

@@ -68,6 +68,17 @@ class MatchController extends ChangeNotifier {
     }
   }
 
+  /* TODO: Review this method. I think this should be responsibility of Match
+        Maybe something like isOnePlayerStanding() */
+  bool hasOthersLost() {
+    // all lost except you
+    return (_match!.teams!.length -
+            _match!.teams!
+                .where((p) => p.status.id == TeamStatus.LOST)
+                .length) ==
+        1;
+  }
+
   Future<void> addResult(Team team, int value) async {
     bool wasAdded = await team.addResult(value);
     if (wasAdded) {
@@ -85,12 +96,7 @@ class MatchController extends ChangeNotifier {
     //   }
     // }
 
-    if (team.status.id == TeamStatus.WON || /* or all lost except you */
-        ((_match!.teams!.length -
-                _match!.teams!
-                    .where((p) => p.status.id == TeamStatus.LOST)
-                    .length) ==
-            1)) {
+    if (team.status.id == TeamStatus.WON || hasOthersLost()) {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
       _matchRepository.setTeamStatusByMatch(_match!);
