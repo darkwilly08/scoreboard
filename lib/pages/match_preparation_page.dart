@@ -153,6 +153,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   List<Team>? _createTeams() {
+    //TODO como mejoramos esto manu? si queres lo hablamos
     List<Team> teams = [];
     if (ffaList != null) {
       teams = ffaList!.map((u) {

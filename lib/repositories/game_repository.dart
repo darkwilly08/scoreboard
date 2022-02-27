@@ -19,6 +19,12 @@ class GameRepository {
     return game;
   }
 
+  Future<void> update(Game game) async {
+    final db = await AppData.database;
+    db.update(Tables.game, game.toMap(),
+        where: '${Tables.game}_id = ?', whereArgs: [game.id!]);
+  }
+
   Future<List<Game>> games() async {
     final db = await AppData.database;
 

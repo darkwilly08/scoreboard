@@ -20,24 +20,34 @@ class GameController extends ChangeNotifier {
   }
 
   Future<void> updateTargetScore(int targetScore) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
     _selectedGame?.targetScore = targetScore; //TODO maybe a setter?
-    //TODO call repository
+    _gameRepository.update(_selectedGame!);
     notifyListeners();
   }
 
   Future<void> updateScoreInfo(TrucoScore trucoScore) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
     if (_selectedGame is TrucoGame) {
       TrucoGame tg = _selectedGame as TrucoGame;
       tg.targetScore = trucoScore.points;
       tg.twoHalves = trucoScore.twoHalves;
-      //TODO call repository
+      _gameRepository.update(_selectedGame!);
       notifyListeners();
     }
   }
 
   Future<void> updateTargetScoreWins(bool targetScoreWins) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
     _selectedGame?.targetScoreWins = targetScoreWins; //TODO maybe a setter?
-    //TODO call repository
+    _gameRepository.update(_selectedGame!);
     notifyListeners();
   }
 
