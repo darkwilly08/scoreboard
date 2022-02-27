@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/custom_text_form_field.dart';

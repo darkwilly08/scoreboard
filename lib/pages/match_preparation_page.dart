@@ -1,7 +1,14 @@
+import 'package:anotador/constants/const_variables.dart';
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
+import 'package:anotador/model/game_type.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/player.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
+import 'package:anotador/model/truco/truco_score.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
@@ -10,6 +17,8 @@ import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
+import 'package:anotador/widgets/dialogs/input_dialog.dart';
+import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -28,8 +37,8 @@ class MatchPreparationScreen extends StatefulWidget {
 }
 
 class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
-  late ThemeController _themeController;
   late MatchController _matchController;
+  late GameController _gameController;
   int _index = 0;
   List<User>? ffaList;
   List<User>? playersTeamA;
@@ -39,8 +48,9 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
 
   @override
   void initState() {
-    _themeController = Provider.of<ThemeController>(context, listen: false);
     _matchController = Provider.of<MatchController>(context, listen: false);
+    _gameController = Provider.of<GameController>(context, listen: false);
+    _initGameController();
     checkMatchInProgress();
     super.initState();
   }
@@ -48,6 +58,10 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   @override
   Widget build(BuildContext context) {
     return _MatchPreparationPhoneView(this);
+  }
+
+  Future<void> _initGameController() async {
+    await _gameController.setSelected(widget.selectedGame);
   }
 
   Future<void> checkMatchInProgress() async {
@@ -112,6 +126,23 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         (players) => setState(() => playersTeamB = players));
   }
 
+  void handleRulesTargetScoreChanged(int targetScore) {
+    _gameController.updateTargetScore(targetScore);
+  }
+
+  //only for Truco
+  void handleRulesScoreInfoChanged(TrucoScore scoreInfo) {
+    _gameController.updateScoreInfo(scoreInfo);
+  }
+
+  void handleRulesTargetScoreWinsChanged(bool targetScoreWins) {
+    _gameController.updateTargetScoreWins(targetScoreWins);
+  }
+
+  void handleMoreSettings() {
+    //TODO open new route to handle, allowNegatives, dropdown and any new feature
+  }
+
   void handleToggleChanged(int index) {
     setState(() {
       ffaList = null;
@@ -122,6 +153,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   List<Team>? _createTeams() {
+    //TODO como mejoramos esto manu? si queres lo hablamos
     List<Team> teams = [];
     if (ffaList != null) {
       teams = ffaList!.map((u) {
@@ -173,41 +205,86 @@ class _MatchPreparationPhoneView
     extends WidgetView<MatchPreparationScreen, _MatchPreparationScreenState> {
   const _MatchPreparationPhoneView(state, {Key? key}) : super(state, key: key);
 
+  _showTargetScoreInputDialog(BuildContext context) async {
+    var dialog = InputDialog(
+        title: Text(AppLocalizations.of(context)!.target_score),
+        isNumber: true,
+        val: widget.selectedGame.targetScore.toString());
+    String? valStr = await dialog.show(context);
+
+    int? score = valStr != null ? int.tryParse(valStr) : null;
+    if (score != null) {
+      state.handleRulesTargetScoreChanged(score);
+    }
+  }
+
+  _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
+    var dialog = SingleChoiceDialog<TrucoScore>(
+        title: Text(AppLocalizations.of(context)!.target_score +
+            " (${AppLocalizations.of(context)!.bad_plus_good.toLowerCase()})"),
+        items: AppConstants.trucoPossibleScores,
+        selected: (widget.selectedGame as TrucoGame).scoreInfo);
+    TrucoScore? trucoScore = await dialog.show(context);
+    if (trucoScore != null) {
+      state.handleRulesScoreInfoChanged(trucoScore);
+    }
+  }
+
   Widget _buildSettingsList(BuildContext context) {
     //TODO editable game settings before start the match
-    return SettingsList(
-      shrinkWrap: true,
-      darkTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
-      lightTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
-      sections: [
-        SettingsSection(
-          title: Text(
-            AppLocalizations.of(context)!.rules,
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+    return Consumer<GameController>(builder: (context, gameController, _) {
+      return SettingsList(
+        contentPadding: const EdgeInsetsDirectional.all(0),
+        shrinkWrap: true,
+        darkTheme: SettingsThemeData(
+            settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+        lightTheme: SettingsThemeData(
+            settingsListBackground:
+                AppTheme.lightTheme.scaffoldBackgroundColor),
+        sections: [
+          SettingsSection(
+            margin: EdgeInsetsDirectional.zero,
+            title: Text(
+              AppLocalizations.of(context)!.rules,
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            tiles: [
+              SettingsTile(
+                title: Text(AppLocalizations.of(context)!.target_score),
+                value: widget.selectedGame is! TrucoGame
+                    ? Text(widget.selectedGame.targetScore.toString())
+                    : Text((widget.selectedGame as TrucoGame)
+                        .scoreInfo
+                        .toString()),
+                leading: const Icon(Icons.adjust),
+                onPressed: (BuildContext context) {
+                  if (widget.selectedGame is TrucoGame) {
+                    _showTrucoScoreSingleChoiceDialog(context);
+                  } else {
+                    _showTargetScoreInputDialog(context);
+                  }
+                },
+              ),
+              SettingsTile.switchTile(
+                title: Text(AppLocalizations.of(context)!.target_score_wins),
+                leading: const Icon(Icons.emoji_events),
+                initialValue: widget.selectedGame.targetScoreWins,
+                onToggle: widget.selectedGame is! TrucoGame
+                    ? state.handleRulesTargetScoreWinsChanged
+                    : null,
+              ),
+              SettingsTile(
+                title: const Text("More settings"),
+                leading: const Icon(Icons.tune),
+                onPressed: (BuildContext context) {
+                  //TODO handleMoreSettings(context);
+                },
+              )
+            ],
           ),
-          tiles: [
-            SettingsTile(
-              title: Text(AppLocalizations.of(context)!.target_score),
-              value: Text(widget.selectedGame.targetScore.toString()),
-              leading: const Icon(Icons.adjust),
-              onPressed: (BuildContext context) {
-                //TODO _showSingleChoiceDialog(context, langCode);
-              },
-            ),
-            SettingsTile.switchTile(
-              title: Text(AppLocalizations.of(context)!.target_score_wins),
-              leading: const Icon(Icons.emoji_events),
-              initialValue: widget.selectedGame.targetScoreWins,
-              onToggle: (bool value) {
-                //TODO state.handleThemeModeChanged(value);
-              },
-            ),
-          ],
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget _buildListHeader(

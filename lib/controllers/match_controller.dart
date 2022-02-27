@@ -1,6 +1,9 @@
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/match_status.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
@@ -47,7 +50,7 @@ class MatchController extends ChangeNotifier {
       throw Exception("match is not initilized");
     }
 
-    // _match!.players.add(
+    //TODO add player menu is missing _match!.players.add(
     //     MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
 
     // await _matchRepository.addPlayer(_match);
@@ -63,6 +66,17 @@ class MatchController extends ChangeNotifier {
     if (wasRemoved) {
       await _matchRepository.removeLastScore(team);
     }
+  }
+
+  /* TODO: Review this method. I think this should be responsibility of Match
+        Maybe something like isOnePlayerStanding() */
+  bool hasOthersLost() {
+    // all lost except you
+    return (_match!.teams!.length -
+            _match!.teams!
+                .where((p) => p.status.id == TeamStatus.LOST)
+                .length) ==
+        1;
   }
 
   Future<void> addResult(Team team, int value) async {
@@ -82,12 +96,7 @@ class MatchController extends ChangeNotifier {
     //   }
     // }
 
-    if (team.status.id == TeamStatus.WON || /* or all lost except you */
-        ((_match!.teams!.length -
-                _match!.teams!
-                    .where((p) => p.status.id == TeamStatus.LOST)
-                    .length) ==
-            1)) {
+    if (team.status.id == TeamStatus.WON || hasOthersLost()) {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
       _matchRepository.setTeamStatusByMatch(_match!);

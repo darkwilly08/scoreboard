@@ -1,5 +1,5 @@
 import 'package:anotador/model/game.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:sqflite/sqflite.dart';
@@ -17,6 +17,12 @@ class GameRepository {
     game.id = gameId;
 
     return game;
+  }
+
+  Future<void> update(Game game) async {
+    final db = await AppData.database;
+    db.update(Tables.game, game.toMap(),
+        where: '${Tables.game}_id = ?', whereArgs: [game.id!]);
   }
 
   Future<List<Game>> games() async {

@@ -15,7 +15,7 @@ class SingleChoiceDialog<T> {
         title: title,
         content: SingleChildScrollView(
           child: SizedBox(
-            width: double.infinity,
+            width: MediaQuery.of(context).size.width,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: items

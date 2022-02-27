@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/model/game.dart';
-import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/utils/audio_helper.dart';
 import 'package:anotador/widgets/game_title.dart';
 import 'package:flutter/material.dart';
@@ -21,32 +21,26 @@ class _TrucoBoardState extends State<TrucoBoard> {
   late MatchController _matchController;
   late Uint8List removeAudio;
   late Uint8List addAudio;
-  final AudioHelper _audioHelper =
-      AudioHelper(); //reuse the same instance to avoid delays creating the object each time
+  // Reuse the same instance to avoid delays creating the object each time
+  final AudioHelper _audioHelper = AudioHelper();
 
   @override
   void initState() {
     _matchController = Provider.of<MatchController>(context, listen: false);
-    _cacheAudios();
     super.initState();
   }
 
-  void _cacheAudios() async {
-    removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
-    addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);
-  }
-
   void handleAddScoreBtn() {
-    _audioHelper.playLocal(addAudio);
+    _audioHelper.playLocal(AssetsConstants.pointAdded);
     setState(() {
       _matchController.addResult(widget.team, 1);
     });
   }
 
   void handleRemoveScoreBtn() {
-    _audioHelper.playLocal(removeAudio);
+    _audioHelper.playLocal(AssetsConstants.pointRemoved);
     setState(() {
-      _matchController.addResult(widget.team, -1);
+      _matchController.removeLatestResult(widget.team);
     });
   }
 
@@ -183,10 +177,14 @@ class _TrucoBoardState extends State<TrucoBoard> {
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: handleAddScoreBtn,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: _drawScore(constraints, tGame, currentScore),
+                  child: SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: _drawScore(constraints, tGame, currentScore),
+                    ),
                   ),
                 );
               })),
