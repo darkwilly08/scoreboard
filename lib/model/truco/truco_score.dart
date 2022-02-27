@@ -14,6 +14,6 @@ class TrucoScore {
     int pointsByHalf = (points / 2).ceil();
     return twoHalves
         ? "$points ($pointsByHalf + $pointsByHalf)"
-        : "$points (bad only)";
+        : "$points ($points + 0)";
   }
 }

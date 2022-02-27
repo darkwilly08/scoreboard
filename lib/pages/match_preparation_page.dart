@@ -1,4 +1,5 @@
 import 'package:anotador/constants/const_variables.dart';
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/game_type.dart';
@@ -37,6 +38,7 @@ class MatchPreparationScreen extends StatefulWidget {
 
 class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   late MatchController _matchController;
+  late GameController _gameController;
   int _index = 0;
   List<User>? ffaList;
   List<User>? playersTeamA;
@@ -47,6 +49,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   @override
   void initState() {
     _matchController = Provider.of<MatchController>(context, listen: false);
+    _gameController = Provider.of<GameController>(context, listen: false);
+    _initGameController();
     checkMatchInProgress();
     super.initState();
   }
@@ -54,6 +58,10 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   @override
   Widget build(BuildContext context) {
     return _MatchPreparationPhoneView(this);
+  }
+
+  Future<void> _initGameController() async {
+    await _gameController.setSelected(widget.selectedGame);
   }
 
   Future<void> checkMatchInProgress() async {
@@ -118,9 +126,22 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         (players) => setState(() => playersTeamB = players));
   }
 
-  void handleRulesTargetScoreChanged(int targetScore) {}
-  void handleRulesTargetScoreWinsChanged(bool targetScoreWins) {}
-  void handleRulesDropdownOptionsChanged(int npMin, int npMax, int npStep) {}
+  void handleRulesTargetScoreChanged(int targetScore) {
+    _gameController.updateTargetScore(targetScore);
+  }
+
+  //only for Truco
+  void handleRulesScoreInfoChanged(TrucoScore scoreInfo) {
+    _gameController.updateScoreInfo(scoreInfo);
+  }
+
+  void handleRulesTargetScoreWinsChanged(bool targetScoreWins) {
+    _gameController.updateTargetScoreWins(targetScoreWins);
+  }
+
+  void handleMoreSettings() {
+    //TODO open new route to handle, allowNegatives, dropdown and any new feature
+  }
 
   void handleToggleChanged(int index) {
     setState(() {
@@ -198,71 +219,71 @@ class _MatchPreparationPhoneView
 
   _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
     var dialog = SingleChoiceDialog<TrucoScore>(
-        title: Text(AppLocalizations.of(context)!.target_score),
+        title: Text(AppLocalizations.of(context)!.target_score +
+            " (${AppLocalizations.of(context)!.bad_plus_good.toLowerCase()})"),
         items: AppConstants.trucoPossibleScores,
         selected: (widget.selectedGame as TrucoGame).scoreInfo);
     TrucoScore? trucoScore = await dialog.show(context);
     if (trucoScore != null) {
-      // state.handleLanguageChanged(locale.languageCode);
+      state.handleRulesScoreInfoChanged(trucoScore);
     }
   }
 
   Widget _buildSettingsList(BuildContext context) {
     //TODO editable game settings before start the match
-    return SettingsList(
-      contentPadding: const EdgeInsetsDirectional.all(0),
-      shrinkWrap: true,
-      darkTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
-      lightTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
-      sections: [
-        SettingsSection(
-          margin: EdgeInsetsDirectional.zero,
-          title: Text(
-            AppLocalizations.of(context)!.rules,
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+    return Consumer<GameController>(builder: (context, gameController, _) {
+      return SettingsList(
+        contentPadding: const EdgeInsetsDirectional.all(0),
+        shrinkWrap: true,
+        darkTheme: SettingsThemeData(
+            settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+        lightTheme: SettingsThemeData(
+            settingsListBackground:
+                AppTheme.lightTheme.scaffoldBackgroundColor),
+        sections: [
+          SettingsSection(
+            margin: EdgeInsetsDirectional.zero,
+            title: Text(
+              AppLocalizations.of(context)!.rules,
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            tiles: [
+              SettingsTile(
+                title: Text(AppLocalizations.of(context)!.target_score),
+                value: widget.selectedGame is! TrucoGame
+                    ? Text(widget.selectedGame.targetScore.toString())
+                    : Text((widget.selectedGame as TrucoGame)
+                        .scoreInfo
+                        .toString()),
+                leading: const Icon(Icons.adjust),
+                onPressed: (BuildContext context) {
+                  if (widget.selectedGame is TrucoGame) {
+                    _showTrucoScoreSingleChoiceDialog(context);
+                  } else {
+                    _showTargetScoreInputDialog(context);
+                  }
+                },
+              ),
+              SettingsTile.switchTile(
+                title: Text(AppLocalizations.of(context)!.target_score_wins),
+                leading: const Icon(Icons.emoji_events),
+                initialValue: widget.selectedGame.targetScoreWins,
+                onToggle: widget.selectedGame is! TrucoGame
+                    ? state.handleRulesTargetScoreWinsChanged
+                    : null,
+              ),
+              SettingsTile(
+                title: const Text("More settings"),
+                leading: const Icon(Icons.tune),
+                onPressed: (BuildContext context) {
+                  //TODO handleMoreSettings(context);
+                },
+              )
+            ],
           ),
-          tiles: [
-            SettingsTile(
-              title: Text(AppLocalizations.of(context)!.target_score),
-              value: Text(widget.selectedGame.targetScore.toString()),
-              leading: const Icon(Icons.adjust),
-              onPressed: (BuildContext context) {
-                if (widget.selectedGame is TrucoGame) {
-                  _showTrucoScoreSingleChoiceDialog(context);
-                } else {
-                  _showTargetScoreInputDialog(context);
-                }
-              },
-            ),
-            SettingsTile.switchTile(
-              title: Text(AppLocalizations.of(context)!.target_score_wins),
-              leading: const Icon(Icons.emoji_events),
-              initialValue: widget.selectedGame.targetScoreWins,
-              onToggle: widget.selectedGame is! TrucoGame
-                  ? (val) => state.handleRulesTargetScoreWinsChanged
-                  : null,
-            ),
-            widget.selectedGame is! TrucoGame
-                ? SettingsTile(
-                    title: const Text("Scoring dropdown"),
-                    leading: const Icon(Icons.list_alt),
-                    onPressed: (BuildContext context) {
-                      //TODO _showSingleChoiceDialog(context, langCode);
-                      //state.handleRulesDropdownOptionsChanged(targetScore)
-                    },
-                  )
-                : SettingsTile.switchTile(
-                    title: const Text("Two Halves"),
-                    leading: const Icon(Icons.splitscreen),
-                    initialValue: (widget.selectedGame as TrucoGame).twoHalves,
-                    onToggle: null,
-                  )
-          ],
-        ),
-      ],
-    );
+        ],
+      );
+    });
   }
 
   Widget _buildListHeader(

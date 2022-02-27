@@ -50,7 +50,7 @@ class MatchController extends ChangeNotifier {
       throw Exception("match is not initilized");
     }
 
-    // _match!.players.add(
+    //TODO add player menu is missing _match!.players.add(
     //     MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
 
     // await _matchRepository.addPlayer(_match);

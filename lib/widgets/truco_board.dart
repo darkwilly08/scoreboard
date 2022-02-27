@@ -183,10 +183,14 @@ class _TrucoBoardState extends State<TrucoBoard> {
                 return GestureDetector(
                   behavior: HitTestBehavior.translucent,
                   onTap: handleAddScoreBtn,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: _drawScore(constraints, tGame, currentScore),
+                  child: SizedBox(
+                    height: double.infinity,
+                    width: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: _drawScore(constraints, tGame, currentScore),
+                    ),
                   ),
                 );
               })),
