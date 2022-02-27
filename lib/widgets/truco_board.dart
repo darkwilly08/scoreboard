@@ -27,13 +27,7 @@ class _TrucoBoardState extends State<TrucoBoard> {
   @override
   void initState() {
     _matchController = Provider.of<MatchController>(context, listen: false);
-    _cacheAudios();
     super.initState();
-  }
-
-  void _cacheAudios() async {
-    removeAudio = await _audioHelper.getBytes(AssetsConstants.pointRemoved);
-    addAudio = await _audioHelper.getBytes(AssetsConstants.pointAdded);
   }
 
   void handleAddScoreBtn() {
