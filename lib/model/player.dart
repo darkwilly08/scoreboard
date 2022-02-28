@@ -7,6 +7,10 @@ class Player {
   Team team;
   User user;
 
+  static Player createCopy(player) {
+    return Player(team: player.team, user: player.user);
+  }
+
   Player({this.id, required this.team, required this.user});
 
   factory Player.fromJson(Team team, Map<String, dynamic> json) {

@@ -15,6 +15,17 @@ class Game {
   int? npMaxVal;
   int? npStep;
 
+  static Game createCopy(Game game) {
+    return Game(
+        name: game.name,
+        targetScore: game.targetScore,
+        targetScoreWins: game.targetScoreWins,
+        isNegativeAllowed: game.isNegativeAllowed,
+        npMaxVal: game.npMaxVal,
+        npMinVal: game.npMinVal,
+        npStep: game.npStep);
+  }
+
   Game(
       {this.id,
       required this.name,

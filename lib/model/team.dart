@@ -19,6 +19,17 @@ class Team {
   List<int> scoreList = [];
   List<Player> players = [];
 
+  static Team createCopy(Team team) {
+    Team newTeam = Team(
+      name: team.name,
+      statusId: PLAYING,
+    );
+    newTeam.players = team
+        .players
+        .map((player) => Player.createCopy(player)).toList();
+    return newTeam;
+  }
+
   Team(
       {this.id,
       this.match,
@@ -81,9 +92,7 @@ class Team {
   Future<bool> removeLast() async {
     if (scoreList.length > 1) {
       scoreList.removeLast();
-      if (status.id != TeamStatus.PLAYING) {
-        status.id = TeamStatus.PLAYING;
-      }
+      status.id = TeamStatus.PLAYING;
       return true;
     }
     return false;
@@ -94,8 +103,8 @@ class Team {
 
     int newScore = lastScore + value;
 
-    if (_isValidScore(newScore)) {
-      if (_hasReachedTargetScore(newScore) && status.id == TeamStatus.PLAYING) {
+    if (_isValidScore(newScore) && status.id == TeamStatus.PLAYING) {
+      if (_hasReachedTargetScore(newScore)) {
         status.id = targetScoreWins ? TeamStatus.WON : TeamStatus.LOST;
       } else {
         status.id = TeamStatus.PLAYING;

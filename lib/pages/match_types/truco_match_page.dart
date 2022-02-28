@@ -71,7 +71,16 @@ class _TrucoMatchScreenState extends State<TrucoMatchScreen> {
     }
   }
 
-  void handleExitBtn() {
+  void handleRematchButton() {
+    _matchController.restartMatch();
+  }
+
+  void handleKeepPlayingButton() {
+    // TODO: Add functionality.
+    return;
+  }
+
+  void handleExitButton() {
     Navigator.pop(context);
   }
 }
@@ -119,20 +128,20 @@ class _TrucoMatchView
       leading: const CircleAvatar(child: Icon(Icons.emoji_events)),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       actions: [
-        const TextButton(
-            onPressed: null,
-            child: Text(
+        TextButton(
+            onPressed: state.handleRematchButton,
+            child: const Text(
               "RE MATCH",
               style: TextStyle(color: Colors.black),
             )),
-        const TextButton(
-            onPressed: null,
-            child: Text(
+        TextButton(
+            onPressed: state.handleKeepPlayingButton,
+            child: const Text(
               "KEEP PLAYING",
               style: TextStyle(color: Colors.black),
             )),
         TextButton(
-            onPressed: state.handleExitBtn,
+            onPressed: state.handleExitButton,
             child: const Text(
               "EXIT",
               style: TextStyle(color: Colors.black),
@@ -167,7 +176,12 @@ class _TrucoMatchView
                   }
                   return const SizedBox.shrink();
                 }),
-                Expanded(child: _buildBoard()),
+                Selector<MatchController, int>(
+                    builder: (context, matchId, _) {
+                      return Expanded(child: _buildBoard());
+                    },
+                    selector: (_, matchController) => matchController.match!.id!
+                ),
               ],
             )),
         onWillPop: state._onWillPop);
