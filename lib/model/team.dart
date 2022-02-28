@@ -24,9 +24,9 @@ class Team {
       name: team.name,
       statusId: PLAYING,
     );
-    newTeam.players = team
-        .players
-        .map((player) => Player.createCopy(player)).toList();
+    newTeam.players = team.players
+        .map((player) => Player(team: newTeam, user: player.user))
+        .toList();
     return newTeam;
   }
 
