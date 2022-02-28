@@ -65,5 +65,7 @@
     "rules": "Reglas",
     "target_score_wins":"El primero que llega gana",
     "target_score": "Puntaje",
-    "bad_plus_good": "Malas + Buenas"
+    "bad_plus_good": "Malas + Buenas",
+    "restart_match": "Reinicar partida",
+    "exit": "Salir"
 }

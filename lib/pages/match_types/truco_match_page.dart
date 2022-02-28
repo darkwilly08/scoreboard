@@ -5,6 +5,7 @@ import 'package:anotador/model/team_status.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
+import 'package:anotador/widgets/in_game/menu/popup_menu.dart';
 import 'package:anotador/widgets/truco_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -152,6 +153,9 @@ class _TrucoMatchView
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () => state.handleBackArrow(),
+              ),
+              trailing: const InGamePopupMenu(
+                skip: 1,
               ),
             ),
             body: Column(
