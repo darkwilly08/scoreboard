@@ -47,9 +47,8 @@ class MatchController extends ChangeNotifier {
 
   void restartMatch() {
     // regenerate teams
-    List<Team> newTeams = _match!
-        .teams!
-        .map((team) => Team.createCopy(team)).toList();
+    List<Team> newTeams =
+        _match!.teams!.map((team) => Team.createCopy(team)).toList();
     start(_match!.game, _match!.isFFA, newTeams);
   }
 
@@ -107,8 +106,8 @@ class MatchController extends ChangeNotifier {
     if (team.status.id == TeamStatus.WON || hasOthersLost()) {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
-      _matchRepository.setTeamStatusByMatch(_match!);
-      _gameController?.refreshStats();
+      await _matchRepository.setTeamStatusByMatch(_match!);
+      await _gameController?.refreshStats();
       notifyListeners();
     } else {
       _match!.status.id = MatchStatus.IN_PROGRES;

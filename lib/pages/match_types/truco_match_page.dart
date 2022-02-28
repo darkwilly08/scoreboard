@@ -180,12 +180,12 @@ class _TrucoMatchView
                   }
                   return const SizedBox.shrink();
                 }),
-                Selector<MatchController, int>(
+                Selector<MatchController, int?>(
                     builder: (context, matchId, _) {
                       return Expanded(child: _buildBoard());
                     },
-                    selector: (_, matchController) => matchController.match!.id!
-                ),
+                    selector: (_, matchController) =>
+                        matchController.match?.id),
               ],
             )),
         onWillPop: state._onWillPop);
