@@ -69,6 +69,8 @@ class _SettingsPhoneView
         : AppLocalizations.of(context)!.light_theme;
 
     return SettingsList(
+      shrinkWrap: true,
+      contentPadding: const EdgeInsetsDirectional.all(0),
       darkTheme: SettingsThemeData(
           settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
       lightTheme: SettingsThemeData(
@@ -106,18 +108,18 @@ class _SettingsPhoneView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
+        appBar: BackHeader(
           title: AppLocalizations.of(context)!.settings,
         ),
-        Consumer2<ThemeController, LocaleController>(
-            builder: (context, themeController, localeController, _) {
-          return Expanded(
-              child: _buildSettingsList(
-                  context, themeController, localeController));
-        })
-      ],
-    ));
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Consumer2<ThemeController, LocaleController>(
+                builder: (context, themeController, localeController, _) {
+              return _buildSettingsList(
+                  context, themeController, localeController);
+            })
+          ],
+        ));
   }
 }

@@ -190,14 +190,12 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
         ? AppLocalizations.of(context)!.edit_player
         : AppLocalizations.of(context)!.add_player;
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
+        appBar: BackHeader(
           title: title,
           trailing: _buildTrailing(),
         ),
-        Expanded(child: _buildForm(context))
-      ],
-    ));
+        body: Column(
+          children: [Expanded(child: _buildForm(context))],
+        ));
   }
 }

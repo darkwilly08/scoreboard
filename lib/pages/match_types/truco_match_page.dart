@@ -147,28 +147,29 @@ class _TrucoMatchView
         state._matchController.match!.teams!.length;
     return WillPopScope(
         child: Scaffold(
-            body: Column(
-          children: [
-            BackHeader(
+            appBar: BackHeader(
               title: state._matchController.match!.game.name,
               leading: IconButton(
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () => state.handleBackArrow(),
               ),
             ),
-            Consumer<MatchController>(builder: (context, matchController, _) {
-              final m = matchController.match!;
-              final aux = m.teams!
-                  .where((element) => element.status.id == TeamStatus.WON);
-              if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
-                final wonTeam = aux.single;
-                return _buildMatchEndedBanner(wonTeam, context);
-              }
-              return const SizedBox.shrink();
-            }),
-            Expanded(child: _buildBoard()),
-          ],
-        )),
+            body: Column(
+              children: [
+                Consumer<MatchController>(
+                    builder: (context, matchController, _) {
+                  final m = matchController.match!;
+                  final aux = m.teams!
+                      .where((element) => element.status.id == TeamStatus.WON);
+                  if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
+                    final wonTeam = aux.single;
+                    return _buildMatchEndedBanner(wonTeam, context);
+                  }
+                  return const SizedBox.shrink();
+                }),
+                Expanded(child: _buildBoard()),
+              ],
+            )),
         onWillPop: state._onWillPop);
   }
 }

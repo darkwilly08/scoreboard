@@ -113,27 +113,27 @@ class _PickPlayersPhoneView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
+        appBar: BackHeader(
           title: AppLocalizations.of(context)!.players,
           trailing: _buildTrailing(),
         ),
-        Expanded(child: _buildUserList(context)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: Column(
           children: [
-            CustomTextButton(
-                onTap: () => state.handleCancelBtn(),
-                text: AppLocalizations.of(context)!.cancel),
-            CustomTextButton(
-                onTap: () {
-                  state.handleAcceptBtn();
-                },
-                text: AppLocalizations.of(context)!.accept),
+            Expanded(child: _buildUserList(context)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomTextButton(
+                    onTap: () => state.handleCancelBtn(),
+                    text: AppLocalizations.of(context)!.cancel),
+                CustomTextButton(
+                    onTap: () {
+                      state.handleAcceptBtn();
+                    },
+                    text: AppLocalizations.of(context)!.accept),
+              ],
+            )
           ],
-        )
-      ],
-    ));
+        ));
   }
 }

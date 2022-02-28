@@ -32,38 +32,19 @@ class _HomeScreenState extends State<HomeScreen> {
 class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
   const _HomePhoneView(state, {Key? key}) : super(state, key: key);
 
-  Widget _buildTopHeader(BuildContext context) {
-    return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.only(right: 8.0, bottom: 0.0),
-      child: Row(
-        children: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.menu),
-            onPressed: () => Scaffold.of(context).openDrawer(),
-            iconSize: 32.0,
-            padding: const EdgeInsets.all(0),
+  AppBar _buildTopHeader(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      actions: const [
+        Padding(
+          padding: EdgeInsets.all(8),
+          child: Image(
+            image: AssetImage(AssetsConstants.scoreboard),
           ),
-          const Expanded(
-            child: Padding(
-              padding: EdgeInsets.only(left: 8.0),
-              child: Text(
-                "",
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: const [
-              Image(
-                image: AssetImage(AssetsConstants.scoreboard),
-                height: 38,
-              ),
-            ],
-          )
-        ],
-      ),
-    ));
+        )
+      ],
+    );
   }
 
   Widget _buildBody(BuildContext context) {
@@ -84,13 +65,12 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        extendBodyBehindAppBar: false,
+        appBar: _buildTopHeader(context),
         drawer: AppDrawer(
           onItemClicked: (route) => _drawerItemClicked(context, route),
         ),
         body: Column(
           children: [
-            Builder(builder: (context) => _buildTopHeader(context)),
             Container(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: CustomToggleButton(

@@ -243,7 +243,6 @@ class _MatchPreparationPhoneView
                 AppTheme.lightTheme.scaffoldBackgroundColor),
         sections: [
           SettingsSection(
-            margin: EdgeInsetsDirectional.zero,
             title: Text(
               AppLocalizations.of(context)!.rules,
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
@@ -383,56 +382,61 @@ class _MatchPreparationPhoneView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: BackHeader(title: AppLocalizations.of(context)!.new_match),
         body: Stack(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            BackHeader(title: AppLocalizations.of(context)!.new_match),
-            _buildSettingsList(context),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomToggleButton(
-                firstBtnText: AppLocalizations.of(context)!.ffa,
-                secondBtnText: AppLocalizations.of(context)!.teams,
-                onChanged: state.handleToggleChanged,
-              ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildSettingsList(context),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: CustomToggleButton(
+                    firstBtnText: AppLocalizations.of(context)!.ffa,
+                    secondBtnText: AppLocalizations.of(context)!.teams,
+                    onChanged: state.handleToggleChanged,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: _buildBody(context),
+                ),
+              ],
             ),
-            _buildBody(context),
-          ],
-        ),
-        Positioned(
-          child: InkWell(
-            onTap: state.handleStartBtn,
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(60.0),
-                      topRight: Radius.circular(60.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      spreadRadius: 3,
-                      blurRadius: 10,
-                      offset: const Offset(0, -1), // changes position of shadow
+            Positioned(
+              child: InkWell(
+                onTap: state.handleStartBtn,
+                child: Container(
+                  height: 50,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                      color: Theme.of(context).colorScheme.secondary,
+                      borderRadius: const BorderRadius.only(
+                          topLeft: Radius.circular(60.0),
+                          topRight: Radius.circular(60.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.grey.withOpacity(0.6),
+                          spreadRadius: 3,
+                          blurRadius: 10,
+                          offset:
+                              const Offset(0, -1), // changes position of shadow
+                        ),
+                      ]),
+                  child: Center(
+                    child: Text(
+                      AppLocalizations.of(context)!.start,
+                      style: TextStyle(
+                          fontSize: 20,
+                          color:
+                              Theme.of(context).colorScheme.primaryContainer),
                     ),
-                  ]),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.start,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.primaryContainer),
+                  ),
                 ),
               ),
-            ),
-          ),
-          bottom: 0,
-        )
-      ],
-    ));
+              bottom: 0,
+            )
+          ],
+        ));
   }
 }
