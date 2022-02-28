@@ -1,5 +1,7 @@
 import 'package:anotador/model/custom_locale.dart';
+import 'package:anotador/model/in_game/menu/choice.dart';
 import 'package:anotador/model/truco/truco_score.dart';
+import 'package:flutter/material.dart';
 
 class AppConstants {
   AppConstants._();
@@ -19,6 +21,12 @@ class AppConstants {
     TrucoScore(points: 24, pointsBySquare: 4, twoHalves: true),
     TrucoScore(points: 30, pointsBySquare: 5, twoHalves: true),
     TrucoScore(points: 40, pointsBySquare: 5, twoHalves: true),
+  ];
+  static const choices = [
+    Choice(title: 'add_player', icon: Icons.group_sharp),
+    Choice(title: 'restart_match', icon: Icons.restart_alt),
+    Choice(title: 'settings', icon: Icons.settings),
+    Choice(title: 'exit', icon: Icons.exit_to_app)
   ];
 }
 
