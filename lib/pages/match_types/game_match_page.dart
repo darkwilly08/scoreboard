@@ -2,25 +2,27 @@ import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/match_status.dart';
 import 'package:anotador/model/team.dart';
 import 'package:anotador/model/team_status.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/in_game/menu/popup_menu.dart';
+import 'package:anotador/widgets/player_board.dart';
 import 'package:anotador/widgets/truco_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-class TrucoMatchScreen extends StatefulWidget {
-  static const String routeName = "/match/truco";
+class GameMatchScreen extends StatefulWidget {
+  static const String routeName = "/match/board";
 
-  const TrucoMatchScreen({Key? key}) : super(key: key);
+  const GameMatchScreen({Key? key}) : super(key: key);
 
   @override
-  _TrucoMatchScreenState createState() => _TrucoMatchScreenState();
+  _GameMatchScreenState createState() => _GameMatchScreenState();
 }
 
-class _TrucoMatchScreenState extends State<TrucoMatchScreen> {
+class _GameMatchScreenState extends State<GameMatchScreen> {
   late MatchController _matchController;
   late double widthPlayerBoard;
   late double heightPlayerBoard;
@@ -33,7 +35,7 @@ class _TrucoMatchScreenState extends State<TrucoMatchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return _TrucoMatchView(this);
+    return _GameMatchView(this);
   }
 
   Future<bool?> handleBackClicked() async {
@@ -86,22 +88,22 @@ class _TrucoMatchScreenState extends State<TrucoMatchScreen> {
   }
 }
 
-class _TrucoMatchView
-    extends WidgetView<TrucoMatchScreen, _TrucoMatchScreenState> {
-  const _TrucoMatchView(state, {Key? key}) : super(state, key: key);
+class _GameMatchView
+    extends WidgetView<GameMatchScreen, _GameMatchScreenState> {
+  const _GameMatchView(state, {Key? key}) : super(state, key: key);
 
   Widget _buildBoard() {
     List<Widget> teamBoardList = [];
     for (int i = 0; i < state._matchController.match!.teams!.length; i++) {
-      teamBoardList.add(_buildTeamBoard(i));
-    }
-
-    teamBoardList.insert(
-        1,
-        const VerticalDivider(
+      if (i % 2 != 0) {
+        teamBoardList.add(const VerticalDivider(
           width: 1,
           color: Colors.white,
         ));
+      }
+      teamBoardList.add(_buildTeamBoard(i));
+    }
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: teamBoardList,
@@ -109,11 +111,13 @@ class _TrucoMatchView
   }
 
   Widget _buildTeamBoard(int index) {
+    Team team = state._matchController.match!.teams![index];
+    Widget board = state._matchController.match!.game is TrucoGame
+        ? TrucoBoard(team: team)
+        : TeamBoard(team: team);
     return SizedBox(
       width: state.widthPlayerBoard - 10,
-      child: TrucoBoard(
-        team: state._matchController.match!.teams![index],
-      ),
+      child: board,
     );
   }
 
@@ -163,8 +167,8 @@ class _TrucoMatchView
                 icon: const Icon(Icons.arrow_back),
                 onPressed: () => state.handleBackArrow(),
               ),
-              trailing: const InGamePopupMenu(
-                skip: 1,
+              trailing: InGamePopupMenu(
+                skip: state._matchController.match!.game is TrucoGame ? 1 : 0,
               ),
             ),
             body: Column(

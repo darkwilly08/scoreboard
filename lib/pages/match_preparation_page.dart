@@ -192,12 +192,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   void goToMatch() {
-    if (widget.selectedGame.type.id == GameType.NORMAL) {
-      Navigator.pushReplacementNamed(context, Routes.normalMatch);
-    } else {
-      //truco
-      Navigator.pushReplacementNamed(context, Routes.trucoMatch);
-    }
+    //truco
+    Navigator.pushReplacementNamed(context, Routes.matchBoard);
   }
 }
 

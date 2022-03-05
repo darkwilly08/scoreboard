@@ -6,8 +6,7 @@ import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/pages/home.dart';
 import 'package:anotador/pages/match_preparation_page.dart';
-import 'package:anotador/pages/match_types/normal_match_page.dart';
-import 'package:anotador/pages/match_types/truco_match_page.dart';
+import 'package:anotador/pages/match_types/game_match_page.dart';
 import 'package:anotador/pages/settings_page.dart';
 import 'package:anotador/pages/users_page.dart';
 import 'package:anotador/routes/routes.dart';
@@ -61,8 +60,7 @@ class MyApp extends StatelessWidget {
                   Routes.users: (context) => const UsersScreen(),
                   Routes.matchPreparation: (context) => MatchPreparationScreen(
                       selectedGame: routeSettings.arguments as Game),
-                  Routes.normalMatch: (context) => const NormalMatchScreen(),
-                  Routes.trucoMatch: (context) => const TrucoMatchScreen()
+                  Routes.matchBoard: (context) => const GameMatchScreen(),
                 };
                 WidgetBuilder builder = routes[routeSettings.name]!;
                 return MaterialPageRoute(builder: (ctx) => builder(ctx));
