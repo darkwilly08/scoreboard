@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/box_tile.dart';
@@ -86,6 +88,7 @@ class _PlayerTileState extends State<PlayerTile> {
 
   @override
   Widget build(BuildContext context) {
+    _isSelected = widget.isTapped ?? false;
     return makeListTile();
   }
 }

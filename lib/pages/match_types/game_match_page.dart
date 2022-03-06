@@ -97,7 +97,7 @@ class _GameMatchScreenState extends State<GameMatchScreen> {
         context,
         MaterialPageRoute(
             builder: (context) => PickPlayersScreen(
-                //TODO multipleSelection: !_matchController.match!.isFFA,
+                multipleSelection: !_matchController.match!.isFFA,
                 unavailableUsers: _matchController.match!.getUsers(),
                 onConfirmSelection: handleAddTeam)));
   }

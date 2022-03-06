@@ -17,12 +17,14 @@ class PickPlayersScreen extends StatefulWidget {
   final void Function(List<User>)? onConfirmSelection;
   final List<User>? unavailableUsers;
   final List<User>? preSelectedUsers;
+  final bool multipleSelection;
 
   const PickPlayersScreen(
       {Key? key,
       required this.onConfirmSelection,
       this.unavailableUsers,
-      this.preSelectedUsers})
+      this.preSelectedUsers,
+      this.multipleSelection = true})
       : super(key: key);
 
   @override
@@ -68,11 +70,15 @@ class _PickPlayerscreenState extends State<PickPlayersScreen> {
   }
 
   void handlePlayerTapped(User user, bool selected) {
-    if (selected) {
-      _selectedUsers.add(user);
-    } else {
-      _selectedUsers.removeWhere((element) => element.id == user.id);
-    }
+    setState(() {
+      if (!widget.multipleSelection) _selectedUsers.clear();
+
+      if (selected) {
+        _selectedUsers.add(user);
+      } else {
+        _selectedUsers.removeWhere((element) => element.id == user.id);
+      }
+    });
   }
 }
 
@@ -93,7 +99,7 @@ class _PickPlayersPhoneView
                 : !widget.unavailableUsers!.contains(u))
             .toList(),
         onItemTapped: state.handlePlayerTapped,
-        preSelectedUsers: widget.preSelectedUsers,
+        preSelectedUsers: state._selectedUsers,
       );
     });
   }
