@@ -1,9 +1,13 @@
 import 'package:anotador/controllers/match_controller.dart';
+import 'package:anotador/model/in_game/menu/choice.dart';
 import 'package:anotador/model/match_status.dart';
 import 'package:anotador/model/team.dart';
 import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/truco_game.dart';
+import 'package:anotador/model/user.dart';
+import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
+import 'package:anotador/routes/routes.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/in_game/menu/popup_menu.dart';
@@ -12,6 +16,7 @@ import 'package:anotador/widgets/truco_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:collection/collection.dart';
 
 class GameMatchScreen extends StatefulWidget {
   static const String routeName = "/match/board";
@@ -86,6 +91,41 @@ class _GameMatchScreenState extends State<GameMatchScreen> {
   void handleExitButton() {
     Navigator.pop(context);
   }
+
+  void handlePickNewTeam() {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => PickPlayersScreen(
+                //TODO multipleSelection: !_matchController.match!.isFFA,
+                unavailableUsers: _matchController.match!.getUsers(),
+                onConfirmSelection: handleAddTeam)));
+  }
+
+  void handleAddTeam(List<User>? users) {
+    if (users != null) {
+      setState(() {
+        _matchController.addTeam(Team.createTeam(users).single);
+      });
+    }
+  }
+
+  void handlePopupMenu(Choice choice) {
+    switch (choice.type) {
+      case Choice.addTeam:
+        handlePickNewTeam();
+        break;
+      case Choice.restartMatch:
+        handleRematchButton();
+        break;
+      case Choice.goToSettings:
+        Navigator.pushNamed(context, Routes.settings);
+        break;
+      case Choice.exit:
+        handleBackArrow();
+        break;
+    }
+  }
 }
 
 class _GameMatchView
@@ -94,14 +134,15 @@ class _GameMatchView
 
   Widget _buildBoard() {
     List<Widget> teamBoardList = [];
-    for (int i = 0; i < state._matchController.match!.teams!.length; i++) {
-      if (i % 2 != 0) {
+    final int teamsCount = state._matchController.match!.teams!.length;
+    for (int i = 0; i < teamsCount; i++) {
+      teamBoardList.add(_buildTeamBoard(i));
+      if (i + 1 < teamsCount) {
         teamBoardList.add(const VerticalDivider(
           width: 1,
           color: Colors.white,
         ));
       }
-      teamBoardList.add(_buildTeamBoard(i));
     }
 
     return Row(
@@ -168,6 +209,7 @@ class _GameMatchView
                 onPressed: () => state.handleBackArrow(),
               ),
               trailing: InGamePopupMenu(
+                callback: state.handlePopupMenu,
                 skip: state._matchController.match!.game is TrucoGame ? 1 : 0,
               ),
             ),

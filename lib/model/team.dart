@@ -4,6 +4,8 @@ import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/repositories/tables.dart';
 
+import 'user.dart';
+
 class Team {
   static const int PLAYING = 1;
   static const int WON = 2;
@@ -28,6 +30,25 @@ class Team {
         .map((player) => Player(team: newTeam, user: player.user))
         .toList();
     return newTeam;
+  }
+
+  static List<Team> createTeam(List<User> users,
+      {String? teamName, bool oneTeamPerUser = false}) {
+    List<Team> teams = [];
+    if (oneTeamPerUser) {
+      teams = users.map((u) {
+        var team = Team(name: u.name, statusId: TeamStatus.PLAYING);
+        team.players.add(Player(team: team, user: u));
+        return team;
+      }).toList();
+    } else {
+      String name = teamName ?? users.first.name;
+      final team = Team(name: name, statusId: TeamStatus.PLAYING);
+      team.players = users.map((u) => Player(team: team, user: u)).toList();
+      teams.add(team);
+    }
+
+    return teams;
   }
 
   Team(

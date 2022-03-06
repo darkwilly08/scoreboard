@@ -23,10 +23,13 @@ class AppConstants {
     TrucoScore(points: 40, pointsBySquare: 5, twoHalves: true),
   ];
   static const choices = [
-    Choice(title: 'add_player', icon: Icons.group_sharp),
-    Choice(title: 'restart_match', icon: Icons.restart_alt),
-    Choice(title: 'settings', icon: Icons.settings),
-    Choice(title: 'exit', icon: Icons.exit_to_app)
+    Choice(type: Choice.addTeam, title: 'add_team', icon: Icons.group_sharp),
+    Choice(
+        type: Choice.restartMatch,
+        title: 'restart_match',
+        icon: Icons.restart_alt),
+    Choice(type: Choice.goToSettings, title: 'settings', icon: Icons.settings),
+    Choice(type: Choice.exit, title: 'exit', icon: Icons.exit_to_app)
   ];
 }
 

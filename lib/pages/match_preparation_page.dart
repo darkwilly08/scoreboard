@@ -153,22 +153,13 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   List<Team>? _createTeams() {
-    //TODO como mejoramos esto manu? si queres lo hablamos
     List<Team> teams = [];
     if (ffaList != null) {
-      teams = ffaList!.map((u) {
-        var team = Team(name: u.name, statusId: TeamStatus.PLAYING);
-        team.players.add(Player(team: team, user: u));
-        return team;
-      }).toList();
+      teams = Team.createTeam(ffaList!, oneTeamPerUser: true);
     } else if (playersTeamA != null && playersTeamB != null) {
       //TODO improve this to handle N teams
-      var teamA = Team(name: teamAName, statusId: TeamStatus.PLAYING);
-      teamA.players =
-          playersTeamA!.map((u) => Player(team: teamA, user: u)).toList();
-      var teamB = Team(name: teamBName, statusId: TeamStatus.PLAYING);
-      teamB.players =
-          playersTeamB!.map((u) => Player(team: teamB, user: u)).toList();
+      var teamA = Team.createTeam(playersTeamA!, teamName: teamAName).single;
+      var teamB = Team.createTeam(playersTeamB!, teamName: teamBName).single;
 
       teams.add(teamA);
       teams.add(teamB);

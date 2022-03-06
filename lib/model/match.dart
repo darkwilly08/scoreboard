@@ -1,6 +1,7 @@
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match_status.dart';
 import 'package:anotador/model/team.dart';
+import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/tables.dart';
 import 'package:anotador/utils/date_helper.dart';
 
@@ -25,6 +26,17 @@ class Match {
       this.endAt}) {
     status = MatchStatus(statusId);
     teams?.forEach((element) => element.match = this);
+  }
+
+  List<User>? getUsers() {
+    if (teams == null) return null;
+    List<User> users = [];
+    for (var team in teams!) {
+      for (var player in team.players) {
+        users.add(player.user);
+      }
+    }
+    return users;
   }
 
   Map<String, dynamic> toMap() {

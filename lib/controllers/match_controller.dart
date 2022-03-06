@@ -45,22 +45,22 @@ class MatchController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void restartMatch() {
+  Future<void> restartMatch() async {
+    await cancelMatchesByGameId(
+        _match!.game.id!); //to be sure there is no match in progress
     // regenerate teams
     List<Team> newTeams =
         _match!.teams!.map((team) => Team.createCopy(team)).toList();
     start(_match!.game, _match!.isFFA, newTeams);
   }
 
-  Future<void> addPlayer(User user) async {
+  Future<void> addTeam(Team team) async {
     if (_match == null) {
       throw Exception("match is not initilized");
     }
-
-    // TODO add player menu is missing _match!.players.add(
-    //     MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
-
-    // await _matchRepository.addPlayer(_match);
+    team.match = _match;
+    _match!.teams!.add(team);
+    await _matchRepository.addTeam(team);
     notifyListeners();
   }
 

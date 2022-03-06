@@ -22,37 +22,26 @@ class MatchRepository {
 
       for (var team in teams!) {
         team.match = match;
-        // String inClause = team.players.map((e) => e.user.id!).join(",");
-        // int? teamId = Sqflite.firstIntValue(await txn.rawQuery('''
-        //   select t.${Tables.team}_id
-        //   from ${Tables.team} t
-        //   inner join ${Tables.team_player} tp
-        //   on tp.${Tables.team_player}_team_id = t.${Tables.team}_id
-        //   where tp.${Tables.team_player}_user_id in ($inClause)
-        //   group by tp.${Tables.team_player}_id
-        //   having count (*) = ${team.players.length}
-        // '''));
 
-        if (true) {
-          team.id = await txn.insert(Tables.team, team.toMap());
-          for (var player in team.players) {
-            player.id = await txn.insert(Tables.team_player, player.toMap());
-          }
+        team.id = await txn.insert(Tables.team, team.toMap());
+        for (var player in team.players) {
+          player.id = await txn.insert(Tables.team_player, player.toMap());
         }
-        // else {
-        //   team.id = teamId;
-        //   for (var player in team.players) {
-        //     player.id = Sqflite.firstIntValue(await txn.rawQuery('''
-        //       select tp.${Tables.team_player}_id
-        //       from ${Tables.team_player} tp
-        //       where tp.${Tables.team_player}_team_id = ${team.id} and tp.${Tables.team_player}_user_id = ${player.user.id!}
-        //     '''));
-        //   }
-        // }
       }
     });
 
     return match;
+  }
+
+  Future<void> addTeam(Team team) async {
+    final db = await AppData.database;
+
+    await db.transaction((txn) async {
+      team.id = await txn.insert(Tables.team, team.toMap());
+      for (var player in team.players) {
+        player.id = await txn.insert(Tables.team_player, player.toMap());
+      }
+    });
   }
 
   Future<int> update(Match match) async {
