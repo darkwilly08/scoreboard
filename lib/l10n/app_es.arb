@@ -67,5 +67,6 @@
     "target_score": "Puntaje",
     "bad_plus_good": "Malas + Buenas",
     "restart_match": "Reinicar partida",
-    "exit": "Salir"
+    "exit": "Salir",
+    "add_team": "Agregar equipo"
 }

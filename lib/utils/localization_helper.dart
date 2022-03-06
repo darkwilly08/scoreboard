@@ -13,8 +13,8 @@ class LocalizationHelper {
 
   String get(String messageId) {
     switch (messageId) {
-      case 'add_player':
-        return AppLocalizations.of(context)!.add_player;
+      case 'add_team':
+        return AppLocalizations.of(context)!.add_team;
       case 'restart_match':
         return AppLocalizations.of(context)!.restart_match;
       case 'exit':

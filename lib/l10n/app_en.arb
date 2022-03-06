@@ -67,5 +67,6 @@
     "target_score": "Target score",
     "bad_plus_good": "Bad + Good",
     "restart_match": "Restart match",
-    "exit": "Exit"
+    "exit": "Exit",
+    "add_team": "Add Team"
 }
