@@ -60,10 +60,11 @@
         }
     },
     "games": "Juegos",
-    "stats": "Estad",
+    "stats": "Estadísticas",
     "accept": "Aceptar",
     "rules": "Reglas",
     "target_score_wins":"El primero que llega gana",
+    "more_settings": "Otras reglas",
     "target_score": "Puntaje",
     "bad_plus_good": "Malas + Buenas",
     "restart_match": "Reinicar partida",
