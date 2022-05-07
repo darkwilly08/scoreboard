@@ -4,8 +4,12 @@ import 'package:anotador/utils/app_data.dart';
 import 'package:sqflite/sqflite.dart';
 
 class UserRepository {
-  Future<User> insertUser(User user) async {
+  Future<User> insertUser(User user, {bool isOwner = false}) async {
     final db = await AppData.database;
+
+    if (isOwner) {
+      user.id = 0;
+    }
 
     int userId = await db.insert(
       Tables.user,
@@ -31,6 +35,9 @@ class UserRepository {
   }
 
   Future<void> delete(int userId) async {
+    if (userId == 0) {
+      return; // Owner user cannot be deleted
+    }
     final db = await AppData.database;
 
     await db.delete(Tables.user,
