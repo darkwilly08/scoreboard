@@ -51,6 +51,26 @@ class GameController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> updateGameName(String newName) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
+    _selectedGame!.name = newName; //TODO maybe a setter?
+    _gameRepository.update(_selectedGame!);
+    notifyListeners();
+  }
+
+  Future<void> updateNegativeAllowed(bool isNegativeAllowed) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
+    _selectedGame!.isNegativeAllowed = isNegativeAllowed; //TODO maybe a setter?
+    _gameRepository.update(_selectedGame!);
+    notifyListeners();
+  }
+
   Future<void> addGame(Game newGame) async {
     Game game = await _gameRepository.insert(newGame);
     _games ??= [];

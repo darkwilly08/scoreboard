@@ -20,6 +20,7 @@ import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -137,8 +138,14 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     _gameController.updateTargetScoreWins(targetScoreWins);
   }
 
-  void handleMoreSettings() {
+  void handleMoreSettings(BuildContext context) {
     //TODO open new route to handle, allowNegatives, dropdown and any new feature
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const GameSettings(),
+      ),
+    );
   }
 
   void handleToggleChanged(int index) {
@@ -222,10 +229,11 @@ class _MatchPreparationPhoneView
         contentPadding: const EdgeInsetsDirectional.all(0),
         shrinkWrap: true,
         darkTheme: SettingsThemeData(
-            settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor,
+        ),
         lightTheme: SettingsThemeData(
-            settingsListBackground:
-                AppTheme.lightTheme.scaffoldBackgroundColor),
+          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor,
+        ),
         sections: [
           SettingsSection(
             title: Text(
@@ -234,39 +242,29 @@ class _MatchPreparationPhoneView
             ),
             tiles: [
               SettingsTile(
+                leading: const Icon(LineIcons.flagCheckered),
                 title: Text(AppLocalizations.of(context)!.target_score),
                 value: widget.selectedGame is! TrucoGame
                     ? Text(widget.selectedGame.targetScore.toString())
-                    : Text((widget.selectedGame as TrucoGame)
-                        .scoreInfo
-                        .toString()),
-                leading: const Icon(Icons.adjust),
-                onPressed: (BuildContext context) {
-                  if (widget.selectedGame is TrucoGame) {
-                    _showTrucoScoreSingleChoiceDialog(context);
-                  } else {
-                    _showTargetScoreInputDialog(context);
-                  }
-                },
+                    : Text(
+                        (widget.selectedGame as TrucoGame).scoreInfo.toString(),
+                      ),
+                onPressed: widget.selectedGame is TrucoGame
+                    ? _showTrucoScoreSingleChoiceDialog
+                    : _showTargetScoreInputDialog,
               ),
               SettingsTile.switchTile(
+                leading: const Icon(LineIcons.trophy),
                 title: Text(AppLocalizations.of(context)!.target_score_wins),
-                leading: const Icon(Icons.emoji_events),
                 initialValue: widget.selectedGame.targetScoreWins,
                 onToggle: widget.selectedGame is! TrucoGame
                     ? state.handleRulesTargetScoreWinsChanged
                     : null,
               ),
               SettingsTile(
-                title: Text(AppLocalizations.of(context)!.more_settings),
-                leading: const Icon(Icons.tune),
-                onPressed: (BuildContext context) {
-                  //TODO handleMoreSettings(context);
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => const GameSettings()));
-                },
+                leading: const Icon(LineIcons.horizontalSliders),
+                title: Text(AppLocalizations.of(context)!.customize_game),
+                onPressed: state.handleMoreSettings,
               )
             ],
           ),

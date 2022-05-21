@@ -5,6 +5,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/routes/routes.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class GameListScreen extends StatefulWidget {
@@ -67,11 +68,11 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
                 width: 5,
               ),
               const Icon(
-                Icons.thumb_up_alt_outlined,
+                LineIcons.trophy,
                 size: 18.0,
               ),
               const SizedBox(
-                width: 10,
+                width: 20,
               ),
               Text(
                 game.lost.toString(),
@@ -81,7 +82,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
                 width: 5,
               ),
               const Icon(
-                Icons.thumb_down_alt_outlined,
+                LineIcons.skullCrossbones,
                 size: 18.0,
               )
             ],
