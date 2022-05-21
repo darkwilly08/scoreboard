@@ -32,7 +32,8 @@ class AppTheme {
           Typography.blackCupertino.apply(fontFamily: AppConstants.fontFamily),
       primaryTextTheme: ThemeData.light().textTheme.apply(
             fontFamily: AppConstants.fontFamily,
-          ));
+          ),
+      iconTheme: const IconThemeData().copyWith(color: fontColor));
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
       backgroundColor: backgroundColor,
       scaffoldBackgroundColor: backgroundColor,

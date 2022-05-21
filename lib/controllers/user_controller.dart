@@ -3,7 +3,7 @@ import 'package:anotador/repositories/user_repository.dart';
 import 'package:flutter/material.dart';
 
 class UserController extends ChangeNotifier {
-  UserRepository _userRepository = UserRepository();
+  final UserRepository _userRepository = UserRepository();
   List<User>? _players;
 
   List<User>? get players => _players;
