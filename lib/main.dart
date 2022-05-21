@@ -5,7 +5,6 @@ import 'package:anotador/controllers/owner_controller.dart';
 import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/model/game.dart';
-import 'package:anotador/pages/home.dart';
 import 'package:anotador/pages/match_preparation_page.dart';
 import 'package:anotador/pages/match_types/game_match_page.dart';
 import 'package:anotador/pages/onboarding/onboarding_page.dart';

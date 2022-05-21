@@ -44,15 +44,17 @@ class _GameScreenState extends State<GameListScreen> {
 class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
   const _GamesPhoneView(state, {Key? key}) : super(state, key: key);
 
-  Widget makeListTile(Game game) => Container(
-          child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+  Widget makeListTile(Game game) => ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 5.0,
+        ),
         title: Text(
           game.name,
           style: TextStyle(
-              color: Theme.of(state.context).colorScheme.secondary,
-              fontSize: 22.0),
+            color: Theme.of(state.context).colorScheme.secondary,
+            fontSize: 22.0,
+          ),
         ),
         subtitle: Container(
           margin: const EdgeInsets.only(top: 8.0),
@@ -94,7 +96,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
           },
           iconData: LineIcons.play,
         ),
-      ));
+      );
 
   Widget _buildList(BuildContext context) {
     return Consumer<GameController>(builder: (context, gameController, _) {
@@ -119,8 +121,6 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildList(context),
-    );
+    return _buildList(context);
   }
 }

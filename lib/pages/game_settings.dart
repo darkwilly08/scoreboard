@@ -48,7 +48,10 @@ class _GameSettingsPhoneView
       body: SettingsList(
         sections: [
           SettingsSection(
-            title: Text(AppLocalizations.of(context)!.basic),
+            title: Text(
+              AppLocalizations.of(context)!.basic,
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(LineIcons.dice),
@@ -75,7 +78,10 @@ class _GameSettingsPhoneView
             ],
           ),
           SettingsSection(
-            title: Text(AppLocalizations.of(context)!.rules),
+            title: Text(
+              AppLocalizations.of(context)!.rules,
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
                 leading: const Icon(LineIcons.flagCheckered),

@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 class AddUserScreen extends StatefulWidget {
   final User? user;
 
-  AddUserScreen({Key? key, User? this.user}) : super(key: key);
+  const AddUserScreen({Key? key, this.user}) : super(key: key);
 
   @override
   _AddUserScreenState createState() => _AddUserScreenState();
@@ -38,9 +38,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
   }
 
   void _loadEditableUser() {
-    this.name = widget.user!.name;
-    this.initial = widget.user!.initial;
-    this.favorite = widget.user!.favorite;
+    name = widget.user!.name;
+    initial = widget.user!.initial;
+    favorite = widget.user!.favorite;
   }
 
   @override
@@ -68,12 +68,11 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
   void handleSaveBtn() async {
     if (_formKey.currentState!.validate()) {
-      var user = User(
-          name: this.name!, initial: this.initial!, favorite: this.favorite);
+      var user = User(name: name!, initial: initial!, favorite: favorite);
       await _userController.AddPlayer(user);
       Navigator.pop(context);
       String snackMsg =
-          AppLocalizations.of(context)!.player_added_success(this.name!);
+          AppLocalizations.of(context)!.player_added_success(name!);
       final snackBar = SuccessSnackBar(Text(snackMsg));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -83,13 +82,13 @@ class _AddUserScreenState extends State<AddUserScreen> {
     if (_formKey.currentState!.validate()) {
       var user = User(
           id: widget.user!.id,
-          name: this.name!,
-          initial: this.initial!,
-          favorite: this.favorite);
+          name: name!,
+          initial: initial!,
+          favorite: favorite);
       await _userController.EditPlayer(user);
       Navigator.pop(context);
       String snackMsg =
-          AppLocalizations.of(context)!.player_edited_success(this.name!);
+          AppLocalizations.of(context)!.player_edited_success(name!);
       final snackBar = SuccessSnackBar(Text(snackMsg));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -99,7 +98,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
     await _userController.DeletePlayerById(widget.user!.id!);
     Navigator.pop(context);
     String snackMsg =
-        AppLocalizations.of(context)!.player_removed_success(this.name!);
+        AppLocalizations.of(context)!.player_removed_success(name!);
     final snackBar = SuccessSnackBar(Text(snackMsg));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -126,7 +125,10 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
     return Form(
         key: state._formKey,
         child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 16.0,
+              vertical: 10.0,
+            ),
             child: Column(
               children: [
                 Wrap(

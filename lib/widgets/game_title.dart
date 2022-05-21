@@ -14,17 +14,19 @@ class GameTitle extends StatelessWidget {
         Text(
           title,
           style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
+            color: Theme.of(context).colorScheme.secondary,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
         ),
         subtitle != null
             ? Text(
                 subtitle!,
                 style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13),
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 13,
+                ),
               )
             : const SizedBox.shrink()
       ],
