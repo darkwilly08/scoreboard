@@ -15,8 +15,8 @@ import 'package:anotador/widgets/player_board.dart';
 import 'package:anotador/widgets/truco_board.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class GameMatchScreen extends StatefulWidget {
   static const String routeName = "/match/board";
@@ -171,7 +171,9 @@ class _GameMatchView
             .headline5!
             .copyWith(color: Colors.black),
       ),
-      leading: const CircleAvatar(child: Icon(Icons.emoji_events)),
+      leading: const CircleAvatar(
+        child: Icon(LineIcons.trophy),
+      ),
       backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
       actions: [
         TextButton(
@@ -205,7 +207,7 @@ class _GameMatchView
             appBar: BackHeader(
               title: state._matchController.match!.game.name,
               leading: IconButton(
-                icon: const Icon(Icons.arrow_back),
+                icon: const Icon(LineIcons.arrowLeft),
                 onPressed: () => state.handleBackArrow(),
               ),
               trailing: InGamePopupMenu(

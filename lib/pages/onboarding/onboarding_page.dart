@@ -1,11 +1,11 @@
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/owner_controller.dart';
-import 'package:anotador/routes/routes.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
-import 'package:introduction_screen/introduction_screen.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:introduction_screen/introduction_screen.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class OnBoardingPage extends StatefulWidget {
@@ -192,10 +192,12 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       isTopSafeArea: true,
       isBottomSafeArea: true,
       showBackButton: true,
-      back: const Icon(Icons.arrow_back),
-      next: const Icon(Icons.arrow_forward),
-      done: Text(AppLocalizations.of(context)!.done,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
+      back: const Icon(LineIcons.arrowLeft),
+      next: const Icon(LineIcons.arrowRight),
+      done: Text(
+        AppLocalizations.of(context)!.done,
+        style: const TextStyle(fontWeight: FontWeight.w600),
+      ),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: const EdgeInsets.all(4),

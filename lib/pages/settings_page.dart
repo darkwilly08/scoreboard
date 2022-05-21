@@ -8,6 +8,7 @@ import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -84,16 +85,18 @@ class _SettingsPhoneView
             SettingsTile(
               title: Text(AppLocalizations.of(context)!.language),
               value: Text(localeController.customLocale.languageName),
-              leading: const Icon(Icons.language),
+              leading: const Icon(LineIcons.globe),
               onPressed: (BuildContext context) {
                 _showLanguagePickerDialog(
-                    context, localeController.customLocale);
+                  context,
+                  localeController.customLocale,
+                );
               },
             ),
             SettingsTile.switchTile(
               title: Text(AppLocalizations.of(context)!.theme),
               description: Text(themeName),
-              leading: const Icon(Icons.color_lens_rounded),
+              leading: const Icon(LineIcons.palette),
               initialValue: darkMode,
               onToggle: (bool value) {
                 state.handleThemeModeChanged(value);

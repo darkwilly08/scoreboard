@@ -92,9 +92,8 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
           onTap: () {
             state.handlePlayGameClicked(game);
           },
-          iconData: Icons.play_arrow,
+          iconData: LineIcons.play,
         ),
-        onTap: () {},
       ));
 
   Widget _buildList(BuildContext context) {

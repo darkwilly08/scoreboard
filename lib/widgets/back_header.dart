@@ -1,5 +1,6 @@
 import 'package:anotador/constants/const_variables.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
 class BackHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -31,7 +32,7 @@ class BackHeader extends StatelessWidget implements PreferredSizeWidget {
   Widget _buildLeading(BuildContext context) {
     Widget child = leading ??
         IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(LineIcons.arrowLeft),
           onPressed: () => Navigator.pop(context),
         );
 

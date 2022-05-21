@@ -2,6 +2,7 @@ import 'package:anotador/routes/routes.dart';
 import 'package:anotador/utils/app_data.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 
 class AppDrawer extends StatelessWidget {
   AppDrawer({Key? key, required Function(String) this.onItemClicked})
@@ -46,13 +47,13 @@ class AppDrawer extends StatelessWidget {
     return Column(
       children: [
         _createDrawerItem(
-            icon: Icons.settings,
+            icon: LineIcons.cog,
             text: AppLocalizations.of(context)!.settings,
             onTap: () {
               onItemClicked(Routes.settings);
             }),
         _createDrawerItem(
-            icon: Icons.group_sharp,
+            icon: LineIcons.userFriends,
             text: AppLocalizations.of(context)!.players,
             onTap: () {
               onItemClicked(Routes.users);

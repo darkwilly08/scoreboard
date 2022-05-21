@@ -284,8 +284,8 @@ class _MatchPreparationPhoneView
         const Spacer(),
         CustomFloatingActionButton(
           onTap: onAction,
-          iconData: Icons.add,
-        )
+          iconData: LineIcons.plus,
+        ),
       ],
     );
   }

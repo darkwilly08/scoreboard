@@ -7,6 +7,7 @@ import 'package:anotador/widgets/custom_text_form_field.dart';
 import 'package:anotador/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class AddUserScreen extends StatefulWidget {
@@ -179,7 +180,9 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-            icon: Icon(Icons.delete), onPressed: () => state.handleDeleteBtn()),
+          icon: const Icon(LineIcons.trash),
+          onPressed: () => state.handleDeleteBtn(),
+        ),
       ],
     );
   }

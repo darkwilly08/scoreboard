@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/box_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 
 class PlayerTile extends StatefulWidget {
   final User user;
@@ -33,7 +32,7 @@ class _PlayerTileState extends State<PlayerTile> {
     if (onFavorite != null) {
       return IconButton(
         icon: Icon(
-          Icons.star,
+          LineIcons.star,
           color: widget.user.favorite
               ? Theme.of(context).colorScheme.secondary
               : Theme.of(context).colorScheme.background,
@@ -43,7 +42,7 @@ class _PlayerTileState extends State<PlayerTile> {
     } else {
       return _isSelected
           ? Icon(
-              Icons.check,
+              LineIcons.check,
               color: Theme.of(context).colorScheme.secondary,
             )
           : null;
