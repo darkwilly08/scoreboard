@@ -37,12 +37,22 @@ class PreferenceKeys {
   PreferenceKeys._();
   static const String languageKey = "lang";
   static const String darkModeKey = "darkMode";
+  static const String ownerReadyKey = "ownerReady";
 }
 
 class AssetsConstants {
   AssetsConstants._();
+  static const _imagesFolder = 'assets/images';
   static const _iconsFolder = 'assets/icons';
   static const _audiosFolder = 'assets/audios';
+
+  //images
+  static const onboardingWelcome =
+      '$_imagesFolder/onboarding/displayname_step.png';
+  static const onboardingDisplayname =
+      '$_imagesFolder/onboarding/welcome_step.png';
+
+  //icons
   static const scoreboard = '$_iconsFolder/scoreboard.png';
   static const trucoLine = '$_iconsFolder/one_line.png';
   static const auxLine = '$_iconsFolder/one_line_rotated.png';

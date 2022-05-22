@@ -68,5 +68,12 @@
     "bad_plus_good": "Bad + Good",
     "restart_match": "Restart match",
     "exit": "Exit",
-    "add_team": "Add Team"
+    "add_team": "Add Team",
+    "onboarding_welcome_title": "Welcome to the Scoreboard App!",
+    "onboarding_welcome_description": "Here you can keep score of popular card and dice games and also create your own",
+    "onboarding_letsgo_title": "Let’s get started!",
+    "onboarding_letsgo_description": "Write down your name and start keeping track of your wins!",
+    "onboarding_quote": "While playing Uno remember: Safety first",
+    "display_name": "Display name",
+    "done": "Done"
 }

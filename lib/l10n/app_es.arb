@@ -68,5 +68,13 @@
     "bad_plus_good": "Malas + Buenas",
     "restart_match": "Reinicar partida",
     "exit": "Salir",
-    "add_team": "Agregar equipo"
+    "add_team": "Agregar equipo",
+
+    "onboarding_welcome_title": "¡Bienvenido a tu nuevo Anotador!",
+    "onboarding_welcome_description": "En esta app podrás llevar el puntaje de todos tus juegos de cartas y dados, y ver tus estadísticas",
+    "onboarding_letsgo_title": "¡Comencemos!",
+    "onboarding_letsgo_description": "Completá tu nombre para empezar a registrar tus partidas",
+    "onboarding_quote": "¡No te olvides de mostrar el tanto!",
+    "display_name": "Nombre de usuario",
+    "done": "Listo"
 }
