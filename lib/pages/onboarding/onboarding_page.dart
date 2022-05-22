@@ -1,6 +1,5 @@
 import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/owner_controller.dart';
-import 'package:anotador/routes/routes.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +29,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     bodyTextStyle: _bodyStyle,
     pageColor: Colors.white,
     imagePadding: EdgeInsets.zero,
-    // titlePadding: EdgeInsets.zero
   );
 
   @override
@@ -49,8 +47,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Future<void> _onIntroEnd() async {
     String displayName = _displayNameTextController.text;
     if (!_nameValidator(displayName)) {
-      final snackBar =
-          DangerSnackBar(Text(AppLocalizations.of(context)!.display_name));
+      final snackBar = DangerSnackBar(Text(
+        AppLocalizations.of(context)!.display_name,
+      ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
@@ -122,8 +121,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   controller: _displayNameTextController,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.display_name,
-                    labelStyle:
-                        const TextStyle(color: AppTheme.secondaryDarkerColor),
+                    labelStyle: const TextStyle(
+                      color: AppTheme.secondaryDarkerColor,
+                    ),
                     filled: true,
                     isDense: true,
                     fillColor: Colors.black87,
@@ -139,14 +139,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                     ),
                   ),
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ))
           ],
         ),
-        image: _buildImage(AssetsConstants.onboardingDisplayname),
+        image: _buildImage(
+          AssetsConstants.onboardingDisplayname,
+        ),
         decoration: _pageDecoration.copyWith(
           bodyFlex: 0,
         ),
@@ -195,7 +198,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
       back: const Icon(Icons.arrow_back),
       next: const Icon(Icons.arrow_forward),
       done: Text(AppLocalizations.of(context)!.done,
-          style: const TextStyle(fontWeight: FontWeight.w600)),
+          style: const TextStyle(
+            fontWeight: FontWeight.w600,
+          )),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
       controlsPadding: const EdgeInsets.all(4),
