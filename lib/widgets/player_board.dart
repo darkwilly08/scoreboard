@@ -191,7 +191,7 @@ class _TeamBoardState extends State<TeamBoard> {
                         SizedBox(
                           width: 20,
                           child: Icon(
-                            LineIcons.cross,
+                            LineIcons.broom,
                             size: 16,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
