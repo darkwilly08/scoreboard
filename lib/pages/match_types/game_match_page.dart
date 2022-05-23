@@ -50,9 +50,8 @@ class _GameMatchScreenState extends State<GameMatchScreen> {
   _showMessageDialog(BuildContext context) => showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text("Are you sure?"),
-          content:
-              const Text("The match will be available to continue it later"),
+          title: Text(AppLocalizations.of(context)!.are_you_sure),
+          content: Text(AppLocalizations.of(context)!.match_available_later),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => Navigator.pop(context, true),

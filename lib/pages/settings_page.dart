@@ -4,6 +4,7 @@ import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/custom_locale.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/themes/app_theme.dart';
+import 'package:anotador/utils/localization_helper.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:flutter/material.dart';
@@ -52,9 +53,11 @@ class _SettingsPhoneView
 
   _showLanguagePickerDialog(BuildContext context, CustomLocale selected) async {
     var dialog = SingleChoiceDialog<CustomLocale>(
-        title: Text(AppLocalizations.of(context)!.languageSelector),
-        items: AppConstants.languages,
-        selected: selected);
+      title: Text(AppLocalizations.of(context)!.languageSelector),
+      items: AppConstants
+          .languages, // TODO: Find a way to pass translated language
+      selected: selected,
+    );
     CustomLocale? locale = await dialog.show(context);
     if (locale != null) {
       state.handleLanguageChanged(locale.languageCode);
@@ -84,7 +87,11 @@ class _SettingsPhoneView
           tiles: [
             SettingsTile(
               title: Text(AppLocalizations.of(context)!.language),
-              value: Text(localeController.customLocale.languageName),
+              value: Text(
+                LocalizationHelper.of(context).get(
+                  localeController.customLocale.languageCode,
+                ),
+              ),
               leading: const Icon(LineIcons.globe),
               onPressed: (BuildContext context) {
                 _showLanguagePickerDialog(

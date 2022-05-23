@@ -75,8 +75,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text("There's a match in progress"),
-          content: const Text("Do you want to continue the ongoing match?"),
+          title: Text(AppLocalizations.of(context)!.match_in_progress),
+          content: Text(AppLocalizations.of(context)!.continue_match_question),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => handleContinueMatch(m),
