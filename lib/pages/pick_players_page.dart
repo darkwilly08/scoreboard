@@ -109,7 +109,7 @@ class _PickPlayersPhoneView
       children: [
         IconButton(
           icon: const Icon(LineIcons.search),
-          onPressed: () {},
+          onPressed: () {}, // TODO: make it work
         ),
         IconButton(
           icon: const Icon(LineIcons.plus),

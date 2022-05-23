@@ -78,7 +78,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
       children: [
         IconButton(
           icon: const Icon(LineIcons.search),
-          onPressed: () => null,
+          onPressed: () => null, // TODO: make it work
         ),
         IconButton(
           icon: Icon(LineIcons.plus),
