@@ -139,13 +139,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   void handleMoreSettings(BuildContext context) {
-    //TODO open new route to handle, allowNegatives, dropdown and any new feature
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const GameSettings(),
-      ),
-    );
+    Navigator.pushNamed(context, GameSettings.routeName);
   }
 
   void handleToggleChanged(int index) {
