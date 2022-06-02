@@ -148,11 +148,12 @@ class _TeamBoardState extends State<TeamBoard> {
             child: ListView(
           controller: _scrollController,
           children: widget.team.scoreList.mapIndexed((idx, score) {
+            late Widget child;
             if (idx > 0 && idx == widget.team.scoreList.length - 1) {
               final int scoreDiff = (score - widget.team.scoreList[idx - 1]);
               final String diffStr =
                   scoreDiff > 0 ? "(+$scoreDiff)" : "(-${scoreDiff.abs()})";
-              return Column(
+              child = Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.zero,
@@ -174,10 +175,10 @@ class _TeamBoardState extends State<TeamBoard> {
                     onTap: handleRemoveLastScoreBtn,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20, top: 5),
                           child: Text(
                             score.toString(),
                             textAlign: TextAlign.center,
@@ -202,12 +203,17 @@ class _TeamBoardState extends State<TeamBoard> {
                 ],
               );
             } else {
-              return Text(
+              child = Text(
                 score.toString(),
                 textAlign: TextAlign.center,
                 style: const TextStyle(fontWeight: FontWeight.w300),
               );
             }
+
+            return FittedBox(
+              fit: BoxFit.scaleDown,
+              child: child,
+            );
           }).toList(),
         )),
         Padding(
