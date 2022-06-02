@@ -1,6 +1,5 @@
 import 'package:anotador/model/user.dart';
 import 'package:anotador/patterns/widget_view.dart';
-import 'package:anotador/widgets/box_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:line_icons/line_icons.dart';
@@ -35,7 +34,7 @@ class _PlayerTileState extends State<PlayerTile> {
           LineIcons.star,
           color: widget.user.favorite
               ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).colorScheme.background,
+              : Colors.grey,
         ),
         onPressed: () => onFavorite(widget.user),
       );
@@ -50,34 +49,37 @@ class _PlayerTileState extends State<PlayerTile> {
   }
 
   Card makeListTile() => Card(
-      elevation: 4.0,
-      margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
-      child: Container(
-          child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-        title: Text(
-          widget.user.name,
-          style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-        ),
-        leading: BoxTile(
-          child: Text(
-            widget.user.initial,
-            style: TextStyle(
-                fontSize: 20, color: Theme.of(context).colorScheme.background),
+        elevation: 4.0,
+        margin: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 6.0),
+        child: ListTile(
+          contentPadding:
+              const EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
+          title: Text(
+            widget.user.name,
+            style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
-        ),
-        trailing: _buildTrailing(),
-        onTap: () {
-          setState(() {
-            _isSelected = !_isSelected;
-          });
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            child: Text(
+              widget.user.initial,
+              style: TextStyle(
+                fontSize: 20,
+                color: Theme.of(context).colorScheme.background,
+              ),
+            ),
+          ),
+          trailing: _buildTrailing(),
+          onTap: () {
+            setState(() {
+              _isSelected = !_isSelected;
+            });
 
-          if (widget.onItemTapped != null) {
-            widget.onItemTapped!(widget.user, _isSelected);
-          }
-        },
-      )));
+            if (widget.onItemTapped != null) {
+              widget.onItemTapped!(widget.user, _isSelected);
+            }
+          },
+        ),
+      );
 
   @override
   void initState() {

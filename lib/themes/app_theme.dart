@@ -13,6 +13,7 @@ class AppTheme {
   static const secondaryColor = Color(0xFF63FFDB);
   static const secondaryDarkerColor = Color(0xFF03DAC5);
   static const fontColor = Color(0xFFE5E5E5);
+
   static final ThemeData lightTheme = ThemeData.light().copyWith(
     appBarTheme: const AppBarTheme(
       titleTextStyle: TextStyle(color: lightFontColor),
@@ -28,19 +29,21 @@ class AppTheme {
       foregroundColor: lightBackgroundColor,
     ),
     colorScheme: const ColorScheme.light().copyWith(
-      primary: lightSurfaceColor,
-      secondary: lightSecondaryColor,
-      secondaryContainer: secondaryDarkerColor,
+      primary: lightSecondaryDarkerColor,
+      secondary: lightSecondaryDarkerColor,
       primaryContainer: lightSurfaceColor,
+      secondaryContainer: lightSecondaryDarkerColor,
     ),
     textTheme: Typography.blackCupertino.apply(
       fontFamily: AppConstants.fontFamily,
     ),
     primaryTextTheme: ThemeData.light().textTheme.apply(
+          bodyColor: lightFontColor,
           fontFamily: AppConstants.fontFamily,
         ),
     iconTheme: const IconThemeData().copyWith(color: lightFontColor),
   );
+
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
     backgroundColor: backgroundColor,
     scaffoldBackgroundColor: backgroundColor,
@@ -51,12 +54,15 @@ class AppTheme {
       foregroundColor: backgroundColor,
     ),
     colorScheme: const ColorScheme.dark().copyWith(
-        primary: secondaryDarkerColor,
-        primaryContainer: surfaceColor,
-        secondary: secondaryDarkerColor,
-        secondaryContainer: secondaryDarkerColor),
-    textTheme: Typography.whiteHelsinki
-        .apply(bodyColor: fontColor, fontFamily: AppConstants.fontFamily),
+      primary: secondaryDarkerColor,
+      secondary: secondaryDarkerColor,
+      primaryContainer: surfaceColor,
+      secondaryContainer: secondaryDarkerColor,
+    ),
+    textTheme: Typography.whiteHelsinki.apply(
+      bodyColor: fontColor,
+      fontFamily: AppConstants.fontFamily,
+    ),
     primaryTextTheme: ThemeData.dark().textTheme.apply(
           fontFamily: AppConstants.fontFamily,
         ),

@@ -30,7 +30,6 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     bodyTextStyle: _bodyStyle,
     pageColor: Colors.white,
     imagePadding: EdgeInsets.zero,
-    // titlePadding: EdgeInsets.zero
   );
 
   @override
@@ -49,8 +48,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
   Future<void> _onIntroEnd() async {
     String displayName = _displayNameTextController.text;
     if (!_nameValidator(displayName)) {
-      final snackBar =
-          DangerSnackBar(Text(AppLocalizations.of(context)!.display_name));
+      final snackBar = DangerSnackBar(Text(
+        AppLocalizations.of(context)!.display_name,
+      ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;
     }
@@ -122,8 +122,9 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                   controller: _displayNameTextController,
                   decoration: InputDecoration(
                     labelText: AppLocalizations.of(context)!.display_name,
-                    labelStyle:
-                        const TextStyle(color: AppTheme.secondaryDarkerColor),
+                    labelStyle: const TextStyle(
+                      color: AppTheme.secondaryDarkerColor,
+                    ),
                     filled: true,
                     isDense: true,
                     fillColor: Colors.black87,
@@ -139,14 +140,17 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
                       ),
                     ),
                   ),
-                  style:
-                      TextStyle(color: Theme.of(context).colorScheme.primary),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
                 ),
               ],
             ))
           ],
         ),
-        image: _buildImage(AssetsConstants.onboardingDisplayname),
+        image: _buildImage(
+          AssetsConstants.onboardingDisplayname,
+        ),
         decoration: _pageDecoration.copyWith(
           bodyFlex: 0,
         ),

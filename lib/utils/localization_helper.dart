@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LocalizationHelper {
@@ -21,6 +20,10 @@ class LocalizationHelper {
         return AppLocalizations.of(context)!.exit;
       case 'settings':
         return AppLocalizations.of(context)!.settings;
+      case 'es':
+        return AppLocalizations.of(context)!.es;
+      case 'en':
+        return AppLocalizations.of(context)!.en;
       default:
         return messageId;
     }

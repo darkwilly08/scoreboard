@@ -5,6 +5,8 @@
     "settings": "Configuración",
     "interface": "Interfaz",
     "language": "Idioma",
+    "es": "Español",
+    "en": "Inglés",
     "theme": "Tema",
     "light_theme": "Claro",
     "dark_theme": "Oscuro",
@@ -55,10 +57,14 @@
         "placeholders": {
             "name": {
                 "type": "String",
-                "example": "Opponents"
+                "example": "Oponentes"
             }
         }
     },
+    "match_in_progress": "Hay una partida en curso",
+    "continue_match_question": "¿Querés continuar la partida vigente?",
+    "are_you_sure": "¿Estás seguro?",
+    "match_available_later": "La partida estará disponible para continuarla más tarde",
     "games": "Juegos",
     "stats": "Estadísticas",
     "accept": "Aceptar",
