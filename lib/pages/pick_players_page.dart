@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/fragments/user_list.dart';
 import 'package:anotador/model/user.dart';
@@ -9,6 +7,7 @@ import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class PickPlayersScreen extends StatefulWidget {
@@ -108,10 +107,14 @@ class _PickPlayersPhoneView
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: const Icon(Icons.search), onPressed: () => null),
         IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => state.handleAddPlayerBtn()),
+          icon: const Icon(LineIcons.search),
+          onPressed: () {}, // TODO: make it work
+        ),
+        IconButton(
+          icon: const Icon(LineIcons.plus),
+          onPressed: () => state.handleAddPlayerBtn(),
+        ),
       ],
     );
   }

@@ -1,17 +1,16 @@
-import 'dart:developer';
-
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/team.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/custom_text_form_field.dart';
 import 'package:anotador/widgets/game_title.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:numberpicker/numberpicker.dart';
 import 'package:provider/provider.dart';
-import 'package:collection/collection.dart';
 
 class TeamBoard extends StatefulWidget {
   final Team team;
@@ -83,25 +82,29 @@ class _TeamBoardState extends State<TeamBoard> {
                                 setState(() => _isAddAction = false);
                                 sbSetState(() => _isAddAction = false);
                               },
-                              icon: Icon(Icons.add))
+                              icon: const Icon(LineIcons.plus),
+                            )
                           : IconButton(
                               color: Theme.of(context).colorScheme.secondary,
                               onPressed: () {
                                 setState(() => _isAddAction = true);
                                 sbSetState(() => _isAddAction = true);
                               },
-                              icon: Icon(Icons.remove));
+                              icon: const Icon(LineIcons.minus),
+                            );
                     }),
                     Expanded(
-                        child: Padding(
-                      padding: const EdgeInsets.only(right: 16.0),
-                      child: CustomTextFormField(
-                          textInputType: TextInputType.number,
-                          onChanged: (val) => _numberField = int.tryParse(val),
-                          inputFormatters: <TextInputFormatter>[
-                            FilteringTextInputFormatter.digitsOnly
-                          ]),
-                    ))
+                      child: Padding(
+                        padding: const EdgeInsets.only(right: 16.0),
+                        child: CustomTextFormField(
+                            textInputType: TextInputType.number,
+                            onChanged: (val) =>
+                                _numberField = int.tryParse(val),
+                            inputFormatters: <TextInputFormatter>[
+                              FilteringTextInputFormatter.digitsOnly
+                            ]),
+                      ),
+                    )
                   ],
                 ),
                 StatefulBuilder(
@@ -145,11 +148,12 @@ class _TeamBoardState extends State<TeamBoard> {
             child: ListView(
           controller: _scrollController,
           children: widget.team.scoreList.mapIndexed((idx, score) {
+            late Widget child;
             if (idx > 0 && idx == widget.team.scoreList.length - 1) {
               final int scoreDiff = (score - widget.team.scoreList[idx - 1]);
               final String diffStr =
                   scoreDiff > 0 ? "(+$scoreDiff)" : "(-${scoreDiff.abs()})";
-              return Column(
+              child = Column(
                 children: [
                   Padding(
                     padding: EdgeInsets.zero,
@@ -171,23 +175,24 @@ class _TeamBoardState extends State<TeamBoard> {
                     onTap: handleRemoveLastScoreBtn,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: EdgeInsets.only(left: 20),
+                          padding: const EdgeInsets.only(left: 20, top: 5),
                           child: Text(
                             score.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                color: Theme.of(context).colorScheme.secondary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18),
+                              color: Theme.of(context).colorScheme.secondary,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18,
+                            ),
                           ),
                         ),
                         SizedBox(
                           width: 20,
                           child: Icon(
-                            Icons.clear,
+                            LineIcons.broom,
                             size: 16,
                             color: Theme.of(context).colorScheme.secondary,
                           ),
@@ -198,24 +203,30 @@ class _TeamBoardState extends State<TeamBoard> {
                 ],
               );
             } else {
-              return Text(
+              child = Text(
                 score.toString(),
                 textAlign: TextAlign.center,
-                style: TextStyle(fontWeight: FontWeight.w300),
+                style: const TextStyle(fontWeight: FontWeight.w300),
               );
             }
+
+            return FittedBox(
+              fit: BoxFit.scaleDown,
+              child: child,
+            );
           }).toList(),
         )),
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: const EdgeInsets.all(8.0),
           child: CustomFloatingActionButton(
-              onTap: () {
-                _numberField = null;
-                _currentValue = widget.team.match?.game.npMinVal ?? 0;
-                _isAddAction = true;
-                _showMessageDialog(context);
-              },
-              iconData: Icons.add),
+            onTap: () {
+              _numberField = null;
+              _currentValue = widget.team.match?.game.npMinVal ?? 0;
+              _isAddAction = true;
+              _showMessageDialog(context);
+            },
+            iconData: LineIcons.plus,
+          ),
         )
       ],
     );

@@ -1,0 +1,9 @@
+/* 
+  InfoPlist.strings
+  Runner
+
+  Created by Franco Berardi on 23/05/2022.
+  
+*/
+"CFBundleDisplayName" = "Anotador";
+"CFBundleName" = "Anotador";

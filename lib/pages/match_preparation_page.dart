@@ -2,14 +2,12 @@ import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
 import 'package:anotador/model/game.dart';
-import 'package:anotador/model/game_type.dart';
 import 'package:anotador/model/match.dart';
-import 'package:anotador/model/player.dart';
 import 'package:anotador/model/team.dart';
-import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/truco/truco_score.dart';
 import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/model/user.dart';
+import 'package:anotador/pages/game_settings.dart';
 import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/routes/routes.dart';
@@ -22,6 +20,7 @@ import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -76,8 +75,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text("There's a match in progress"),
-          content: const Text("Do you want to continue the ongoing match?"),
+          title: Text(AppLocalizations.of(context)!.match_in_progress),
+          content: Text(AppLocalizations.of(context)!.continue_match_question),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => handleContinueMatch(m),
@@ -139,8 +138,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     _gameController.updateTargetScoreWins(targetScoreWins);
   }
 
-  void handleMoreSettings() {
-    //TODO open new route to handle, allowNegatives, dropdown and any new feature
+  void handleMoreSettings(BuildContext context) {
+    Navigator.pushNamed(context, GameSettings.routeName);
   }
 
   void handleToggleChanged(int index) {
@@ -224,10 +223,11 @@ class _MatchPreparationPhoneView
         contentPadding: const EdgeInsetsDirectional.all(0),
         shrinkWrap: true,
         darkTheme: SettingsThemeData(
-            settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
+          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor,
+        ),
         lightTheme: SettingsThemeData(
-            settingsListBackground:
-                AppTheme.lightTheme.scaffoldBackgroundColor),
+          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor,
+        ),
         sections: [
           SettingsSection(
             title: Text(
@@ -236,35 +236,29 @@ class _MatchPreparationPhoneView
             ),
             tiles: [
               SettingsTile(
+                leading: const Icon(LineIcons.flagCheckered),
                 title: Text(AppLocalizations.of(context)!.target_score),
                 value: widget.selectedGame is! TrucoGame
                     ? Text(widget.selectedGame.targetScore.toString())
-                    : Text((widget.selectedGame as TrucoGame)
-                        .scoreInfo
-                        .toString()),
-                leading: const Icon(Icons.adjust),
-                onPressed: (BuildContext context) {
-                  if (widget.selectedGame is TrucoGame) {
-                    _showTrucoScoreSingleChoiceDialog(context);
-                  } else {
-                    _showTargetScoreInputDialog(context);
-                  }
-                },
+                    : Text(
+                        (widget.selectedGame as TrucoGame).scoreInfo.toString(),
+                      ),
+                onPressed: widget.selectedGame is TrucoGame
+                    ? _showTrucoScoreSingleChoiceDialog
+                    : _showTargetScoreInputDialog,
               ),
               SettingsTile.switchTile(
+                leading: const Icon(LineIcons.trophy),
                 title: Text(AppLocalizations.of(context)!.target_score_wins),
-                leading: const Icon(Icons.emoji_events),
                 initialValue: widget.selectedGame.targetScoreWins,
                 onToggle: widget.selectedGame is! TrucoGame
                     ? state.handleRulesTargetScoreWinsChanged
                     : null,
               ),
               SettingsTile(
-                title: const Text("More settings"),
-                leading: const Icon(Icons.tune),
-                onPressed: (BuildContext context) {
-                  //TODO handleMoreSettings(context);
-                },
+                leading: const Icon(LineIcons.horizontalSliders),
+                title: Text(AppLocalizations.of(context)!.customize_game),
+                onPressed: state.handleMoreSettings,
               )
             ],
           ),
@@ -284,8 +278,8 @@ class _MatchPreparationPhoneView
         const Spacer(),
         CustomFloatingActionButton(
           onTap: onAction,
-          iconData: Icons.add,
-        )
+          iconData: LineIcons.plus,
+        ),
       ],
     );
   }

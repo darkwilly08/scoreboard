@@ -6,6 +6,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -75,9 +76,14 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: Icon(Icons.search), onPressed: () => null),
         IconButton(
-            icon: Icon(Icons.add), onPressed: () => state.handleAddPlayerBtn()),
+          icon: const Icon(LineIcons.search),
+          onPressed: () => null, // TODO: make it work
+        ),
+        IconButton(
+          icon: Icon(LineIcons.plus),
+          onPressed: () => state.handleAddPlayerBtn(),
+        ),
       ],
     );
   }

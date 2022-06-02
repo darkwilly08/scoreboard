@@ -5,6 +5,8 @@
     "settings": "Configuración",
     "interface": "Interfaz",
     "language": "Idioma",
+    "es": "Español",
+    "en": "Inglés",
     "theme": "Tema",
     "light_theme": "Claro",
     "dark_theme": "Oscuro",
@@ -55,15 +57,25 @@
         "placeholders": {
             "name": {
                 "type": "String",
-                "example": "Opponents"
+                "example": "Oponentes"
             }
         }
     },
+    "match_in_progress": "Hay una partida en curso",
+    "continue_match_question": "¿Querés continuar la partida vigente?",
+    "are_you_sure": "¿Estás seguro?",
+    "match_available_later": "La partida estará disponible para continuarla más tarde",
     "games": "Juegos",
-    "stats": "Estad",
+    "stats": "Estadísticas",
     "accept": "Aceptar",
     "rules": "Reglas",
+    "basic": "Básico",
+    "customize_game":"Personalizar juego",
+    "game_name":"Nombre del juego",
+    "scoreboard_type":"Tipo de anotador",
     "target_score_wins":"El primero que llega gana",
+    "more_settings": "Otras reglas",
+    "is_negative_allowed": "Permite puntaje negativo",
     "target_score": "Puntaje",
     "bad_plus_good": "Malas + Buenas",
     "restart_match": "Reinicar partida",

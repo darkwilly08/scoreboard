@@ -9,25 +9,29 @@ class GameTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-              color: Theme.of(context).colorScheme.secondary,
-              fontWeight: FontWeight.bold,
-              fontSize: 18),
-        ),
-        subtitle != null
-            ? Text(
-                subtitle!,
-                style: TextStyle(
-                    color: Theme.of(context).colorScheme.secondary,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 13),
-              )
-            : const SizedBox.shrink()
-      ],
-    );
+    return FittedBox(
+        fit: BoxFit.scaleDown,
+        child: Column(
+          children: [
+            Text(
+              title,
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.secondary,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
+              ),
+            ),
+            subtitle != null
+                ? Text(
+                    subtitle!,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontWeight: FontWeight.w400,
+                      fontSize: 13,
+                    ),
+                  )
+                : const SizedBox.shrink()
+          ],
+        ));
   }
 }
