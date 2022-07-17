@@ -76,10 +76,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(
-          icon: const Icon(LineIcons.search),
-          onPressed: () => null, // TODO: make it work
-        ),
+        // TODO: Add search by user feature.
         IconButton(
           icon: Icon(LineIcons.plus),
           onPressed: () => state.handleAddPlayerBtn(),

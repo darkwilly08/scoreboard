@@ -52,9 +52,9 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
       case 0:
         return const GameListScreen();
       case 1:
-        return const Text("page 2");
+        return Text(AppLocalizations.of(context)!.comingSoon);
       default:
-        return const Text("page not found");
+        return Text(AppLocalizations.of(context)!.page_not_found);
     }
   }
 

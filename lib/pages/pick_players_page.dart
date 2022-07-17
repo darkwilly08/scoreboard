@@ -107,10 +107,7 @@ class _PickPlayersPhoneView
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(
-          icon: const Icon(LineIcons.search),
-          onPressed: () {}, // TODO: make it work
-        ),
+        // TODO: Add search by user feature.
         IconButton(
           icon: const Icon(LineIcons.plus),
           onPressed: () => state.handleAddPlayerBtn(),

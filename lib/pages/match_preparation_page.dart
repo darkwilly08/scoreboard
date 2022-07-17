@@ -102,12 +102,14 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   void handleAddPlayerBtn(List<User>? alreadySelectedPlayers,
       List<User>? unavailablePlayers, Function(List<User>?) onPlayers) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PickPlayersScreen(
-                preSelectedUsers: alreadySelectedPlayers,
-                unavailableUsers: unavailablePlayers,
-                onConfirmSelection: onPlayers)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => PickPlayersScreen(
+            preSelectedUsers: alreadySelectedPlayers,
+            unavailableUsers: unavailablePlayers,
+            onConfirmSelection: onPlayers),
+      ),
+    );
   }
 
   void handleAddPlayerBtnToFFA() {
@@ -169,11 +171,37 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     return teams;
   }
 
+  Future<void> _showNoPlayersDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.no_selected_players),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(AppLocalizations.of(context)!.no_players_description),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void handleStartBtn() {
     var teams = _createTeams();
 
     if (teams == null) {
-      //TODO: show error message.. complete players
+      _showNoPlayersDialog();
       return;
     }
 
@@ -182,7 +210,6 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   void goToMatch() {
-    //truco
     Navigator.pushReplacementNamed(context, Routes.matchBoard);
   }
 }
@@ -204,7 +231,7 @@ class _MatchPreparationPhoneView
     }
   }
 
-  _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
+  void _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
     var dialog = SingleChoiceDialog<TrucoScore>(
         title: Text(AppLocalizations.of(context)!.target_score +
             " (${AppLocalizations.of(context)!.bad_plus_good.toLowerCase()})"),
@@ -216,8 +243,40 @@ class _MatchPreparationPhoneView
     }
   }
 
+  List<SettingsTile> _getQuickSettingsTiles(context) {
+    List<SettingsTile> quickSettings = [
+      SettingsTile(
+        leading: const Icon(LineIcons.flagCheckered),
+        title: Text(AppLocalizations.of(context)!.target_score),
+        value: widget.selectedGame is! TrucoGame
+            ? Text(widget.selectedGame.targetScore.toString())
+            : Text(
+                (widget.selectedGame as TrucoGame).scoreInfo.toString(),
+              ),
+        onPressed: widget.selectedGame is TrucoGame
+            ? _showTrucoScoreSingleChoiceDialog
+            : _showTargetScoreInputDialog,
+      ),
+    ];
+    if (widget.selectedGame is! TrucoGame) {
+      quickSettings.add(SettingsTile.switchTile(
+        leading: const Icon(LineIcons.trophy),
+        title: Text(AppLocalizations.of(context)!.target_score_wins),
+        initialValue: widget.selectedGame.targetScoreWins,
+        onToggle: widget.selectedGame is! TrucoGame
+            ? state.handleRulesTargetScoreWinsChanged
+            : null,
+      ));
+      quickSettings.add(SettingsTile(
+        leading: const Icon(LineIcons.horizontalSliders),
+        title: Text(AppLocalizations.of(context)!.customize_game),
+        onPressed: state.handleMoreSettings,
+      ));
+    }
+    return quickSettings;
+  }
+
   Widget _buildSettingsList(BuildContext context) {
-    //TODO editable game settings before start the match
     return Consumer<GameController>(builder: (context, gameController, _) {
       return SettingsList(
         contentPadding: const EdgeInsetsDirectional.all(0),
@@ -234,33 +293,7 @@ class _MatchPreparationPhoneView
               AppLocalizations.of(context)!.rules,
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
-            tiles: [
-              SettingsTile(
-                leading: const Icon(LineIcons.flagCheckered),
-                title: Text(AppLocalizations.of(context)!.target_score),
-                value: widget.selectedGame is! TrucoGame
-                    ? Text(widget.selectedGame.targetScore.toString())
-                    : Text(
-                        (widget.selectedGame as TrucoGame).scoreInfo.toString(),
-                      ),
-                onPressed: widget.selectedGame is TrucoGame
-                    ? _showTrucoScoreSingleChoiceDialog
-                    : _showTargetScoreInputDialog,
-              ),
-              SettingsTile.switchTile(
-                leading: const Icon(LineIcons.trophy),
-                title: Text(AppLocalizations.of(context)!.target_score_wins),
-                initialValue: widget.selectedGame.targetScoreWins,
-                onToggle: widget.selectedGame is! TrucoGame
-                    ? state.handleRulesTargetScoreWinsChanged
-                    : null,
-              ),
-              SettingsTile(
-                leading: const Icon(LineIcons.horizontalSliders),
-                title: Text(AppLocalizations.of(context)!.customize_game),
-                onPressed: state.handleMoreSettings,
-              )
-            ],
+            tiles: _getQuickSettingsTiles(context),
           ),
         ],
       );
@@ -293,8 +326,9 @@ class _MatchPreparationPhoneView
       );
     } else {
       return Wrap(
-          spacing: 16.0,
-          children: elements.map((e) => Chip(label: Text(e.name))).toList());
+        spacing: 16.0,
+        children: elements.map((e) => Chip(label: Text(e.name))).toList(),
+      );
     }
   }
 
@@ -356,68 +390,68 @@ class _MatchPreparationPhoneView
       case 1:
         return _buldTeamsSection(context);
       default:
-        return const Text("page not found");
+        return Text(AppLocalizations.of(context)!.page_not_found);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: BackHeader(title: AppLocalizations.of(context)!.new_match),
-        body: Stack(
-          children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                _buildSettingsList(context),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: CustomToggleButton(
-                    firstBtnText: AppLocalizations.of(context)!.ffa,
-                    secondBtnText: AppLocalizations.of(context)!.teams,
-                    onChanged: state.handleToggleChanged,
-                  ),
+      appBar: BackHeader(title: AppLocalizations.of(context)!.new_match),
+      body: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildSettingsList(context),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomToggleButton(
+                  firstBtnText: AppLocalizations.of(context)!.ffa,
+                  secondBtnText: AppLocalizations.of(context)!.teams,
+                  onChanged: state.handleToggleChanged,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: _buildBody(context),
-                ),
-              ],
-            ),
-            Positioned(
-              child: InkWell(
-                onTap: state.handleStartBtn,
-                child: Container(
-                  height: 50,
-                  width: MediaQuery.of(context).size.width,
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).colorScheme.secondary,
-                      borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(60.0),
-                          topRight: Radius.circular(60.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.6),
-                          spreadRadius: 3,
-                          blurRadius: 10,
-                          offset:
-                              const Offset(0, -1), // changes position of shadow
-                        ),
-                      ]),
-                  child: Center(
-                    child: Text(
-                      AppLocalizations.of(context)!.start,
-                      style: TextStyle(
-                          fontSize: 20,
-                          color:
-                              Theme.of(context).colorScheme.primaryContainer),
-                    ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildBody(context),
+              ),
+            ],
+          ),
+          Positioned(
+            child: InkWell(
+              onTap: state.handleStartBtn,
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(60.0),
+                        topRight: Radius.circular(60.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.6),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset:
+                            const Offset(0, -1), // changes position of shadow
+                      ),
+                    ]),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.start,
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primaryContainer),
                   ),
                 ),
               ),
-              bottom: 0,
-            )
-          ],
-        ));
+            ),
+            bottom: 0,
+          )
+        ],
+      ),
+    );
   }
 }
