@@ -20,6 +20,11 @@
     "save": "Save",
     "error_field_mandatory": "This field is mandatory",
     "edit_player": "Edit player",
+    "no_selected_players": "No selected players",
+    "no_players_description": "Wait! You need to add players or teams before starting the match.",
+    "back": "Go back",
+    "page_not_found": "Page not found",
+    "comingSoon": "Coming soon...",
     "player_added_success": "{name} was added successfuly!",
     "@player_added_success": {
         "placeholders": {

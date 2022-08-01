@@ -20,7 +20,12 @@
     "save": "Guardar",
     "error_field_mandatory": "Por favor complete este campo",
     "edit_player": "Editar jugador",
+    "no_selected_players": "No seleccionó jugadores",
+    "no_players_description": "Espere! Tiene que elegir jugadores o formar equipos para la partida.",
+    "back": "Volver",
     "player_added_success": "¡El jugador {name} fue agregado con éxito!",
+    "page_not_found": "Página no encontrada",
+    "comingSoon": "Próximamente...",
     "@player_added_success": {
         "placeholders": {
             "name": {

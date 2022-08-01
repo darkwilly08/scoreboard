@@ -48,7 +48,6 @@ class _GameSettingsPhoneView
       appBar: BackHeader(title: AppLocalizations.of(context)!.customize_game),
       body: Consumer<GameController>(builder: (context, gameController, _) {
         return SettingsList(
-          // TODO:
           sections: [
             SettingsSection(
               title: Text(
@@ -73,12 +72,6 @@ class _GameSettingsPhoneView
                     }
                   },
                 ),
-                // TODO: Ver con fran si esto se podria o hacemos verga todo
-                // SettingsTile.navigation(
-                //   leading: const Icon(LineIcons.hashtag),
-                //   title: Text(AppLocalizations.of(context)!.scoreboard_type),
-                //   value: Text(state._selectedGame.type.id.toString()),
-                // ),
               ],
             ),
             SettingsSection(

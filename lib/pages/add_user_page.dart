@@ -81,15 +81,18 @@ class _AddUserScreenState extends State<AddUserScreen> {
   void handleEditBtn() async {
     if (_formKey.currentState!.validate()) {
       var user = User(
-          id: widget.user!.id,
-          name: name!,
-          initial: initial!,
-          favorite: favorite);
+        id: widget.user!.id,
+        name: name!,
+        initial: initial!,
+        favorite: favorite,
+      );
       await _userController.EditPlayer(user);
       Navigator.pop(context);
       String snackMsg =
           AppLocalizations.of(context)!.player_edited_success(name!);
-      final snackBar = SuccessSnackBar(Text(snackMsg));
+      final snackBar = SuccessSnackBar(
+        Text(snackMsg),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -123,56 +126,61 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
 
   Widget _buildForm(BuildContext context) {
     return Form(
-        key: state._formKey,
-        child: Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: 16.0,
-              vertical: 10.0,
-            ),
-            child: Column(
+      key: state._formKey,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 10.0,
+        ),
+        child: Column(
+          children: [
+            Wrap(
+              runSpacing: 20,
               children: [
-                Wrap(
-                  runSpacing: 20,
-                  children: [
-                    CustomTextFormField(
-                      labelText: AppLocalizations.of(context)!.input_name,
-                      onChanged: state.handleNameChanged,
-                      validator: state._nameValidator,
-                      initialValue: state.name,
-                    ),
-                    CustomTextFormField(
-                      labelText: AppLocalizations.of(context)!.input_initial,
-                      maxLength: 1,
-                      onChanged: state.handleInitialChanged,
-                      validator: state._initialValidator,
-                      initialValue: state.initial,
-                    ),
-                    SwitchListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.favorite,
-                        ),
-                        value: state.favorite,
-                        onChanged: state.handleFavoriteChanged)
-                  ],
+                CustomTextFormField(
+                  labelText: AppLocalizations.of(context)!.input_name,
+                  onChanged: state.handleNameChanged,
+                  validator: state._nameValidator,
+                  initialValue: state.name,
                 ),
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomTextButton(
-                        onTap: () => state.handleCancelBtn(),
-                        text: AppLocalizations.of(context)!.cancel),
-                    CustomTextButton(
-                        onTap: () {
-                          state.editMode
-                              ? state.handleEditBtn()
-                              : state.handleSaveBtn();
-                        },
-                        text: AppLocalizations.of(context)!.save),
-                  ],
+                CustomTextFormField(
+                  labelText: AppLocalizations.of(context)!.input_initial,
+                  maxLength: 1,
+                  onChanged: state.handleInitialChanged,
+                  validator: state._initialValidator,
+                  initialValue: state.initial,
+                ),
+                SwitchListTile(
+                  title: Text(
+                    AppLocalizations.of(context)!.favorite,
+                  ),
+                  value: state.favorite,
+                  onChanged: state.handleFavoriteChanged,
                 )
               ],
-            )));
+            ),
+            Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomTextButton(
+                  onTap: () => state.handleCancelBtn(),
+                  text: AppLocalizations.of(context)!.cancel,
+                ),
+                CustomTextButton(
+                  onTap: () {
+                    state.editMode
+                        ? state.handleEditBtn()
+                        : state.handleSaveBtn();
+                  },
+                  text: AppLocalizations.of(context)!.save,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget? _buildTrailing() {
@@ -195,12 +203,13 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
         ? AppLocalizations.of(context)!.edit_player
         : AppLocalizations.of(context)!.add_player;
     return Scaffold(
-        appBar: BackHeader(
-          title: title,
-          trailing: _buildTrailing(),
-        ),
-        body: Column(
-          children: [Expanded(child: _buildForm(context))],
-        ));
+      appBar: BackHeader(
+        title: title,
+        trailing: _buildTrailing(),
+      ),
+      body: Column(
+        children: [Expanded(child: _buildForm(context))],
+      ),
+    );
   }
 }
