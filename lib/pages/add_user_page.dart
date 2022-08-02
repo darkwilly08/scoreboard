@@ -69,7 +69,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   void handleSaveBtn() async {
     if (_formKey.currentState!.validate()) {
       var user = User(name: name!, initial: initial!, favorite: favorite);
-      await _userController.AddPlayer(user);
+      await _userController.addPlayer(user);
       Navigator.pop(context);
       String snackMsg =
           AppLocalizations.of(context)!.player_added_success(name!);
@@ -86,7 +86,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
         initial: initial!,
         favorite: favorite,
       );
-      await _userController.EditPlayer(user);
+      await _userController.editPlayer(user);
       Navigator.pop(context);
       String snackMsg =
           AppLocalizations.of(context)!.player_edited_success(name!);
@@ -98,7 +98,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
   }
 
   void handleDeleteBtn() async {
-    await _userController.DeletePlayerById(widget.user!.id!);
+    await _userController.deletePlayerById(widget.user!.id!);
     Navigator.pop(context);
     String snackMsg =
         AppLocalizations.of(context)!.player_removed_success(name!);
@@ -159,7 +159,7 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
                 )
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -184,7 +184,10 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
   }
 
   Widget? _buildTrailing() {
-    if (!state.editMode) return null;
+    // TODO: improve this with a getter isOwner
+    if (!state.editMode || widget.user?.id == 0) {
+      return null;
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,

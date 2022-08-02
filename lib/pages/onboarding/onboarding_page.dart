@@ -49,7 +49,7 @@ class _OnBoardingPageState extends State<OnBoardingPage> {
     String displayName = _displayNameTextController.text;
     if (!_nameValidator(displayName)) {
       final snackBar = DangerSnackBar(Text(
-        AppLocalizations.of(context)!.display_name,
+        AppLocalizations.of(context)!.onboarding_missing_name,
       ));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
       return;

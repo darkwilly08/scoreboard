@@ -35,8 +35,8 @@ class _UserscreenState extends State<UsersScreen> {
   }
 
   void handleAddPlayerBtn() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddUserScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddUserScreen()));
   }
 
   void handleEditPlayerTap(User user, bool _) {
@@ -50,7 +50,7 @@ class _UserscreenState extends State<UsersScreen> {
 
   Future<void> handleToggleFavorite(User user) async {
     user.favorite = !user.favorite;
-    await _userController.EditPlayer(user);
+    await _userController.editPlayer(user);
   }
 }
 
@@ -61,7 +61,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
     return Consumer<UserController>(builder: (context, userController, _) {
       var players = userController.players;
       if (players == null) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
 
       return UserList(
@@ -78,7 +78,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
       children: [
         // TODO: Add search by user feature.
         IconButton(
-          icon: Icon(LineIcons.plus),
+          icon: const Icon(LineIcons.plus),
           onPressed: () => state.handleAddPlayerBtn(),
         ),
       ],

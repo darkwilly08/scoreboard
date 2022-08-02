@@ -25,7 +25,7 @@ class UserController extends ChangeNotifier {
     return a.name.compareTo(b.name);
   }
 
-  Future<void> AddPlayer(User newPlayer) async {
+  Future<void> addPlayer(User newPlayer) async {
     User player = await _userRepository.insertUser(newPlayer);
     _players ??= [];
 
@@ -34,7 +34,7 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> EditPlayer(User editedPlayer) async {
+  Future<void> editPlayer(User editedPlayer) async {
     // Id is not empty, is really modifying one user
     await _userRepository.insertUser(editedPlayer);
 
@@ -48,10 +48,12 @@ class UserController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> DeletePlayerById(int playerId) async {
-    await _userRepository.delete(playerId);
-    _players!.removeWhere((player) => player.id == playerId);
-    notifyListeners();
+  Future<void> deletePlayerById(int playerId) async {
+    int wasDeleted = await _userRepository.delete(playerId);
+    if (wasDeleted > 0) {
+      _players!.removeWhere((player) => player.id == playerId);
+      notifyListeners();
+    }
   }
 
   Future<void> initPlayerList() async {

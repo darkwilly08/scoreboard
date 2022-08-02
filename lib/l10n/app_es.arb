@@ -92,6 +92,7 @@
     "onboarding_letsgo_title": "¡Comencemos!",
     "onboarding_letsgo_description": "Completá tu nombre para empezar a registrar tus partidas",
     "onboarding_quote": "¡No te olvides de mostrar el tanto!",
+    "onboarding_missing_name": "Tu nombre nos permite llevar tus estadísticas",
     "display_name": "Nombre de usuario",
     "done": "Listo"
 }
