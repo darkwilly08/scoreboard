@@ -91,6 +91,7 @@
     "onboarding_letsgo_title": "Let’s get started!",
     "onboarding_letsgo_description": "Write down your name and start keeping track of your wins!",
     "onboarding_quote": "While playing Uno remember: Safety first",
+    "onboarding_missing_name": "Please tell us your name",
     "display_name": "Display name",
     "done": "Done"
 }

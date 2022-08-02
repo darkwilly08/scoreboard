@@ -34,13 +34,13 @@ class UserRepository {
     });
   }
 
-  Future<void> delete(int userId) async {
+  Future<int> delete(int userId) async {
     if (userId == 0) {
-      return; // Owner user cannot be deleted
+      return 0; // Owner user cannot be deleted
     }
     final db = await AppData.database;
 
-    await db.delete(Tables.user,
+    return await db.delete(Tables.user,
         where: '${Tables.user}_id = ?', whereArgs: [userId]);
   }
 }
