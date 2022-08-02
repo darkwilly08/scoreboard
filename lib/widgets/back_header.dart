@@ -1,7 +1,8 @@
 import 'package:anotador/constants/const_variables.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 
-class BackHeader extends StatelessWidget {
+class BackHeader extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final Widget? trailing;
   final Widget? leading;
@@ -9,51 +10,54 @@ class BackHeader extends StatelessWidget {
   const BackHeader({Key? key, required this.title, this.trailing, this.leading})
       : super(key: key);
 
+  @override
+  Size get preferredSize => const Size.fromHeight(56);
+
   Widget _buildTrailing() {
     return trailing ??
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: const [
-            Image(
-              image: AssetImage(AssetsConstants.scoreboard),
-              height: 36.0,
-            ),
-          ],
+        Padding(
+          padding: EdgeInsets.only(right: 8.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: const [
+              Image(
+                image: AssetImage(AssetsConstants.scoreboard),
+                height: 36.0,
+              ),
+            ],
+          ),
         );
   }
 
   Widget _buildLeading(BuildContext context) {
-    return leading ??
+    Widget child = leading ??
         IconButton(
-          icon: const Icon(Icons.arrow_back),
+          icon: const Icon(LineIcons.arrowLeft),
           onPressed: () => Navigator.pop(context),
         );
+
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6.0),
+      child: child,
+    );
   }
 
-  Widget _buildTopHeader(BuildContext context) {
-    return SafeArea(
-        child: Padding(
-      padding: const EdgeInsets.only(right: 8.0),
-      child: Row(
-        children: <Widget>[
-          _buildLeading(context),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0),
-              child: Text(
-                title,
-                style: Theme.of(context).textTheme.headline6,
-              ),
-            ),
-          ),
-          _buildTrailing()
-        ],
+  PreferredSizeWidget _buildTopHeader(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.transparent,
+      elevation: 0.0,
+      leading: _buildLeading(context),
+      centerTitle: false,
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.headline6,
       ),
-    ));
+      actions: [_buildTrailing()],
+    );
   }
 
   @override
-  Widget build(BuildContext context) {
+  PreferredSizeWidget build(BuildContext context) {
     return _buildTopHeader(context);
   }
 }

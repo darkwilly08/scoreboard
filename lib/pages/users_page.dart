@@ -6,6 +6,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class UsersScreen extends StatefulWidget {
@@ -34,8 +35,8 @@ class _UserscreenState extends State<UsersScreen> {
   }
 
   void handleAddPlayerBtn() {
-    Navigator.push(
-        context, MaterialPageRoute(builder: (context) => AddUserScreen()));
+    Navigator.push(context,
+        MaterialPageRoute(builder: (context) => const AddUserScreen()));
   }
 
   void handleEditPlayerTap(User user, bool _) {
@@ -49,7 +50,7 @@ class _UserscreenState extends State<UsersScreen> {
 
   Future<void> handleToggleFavorite(User user) async {
     user.favorite = !user.favorite;
-    await _userController.EditPlayer(user);
+    await _userController.editPlayer(user);
   }
 }
 
@@ -60,7 +61,7 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
     return Consumer<UserController>(builder: (context, userController, _) {
       var players = userController.players;
       if (players == null) {
-        return CircularProgressIndicator();
+        return const CircularProgressIndicator();
       }
 
       return UserList(
@@ -75,9 +76,11 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: Icon(Icons.search), onPressed: () => null),
+        // TODO: Add search by user feature.
         IconButton(
-            icon: Icon(Icons.add), onPressed: () => state.handleAddPlayerBtn()),
+          icon: const Icon(LineIcons.plus),
+          onPressed: () => state.handleAddPlayerBtn(),
+        ),
       ],
     );
   }
@@ -85,14 +88,12 @@ class _UsersPhoneView extends WidgetView<UsersScreen, _UserscreenState> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
+        appBar: BackHeader(
           title: AppLocalizations.of(context)!.players,
           trailing: _buildTrailing(),
         ),
-        Expanded(child: _buildUserList(context))
-      ],
-    ));
+        body: Column(
+          children: [Expanded(child: _buildUserList(context))],
+        ));
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:anotador/controllers/user_controller.dart';
 import 'package:anotador/fragments/user_list.dart';
 import 'package:anotador/model/user.dart';
@@ -9,6 +7,7 @@ import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class PickPlayersScreen extends StatefulWidget {
@@ -17,12 +16,14 @@ class PickPlayersScreen extends StatefulWidget {
   final void Function(List<User>)? onConfirmSelection;
   final List<User>? unavailableUsers;
   final List<User>? preSelectedUsers;
+  final bool multipleSelection;
 
   const PickPlayersScreen(
       {Key? key,
       required this.onConfirmSelection,
       this.unavailableUsers,
-      this.preSelectedUsers})
+      this.preSelectedUsers,
+      this.multipleSelection = true})
       : super(key: key);
 
   @override
@@ -68,11 +69,15 @@ class _PickPlayerscreenState extends State<PickPlayersScreen> {
   }
 
   void handlePlayerTapped(User user, bool selected) {
-    if (selected) {
-      _selectedUsers.add(user);
-    } else {
-      _selectedUsers.removeWhere((element) => element.id == user.id);
-    }
+    setState(() {
+      if (!widget.multipleSelection) _selectedUsers.clear();
+
+      if (selected) {
+        _selectedUsers.add(user);
+      } else {
+        _selectedUsers.removeWhere((element) => element.id == user.id);
+      }
+    });
   }
 }
 
@@ -93,7 +98,7 @@ class _PickPlayersPhoneView
                 : !widget.unavailableUsers!.contains(u))
             .toList(),
         onItemTapped: state.handlePlayerTapped,
-        preSelectedUsers: widget.preSelectedUsers,
+        preSelectedUsers: state._selectedUsers,
       );
     });
   }
@@ -102,10 +107,11 @@ class _PickPlayersPhoneView
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        IconButton(icon: const Icon(Icons.search), onPressed: () => null),
+        // TODO: Add search by user feature.
         IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () => state.handleAddPlayerBtn()),
+          icon: const Icon(LineIcons.plus),
+          onPressed: () => state.handleAddPlayerBtn(),
+        ),
       ],
     );
   }
@@ -113,27 +119,27 @@ class _PickPlayersPhoneView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
+        appBar: BackHeader(
           title: AppLocalizations.of(context)!.players,
           trailing: _buildTrailing(),
         ),
-        Expanded(child: _buildUserList(context)),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: Column(
           children: [
-            CustomTextButton(
-                onTap: () => state.handleCancelBtn(),
-                text: AppLocalizations.of(context)!.cancel),
-            CustomTextButton(
-                onTap: () {
-                  state.handleAcceptBtn();
-                },
-                text: AppLocalizations.of(context)!.accept),
+            Expanded(child: _buildUserList(context)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomTextButton(
+                    onTap: () => state.handleCancelBtn(),
+                    text: AppLocalizations.of(context)!.cancel),
+                CustomTextButton(
+                    onTap: () {
+                      state.handleAcceptBtn();
+                    },
+                    text: AppLocalizations.of(context)!.accept),
+              ],
+            )
           ],
-        )
-      ],
-    ));
+        ));
   }
 }

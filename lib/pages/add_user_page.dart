@@ -7,12 +7,13 @@ import 'package:anotador/widgets/custom_text_form_field.dart';
 import 'package:anotador/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class AddUserScreen extends StatefulWidget {
   final User? user;
 
-  AddUserScreen({Key? key, User? this.user}) : super(key: key);
+  const AddUserScreen({Key? key, this.user}) : super(key: key);
 
   @override
   _AddUserScreenState createState() => _AddUserScreenState();
@@ -37,9 +38,9 @@ class _AddUserScreenState extends State<AddUserScreen> {
   }
 
   void _loadEditableUser() {
-    this.name = widget.user!.name;
-    this.initial = widget.user!.initial;
-    this.favorite = widget.user!.favorite;
+    name = widget.user!.name;
+    initial = widget.user!.initial;
+    favorite = widget.user!.favorite;
   }
 
   @override
@@ -67,12 +68,11 @@ class _AddUserScreenState extends State<AddUserScreen> {
 
   void handleSaveBtn() async {
     if (_formKey.currentState!.validate()) {
-      var user = User(
-          name: this.name!, initial: this.initial!, favorite: this.favorite);
-      await _userController.AddPlayer(user);
+      var user = User(name: name!, initial: initial!, favorite: favorite);
+      await _userController.addPlayer(user);
       Navigator.pop(context);
       String snackMsg =
-          AppLocalizations.of(context)!.player_added_success(this.name!);
+          AppLocalizations.of(context)!.player_added_success(name!);
       final snackBar = SuccessSnackBar(Text(snackMsg));
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -81,24 +81,27 @@ class _AddUserScreenState extends State<AddUserScreen> {
   void handleEditBtn() async {
     if (_formKey.currentState!.validate()) {
       var user = User(
-          id: widget.user!.id,
-          name: this.name!,
-          initial: this.initial!,
-          favorite: this.favorite);
-      await _userController.EditPlayer(user);
+        id: widget.user!.id,
+        name: name!,
+        initial: initial!,
+        favorite: favorite,
+      );
+      await _userController.editPlayer(user);
       Navigator.pop(context);
       String snackMsg =
-          AppLocalizations.of(context)!.player_edited_success(this.name!);
-      final snackBar = SuccessSnackBar(Text(snackMsg));
+          AppLocalizations.of(context)!.player_edited_success(name!);
+      final snackBar = SuccessSnackBar(
+        Text(snackMsg),
+      );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
 
   void handleDeleteBtn() async {
-    await _userController.DeletePlayerById(widget.user!.id!);
+    await _userController.deletePlayerById(widget.user!.id!);
     Navigator.pop(context);
     String snackMsg =
-        AppLocalizations.of(context)!.player_removed_success(this.name!);
+        AppLocalizations.of(context)!.player_removed_success(name!);
     final snackBar = SuccessSnackBar(Text(snackMsg));
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
@@ -123,63 +126,76 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
 
   Widget _buildForm(BuildContext context) {
     return Form(
-        key: state._formKey,
-        child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 10.0),
-            child: Column(
+      key: state._formKey,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 10.0,
+        ),
+        child: Column(
+          children: [
+            Wrap(
+              runSpacing: 20,
               children: [
-                Wrap(
-                  runSpacing: 20,
-                  children: [
-                    CustomTextFormField(
-                      labelText: AppLocalizations.of(context)!.input_name,
-                      onChanged: state.handleNameChanged,
-                      validator: state._nameValidator,
-                      initialValue: state.name,
-                    ),
-                    CustomTextFormField(
-                      labelText: AppLocalizations.of(context)!.input_initial,
-                      maxLength: 1,
-                      onChanged: state.handleInitialChanged,
-                      validator: state._initialValidator,
-                      initialValue: state.initial,
-                    ),
-                    SwitchListTile(
-                        title: Text(
-                          AppLocalizations.of(context)!.favorite,
-                        ),
-                        value: state.favorite,
-                        onChanged: state.handleFavoriteChanged)
-                  ],
+                CustomTextFormField(
+                  labelText: AppLocalizations.of(context)!.input_name,
+                  onChanged: state.handleNameChanged,
+                  validator: state._nameValidator,
+                  initialValue: state.name,
                 ),
-                Spacer(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    CustomTextButton(
-                        onTap: () => state.handleCancelBtn(),
-                        text: AppLocalizations.of(context)!.cancel),
-                    CustomTextButton(
-                        onTap: () {
-                          state.editMode
-                              ? state.handleEditBtn()
-                              : state.handleSaveBtn();
-                        },
-                        text: AppLocalizations.of(context)!.save),
-                  ],
+                CustomTextFormField(
+                  labelText: AppLocalizations.of(context)!.input_initial,
+                  maxLength: 1,
+                  onChanged: state.handleInitialChanged,
+                  validator: state._initialValidator,
+                  initialValue: state.initial,
+                ),
+                SwitchListTile(
+                  title: Text(
+                    AppLocalizations.of(context)!.favorite,
+                  ),
+                  value: state.favorite,
+                  onChanged: state.handleFavoriteChanged,
                 )
               ],
-            )));
+            ),
+            const Spacer(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                CustomTextButton(
+                  onTap: () => state.handleCancelBtn(),
+                  text: AppLocalizations.of(context)!.cancel,
+                ),
+                CustomTextButton(
+                  onTap: () {
+                    state.editMode
+                        ? state.handleEditBtn()
+                        : state.handleSaveBtn();
+                  },
+                  text: AppLocalizations.of(context)!.save,
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   Widget? _buildTrailing() {
-    if (!state.editMode) return null;
+    // TODO: improve this with a getter isOwner
+    if (!state.editMode || widget.user?.id == 0) {
+      return null;
+    }
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         IconButton(
-            icon: Icon(Icons.delete), onPressed: () => state.handleDeleteBtn()),
+          icon: const Icon(LineIcons.trash),
+          onPressed: () => state.handleDeleteBtn(),
+        ),
       ],
     );
   }
@@ -190,14 +206,13 @@ class _AddUserPhoneView extends WidgetView<AddUserScreen, _AddUserScreenState> {
         ? AppLocalizations.of(context)!.edit_player
         : AppLocalizations.of(context)!.add_player;
     return Scaffold(
-        body: Column(
-      children: [
-        BackHeader(
-          title: title,
-          trailing: _buildTrailing(),
-        ),
-        Expanded(child: _buildForm(context))
-      ],
-    ));
+      appBar: BackHeader(
+        title: title,
+        trailing: _buildTrailing(),
+      ),
+      body: Column(
+        children: [Expanded(child: _buildForm(context))],
+      ),
+    );
   }
 }

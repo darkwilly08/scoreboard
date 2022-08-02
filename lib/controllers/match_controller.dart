@@ -1,6 +1,9 @@
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/match_status.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/team_status.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/match_repository.dart';
 import 'package:flutter/material.dart';
@@ -42,15 +45,22 @@ class MatchController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addPlayer(User user) async {
+  Future<void> restartMatch() async {
+    await cancelMatchesByGameId(
+        _match!.game.id!); //to be sure there is no match in progress
+    // regenerate teams
+    List<Team> newTeams =
+        _match!.teams!.map((team) => Team.createCopy(team)).toList();
+    start(_match!.game, _match!.isFFA, newTeams);
+  }
+
+  Future<void> addTeam(Team team) async {
     if (_match == null) {
       throw Exception("match is not initilized");
     }
-
-    // _match!.players.add(
-    //     MatchPlayer(match: _match!, user: user, statusId: PlayerStatus.WON));
-
-    // await _matchRepository.addPlayer(_match);
+    team.match = _match;
+    _match!.teams!.add(team);
+    await _matchRepository.addTeam(team);
     notifyListeners();
   }
 
@@ -63,6 +73,17 @@ class MatchController extends ChangeNotifier {
     if (wasRemoved) {
       await _matchRepository.removeLastScore(team);
     }
+  }
+
+  /* TODO: Review this method. I think this should be responsibility of Match
+        Maybe something like isOnePlayerStanding() */
+  bool hasOthersLost() {
+    // all lost except you
+    return (_match!.teams!.length -
+            _match!.teams!
+                .where((p) => p.status.id == TeamStatus.LOST)
+                .length) ==
+        1;
   }
 
   Future<void> addResult(Team team, int value) async {
@@ -82,16 +103,11 @@ class MatchController extends ChangeNotifier {
     //   }
     // }
 
-    if (team.status.id == TeamStatus.WON || /* or all lost except you */
-        ((_match!.teams!.length -
-                _match!.teams!
-                    .where((p) => p.status.id == TeamStatus.LOST)
-                    .length) ==
-            1)) {
+    if (team.status.id == TeamStatus.WON || hasOthersLost()) {
       _match!.status.id = MatchStatus.ENDED;
       _match!.endAt = DateTime.now();
-      _matchRepository.setTeamStatusByMatch(_match!);
-      _gameController?.refreshStats();
+      await _matchRepository.setTeamStatusByMatch(_match!);
+      await _gameController?.refreshStats();
       notifyListeners();
     } else {
       _match!.status.id = MatchStatus.IN_PROGRES;

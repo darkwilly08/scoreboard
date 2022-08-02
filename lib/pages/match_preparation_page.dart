@@ -1,8 +1,13 @@
+import 'package:anotador/constants/const_variables.dart';
+import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
-import 'package:anotador/controllers/theme_controller.dart';
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/match.dart';
+import 'package:anotador/model/team.dart';
+import 'package:anotador/model/truco/truco_score.dart';
+import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/model/user.dart';
+import 'package:anotador/pages/game_settings.dart';
 import 'package:anotador/pages/pick_players_page.dart';
 import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/routes/routes.dart';
@@ -10,9 +15,12 @@ import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/back_header.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
+import 'package:anotador/widgets/dialogs/input_dialog.dart';
+import 'package:anotador/widgets/dialogs/single_choice_dialog.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 import 'package:settings_ui/settings_ui.dart';
 
@@ -28,8 +36,8 @@ class MatchPreparationScreen extends StatefulWidget {
 }
 
 class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
-  late ThemeController _themeController;
   late MatchController _matchController;
+  late GameController _gameController;
   int _index = 0;
   List<User>? ffaList;
   List<User>? playersTeamA;
@@ -39,8 +47,9 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
 
   @override
   void initState() {
-    _themeController = Provider.of<ThemeController>(context, listen: false);
     _matchController = Provider.of<MatchController>(context, listen: false);
+    _gameController = Provider.of<GameController>(context, listen: false);
+    _initGameController();
     checkMatchInProgress();
     super.initState();
   }
@@ -48,6 +57,10 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   @override
   Widget build(BuildContext context) {
     return _MatchPreparationPhoneView(this);
+  }
+
+  Future<void> _initGameController() async {
+    await _gameController.setSelected(widget.selectedGame);
   }
 
   Future<void> checkMatchInProgress() async {
@@ -62,8 +75,8 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text("There's a match in progress"),
-          content: const Text("Do you want to continue the ongoing match?"),
+          title: Text(AppLocalizations.of(context)!.match_in_progress),
+          content: Text(AppLocalizations.of(context)!.continue_match_question),
           actions: <Widget>[
             CustomTextButton(
                 onTap: () => handleContinueMatch(m),
@@ -89,12 +102,14 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   void handleAddPlayerBtn(List<User>? alreadySelectedPlayers,
       List<User>? unavailablePlayers, Function(List<User>?) onPlayers) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => PickPlayersScreen(
-                preSelectedUsers: alreadySelectedPlayers,
-                unavailableUsers: unavailablePlayers,
-                onConfirmSelection: onPlayers)));
+      context,
+      MaterialPageRoute(
+        builder: (context) => PickPlayersScreen(
+            preSelectedUsers: alreadySelectedPlayers,
+            unavailableUsers: unavailablePlayers,
+            onConfirmSelection: onPlayers),
+      ),
+    );
   }
 
   void handleAddPlayerBtnToFFA() {
@@ -112,6 +127,23 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
         (players) => setState(() => playersTeamB = players));
   }
 
+  void handleRulesTargetScoreChanged(int targetScore) {
+    _gameController.updateTargetScore(targetScore);
+  }
+
+  //only for Truco
+  void handleRulesScoreInfoChanged(TrucoScore scoreInfo) {
+    _gameController.updateScoreInfo(scoreInfo);
+  }
+
+  void handleRulesTargetScoreWinsChanged(bool targetScoreWins) {
+    _gameController.updateTargetScoreWins(targetScoreWins);
+  }
+
+  void handleMoreSettings(BuildContext context) {
+    Navigator.pushNamed(context, GameSettings.routeName);
+  }
+
   void handleToggleChanged(int index) {
     setState(() {
       ffaList = null;
@@ -124,19 +156,11 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   List<Team>? _createTeams() {
     List<Team> teams = [];
     if (ffaList != null) {
-      teams = ffaList!.map((u) {
-        var team = Team(name: u.name, statusId: TeamStatus.PLAYING);
-        team.players.add(Player(team: team, user: u));
-        return team;
-      }).toList();
+      teams = Team.createTeam(ffaList!, oneTeamPerUser: true);
     } else if (playersTeamA != null && playersTeamB != null) {
       //TODO improve this to handle N teams
-      var teamA = Team(name: teamAName, statusId: TeamStatus.PLAYING);
-      teamA.players =
-          playersTeamA!.map((u) => Player(team: teamA, user: u)).toList();
-      var teamB = Team(name: teamBName, statusId: TeamStatus.PLAYING);
-      teamB.players =
-          playersTeamB!.map((u) => Player(team: teamB, user: u)).toList();
+      var teamA = Team.createTeam(playersTeamA!, teamName: teamAName).single;
+      var teamB = Team.createTeam(playersTeamB!, teamName: teamBName).single;
 
       teams.add(teamA);
       teams.add(teamB);
@@ -147,11 +171,37 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
     return teams;
   }
 
+  Future<void> _showNoPlayersDialog() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(AppLocalizations.of(context)!.no_selected_players),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: <Widget>[
+                Text(AppLocalizations.of(context)!.no_players_description),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(AppLocalizations.of(context)!.back),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void handleStartBtn() {
     var teams = _createTeams();
 
     if (teams == null) {
-      //TODO: show error message.. complete players
+      _showNoPlayersDialog();
       return;
     }
 
@@ -160,12 +210,7 @@ class _MatchPreparationScreenState extends State<MatchPreparationScreen> {
   }
 
   void goToMatch() {
-    if (widget.selectedGame.type.id == GameType.NORMAL) {
-      Navigator.pushReplacementNamed(context, Routes.normalMatch);
-    } else {
-      //truco
-      Navigator.pushReplacementNamed(context, Routes.trucoMatch);
-    }
+    Navigator.pushReplacementNamed(context, Routes.matchBoard);
   }
 }
 
@@ -173,41 +218,86 @@ class _MatchPreparationPhoneView
     extends WidgetView<MatchPreparationScreen, _MatchPreparationScreenState> {
   const _MatchPreparationPhoneView(state, {Key? key}) : super(state, key: key);
 
+  _showTargetScoreInputDialog(BuildContext context) async {
+    var dialog = InputDialog(
+        title: Text(AppLocalizations.of(context)!.target_score),
+        isNumber: true,
+        val: widget.selectedGame.targetScore.toString());
+    String? valStr = await dialog.show(context);
+
+    int? score = valStr != null ? int.tryParse(valStr) : null;
+    if (score != null) {
+      state.handleRulesTargetScoreChanged(score);
+    }
+  }
+
+  void _showTrucoScoreSingleChoiceDialog(BuildContext context) async {
+    var dialog = SingleChoiceDialog<TrucoScore>(
+        title: Text(AppLocalizations.of(context)!.target_score +
+            " (${AppLocalizations.of(context)!.bad_plus_good.toLowerCase()})"),
+        items: AppConstants.trucoPossibleScores,
+        selected: (widget.selectedGame as TrucoGame).scoreInfo);
+    TrucoScore? trucoScore = await dialog.show(context);
+    if (trucoScore != null) {
+      state.handleRulesScoreInfoChanged(trucoScore);
+    }
+  }
+
+  List<SettingsTile> _getQuickSettingsTiles(context) {
+    List<SettingsTile> quickSettings = [
+      SettingsTile(
+        leading: const Icon(LineIcons.flagCheckered),
+        title: Text(AppLocalizations.of(context)!.target_score),
+        value: widget.selectedGame is! TrucoGame
+            ? Text(widget.selectedGame.targetScore.toString())
+            : Text(
+                (widget.selectedGame as TrucoGame).scoreInfo.toString(),
+              ),
+        onPressed: widget.selectedGame is TrucoGame
+            ? _showTrucoScoreSingleChoiceDialog
+            : _showTargetScoreInputDialog,
+      ),
+    ];
+    if (widget.selectedGame is! TrucoGame) {
+      quickSettings.add(SettingsTile.switchTile(
+        leading: const Icon(LineIcons.trophy),
+        title: Text(AppLocalizations.of(context)!.target_score_wins),
+        initialValue: widget.selectedGame.targetScoreWins,
+        onToggle: widget.selectedGame is! TrucoGame
+            ? state.handleRulesTargetScoreWinsChanged
+            : null,
+      ));
+      quickSettings.add(SettingsTile(
+        leading: const Icon(LineIcons.horizontalSliders),
+        title: Text(AppLocalizations.of(context)!.customize_game),
+        onPressed: state.handleMoreSettings,
+      ));
+    }
+    return quickSettings;
+  }
+
   Widget _buildSettingsList(BuildContext context) {
-    //TODO editable game settings before start the match
-    return SettingsList(
-      shrinkWrap: true,
-      darkTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor),
-      lightTheme: SettingsThemeData(
-          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor),
-      sections: [
-        SettingsSection(
-          title: Text(
-            AppLocalizations.of(context)!.rules,
-            style: TextStyle(color: Theme.of(context).colorScheme.secondary),
-          ),
-          tiles: [
-            SettingsTile(
-              title: Text(AppLocalizations.of(context)!.target_score),
-              value: Text(widget.selectedGame.targetScore.toString()),
-              leading: const Icon(Icons.adjust),
-              onPressed: (BuildContext context) {
-                //TODO _showSingleChoiceDialog(context, langCode);
-              },
-            ),
-            SettingsTile.switchTile(
-              title: Text(AppLocalizations.of(context)!.target_score_wins),
-              leading: const Icon(Icons.emoji_events),
-              initialValue: widget.selectedGame.targetScoreWins,
-              onToggle: (bool value) {
-                //TODO state.handleThemeModeChanged(value);
-              },
-            ),
-          ],
+    return Consumer<GameController>(builder: (context, gameController, _) {
+      return SettingsList(
+        contentPadding: const EdgeInsetsDirectional.all(0),
+        shrinkWrap: true,
+        darkTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.darkTheme.scaffoldBackgroundColor,
         ),
-      ],
-    );
+        lightTheme: SettingsThemeData(
+          settingsListBackground: AppTheme.lightTheme.scaffoldBackgroundColor,
+        ),
+        sections: [
+          SettingsSection(
+            title: Text(
+              AppLocalizations.of(context)!.rules,
+              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+            ),
+            tiles: _getQuickSettingsTiles(context),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildListHeader(
@@ -221,8 +311,8 @@ class _MatchPreparationPhoneView
         const Spacer(),
         CustomFloatingActionButton(
           onTap: onAction,
-          iconData: Icons.add,
-        )
+          iconData: LineIcons.plus,
+        ),
       ],
     );
   }
@@ -236,8 +326,9 @@ class _MatchPreparationPhoneView
       );
     } else {
       return Wrap(
-          spacing: 16.0,
-          children: elements.map((e) => Chip(label: Text(e.name))).toList());
+        spacing: 16.0,
+        children: elements.map((e) => Chip(label: Text(e.name))).toList(),
+      );
     }
   }
 
@@ -299,63 +390,68 @@ class _MatchPreparationPhoneView
       case 1:
         return _buldTeamsSection(context);
       default:
-        return const Text("page not found");
+        return Text(AppLocalizations.of(context)!.page_not_found);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Stack(
-      children: [
-        Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            BackHeader(title: AppLocalizations.of(context)!.new_match),
-            _buildSettingsList(context),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CustomToggleButton(
-                firstBtnText: AppLocalizations.of(context)!.ffa,
-                secondBtnText: AppLocalizations.of(context)!.teams,
-                onChanged: state.handleToggleChanged,
+      appBar: BackHeader(title: AppLocalizations.of(context)!.new_match),
+      body: Stack(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              _buildSettingsList(context),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: CustomToggleButton(
+                  firstBtnText: AppLocalizations.of(context)!.ffa,
+                  secondBtnText: AppLocalizations.of(context)!.teams,
+                  onChanged: state.handleToggleChanged,
+                ),
               ),
-            ),
-            _buildBody(context),
-          ],
-        ),
-        Positioned(
-          child: InkWell(
-            onTap: state.handleStartBtn,
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                  color: Theme.of(context).colorScheme.secondary,
-                  borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(60.0),
-                      topRight: Radius.circular(60.0)),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.6),
-                      spreadRadius: 3,
-                      blurRadius: 10,
-                      offset: const Offset(0, -1), // changes position of shadow
-                    ),
-                  ]),
-              child: Center(
-                child: Text(
-                  AppLocalizations.of(context)!.start,
-                  style: TextStyle(
-                      fontSize: 20,
-                      color: Theme.of(context).colorScheme.primaryContainer),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: _buildBody(context),
+              ),
+            ],
+          ),
+          Positioned(
+            child: InkWell(
+              onTap: state.handleStartBtn,
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width,
+                decoration: BoxDecoration(
+                    color: Theme.of(context).colorScheme.secondary,
+                    borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(60.0),
+                        topRight: Radius.circular(60.0)),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.6),
+                        spreadRadius: 3,
+                        blurRadius: 10,
+                        offset:
+                            const Offset(0, -1), // changes position of shadow
+                      ),
+                    ]),
+                child: Center(
+                  child: Text(
+                    AppLocalizations.of(context)!.start,
+                    style: TextStyle(
+                        fontSize: 20,
+                        color: Theme.of(context).colorScheme.primaryContainer),
+                  ),
                 ),
               ),
             ),
-          ),
-          bottom: 0,
-        )
-      ],
-    ));
+            bottom: 0,
+          )
+        ],
+      ),
+    );
   }
 }

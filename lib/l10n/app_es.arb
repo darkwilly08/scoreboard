@@ -5,6 +5,8 @@
     "settings": "Configuración",
     "interface": "Interfaz",
     "language": "Idioma",
+    "es": "Español",
+    "en": "Inglés",
     "theme": "Tema",
     "light_theme": "Claro",
     "dark_theme": "Oscuro",
@@ -18,7 +20,12 @@
     "save": "Guardar",
     "error_field_mandatory": "Por favor complete este campo",
     "edit_player": "Editar jugador",
+    "no_selected_players": "No seleccionó jugadores",
+    "no_players_description": "Espere! Tiene que elegir jugadores o formar equipos para la partida.",
+    "back": "Volver",
     "player_added_success": "¡El jugador {name} fue agregado con éxito!",
+    "page_not_found": "Página no encontrada",
+    "comingSoon": "Próximamente...",
     "@player_added_success": {
         "placeholders": {
             "name": {
@@ -55,14 +62,37 @@
         "placeholders": {
             "name": {
                 "type": "String",
-                "example": "Opponents"
+                "example": "Oponentes"
             }
         }
     },
+    "match_in_progress": "Hay una partida en curso",
+    "continue_match_question": "¿Querés continuar la partida vigente?",
+    "are_you_sure": "¿Estás seguro?",
+    "match_available_later": "La partida estará disponible para continuarla más tarde",
     "games": "Juegos",
-    "stats": "Estad",
+    "stats": "Estadísticas",
     "accept": "Aceptar",
     "rules": "Reglas",
+    "basic": "Básico",
+    "customize_game":"Personalizar juego",
+    "game_name":"Nombre del juego",
+    "scoreboard_type":"Tipo de anotador",
     "target_score_wins":"El primero que llega gana",
-    "target_score": "Puntaje"
+    "more_settings": "Otras reglas",
+    "is_negative_allowed": "Permite puntaje negativo",
+    "target_score": "Puntaje",
+    "bad_plus_good": "Malas + Buenas",
+    "restart_match": "Reinicar partida",
+    "exit": "Salir",
+    "add_team": "Agregar equipo",
+
+    "onboarding_welcome_title": "¡Bienvenido a tu nuevo Anotador!",
+    "onboarding_welcome_description": "En esta app podrás llevar el puntaje de todos tus juegos de cartas y dados, y ver tus estadísticas",
+    "onboarding_letsgo_title": "¡Comencemos!",
+    "onboarding_letsgo_description": "Completá tu nombre para empezar a registrar tus partidas",
+    "onboarding_quote": "¡No te olvides de mostrar el tanto!",
+    "onboarding_missing_name": "Tu nombre nos permite llevar tus estadísticas",
+    "display_name": "Nombre de usuario",
+    "done": "Listo"
 }

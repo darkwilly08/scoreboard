@@ -5,6 +5,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/routes/routes.dart';
 import 'package:anotador/widgets/custom_floating_action_button.dart';
 import 'package:flutter/material.dart';
+import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
 class GameListScreen extends StatefulWidget {
@@ -43,15 +44,17 @@ class _GameScreenState extends State<GameListScreen> {
 class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
   const _GamesPhoneView(state, {Key? key}) : super(state, key: key);
 
-  Widget makeListTile(Game game) => Container(
-          child: ListTile(
-        contentPadding:
-            const EdgeInsets.symmetric(horizontal: 16.0, vertical: 5.0),
+  Widget makeListTile(Game game) => ListTile(
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0,
+          vertical: 5.0,
+        ),
         title: Text(
           game.name,
           style: TextStyle(
-              color: Theme.of(state.context).colorScheme.secondary,
-              fontSize: 22.0),
+            color: Theme.of(state.context).colorScheme.secondary,
+            fontSize: 22.0,
+          ),
         ),
         subtitle: Container(
           margin: const EdgeInsets.only(top: 8.0),
@@ -67,11 +70,11 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
                 width: 5,
               ),
               const Icon(
-                Icons.thumb_up_alt_outlined,
+                LineIcons.trophy,
                 size: 18.0,
               ),
               const SizedBox(
-                width: 10,
+                width: 20,
               ),
               Text(
                 game.lost.toString(),
@@ -81,7 +84,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
                 width: 5,
               ),
               const Icon(
-                Icons.thumb_down_alt_outlined,
+                LineIcons.skullCrossbones,
                 size: 18.0,
               )
             ],
@@ -91,10 +94,9 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
           onTap: () {
             state.handlePlayGameClicked(game);
           },
-          iconData: Icons.play_arrow,
+          iconData: LineIcons.play,
         ),
-        onTap: () {},
-      ));
+      );
 
   Widget _buildList(BuildContext context) {
     return Consumer<GameController>(builder: (context, gameController, _) {
@@ -119,8 +121,6 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: _buildList(context),
-    );
+    return _buildList(context);
   }
 }
