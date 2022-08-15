@@ -19,6 +19,20 @@ class GameController extends ChangeNotifier {
     _selectedGame = game;
   }
 
+  Game createEmptyGame() {
+    Game game = Game(
+        name: 'new game',
+        targetScore: 100,
+        targetScoreWins: true,
+        isNegativeAllowed: false);
+    // game.npMaxVal = game.targetScore,
+
+    //     npMinVal: game.npMinVal,
+    //     npStep: game.npStep);
+
+    return game;
+  }
+
   Future<void> updateTargetScore(int targetScore) async {
     if (_selectedGame == null) {
       throw Exception("game is not selected yet");
