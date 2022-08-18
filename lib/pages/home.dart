@@ -1,10 +1,11 @@
-import 'package:anotador/constants/const_variables.dart';
 import 'package:anotador/fragments/game_list.dart';
 import 'package:anotador/patterns/widget_view.dart';
+import 'package:anotador/routes/routes.dart';
 import 'package:anotador/widgets/drawer.dart';
 import 'package:anotador/widgets/toggle_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:line_icons/line_icons.dart';
 
 class HomeScreen extends StatefulWidget {
   static const String routeName = "/";
@@ -27,6 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
       _index = index;
     });
   }
+
+  void handleCreateCustomGame() {
+    Navigator.pushNamed(context, Routes.gameSettings,
+        arguments: {'isNew': true});
+  }
 }
 
 class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
@@ -36,13 +42,11 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
     return AppBar(
       backgroundColor: Colors.transparent,
       elevation: 0.0,
-      actions: const [
-        Padding(
-          padding: EdgeInsets.all(8),
-          child: Image(
-            image: AssetImage(AssetsConstants.scoreboard),
-          ),
-        )
+      actions: [
+        IconButton(
+          icon: const Icon(LineIcons.plus),
+          onPressed: () => state.handleCreateCustomGame(),
+        ),
       ],
     );
   }

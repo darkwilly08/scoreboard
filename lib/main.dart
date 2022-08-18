@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:anotador/controllers/game_controller.dart';
 import 'package:anotador/controllers/locale_controller.dart';
 import 'package:anotador/controllers/match_controller.dart';
@@ -67,7 +69,17 @@ class MyApp extends StatelessWidget {
                   Routes.matchPreparation: (context) => MatchPreparationScreen(
                       selectedGame: routeSettings.arguments as Game),
                   Routes.matchBoard: (context) => const GameMatchScreen(),
-                  Routes.gameSettings: (context) => const GameSettings(),
+                  Routes.gameSettings: (context) {
+                    var args = (routeSettings.arguments ?? {'isNew': false})
+                        as Map<String, dynamic>;
+
+                    bool isNew =
+                        args.containsKey('isNew') ? args['isNew'] : false;
+
+                    return GameSettings(
+                      isNew: isNew,
+                    );
+                  },
                 };
                 WidgetBuilder builder = routes[routeSettings.name]!;
                 return MaterialPageRoute(builder: (ctx) => builder(ctx));

@@ -94,5 +94,37 @@
     "onboarding_quote": "¡No te olvides de mostrar el tanto!",
     "onboarding_missing_name": "Tu nombre nos permite llevar tus estadísticas",
     "display_name": "Nombre de usuario",
-    "done": "Listo"
+    "done": "Listo",
+
+    "new_game": "Nuevo juego",
+    "max": "Max",
+    "min": "Min",
+    "step": "Intervalo",
+    "np_title": "Selector de puntaje",
+    "np_max_title": "Valor máximo",
+    "np_max_description": "Puntuación máxima en el selector. Siempre podes indicar valores mayores manualmente.",
+    "np_min_title": "Valor mínimo",
+    "np_min_description": "Puntuación mínima en el selector. Siempre podes indicar valores menores manualmente.",
+    "np_step_title": "Valor del intervalo",
+    "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
+    "np_max_error": "El valor máximo debe ser menor al puntaje ({targetScore}) objetivo",
+    "@np_max_error": {
+        "placeholders": {
+            "targetScore": {
+                "type": "int",
+                "example": "250"
+            }
+        }
+    },
+    "np_min_error": "El valor mínimo debe ser menor al valor máximo ({npMaxVal})",
+    "@np_min_error": {
+        "placeholders": {
+            "npMaxVal": {
+                "type": "int",
+                "example": "250"
+            }
+        }
+    },
+    "np_step_error": "El valor del intervalo debe ser mayor a 0",
+    "game_name_missing": "Por favor completá el nombre del juego"
 }
