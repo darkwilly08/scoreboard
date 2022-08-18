@@ -106,7 +106,7 @@
     "np_min_title": "Valor mínimo",
     "np_min_description": "Puntuación mínima en el selector. Siempre podes indicar valores menores manualmente.",
     "np_step_title": "Valor del intervalo",
-    "np_step_description": "Resolution of the selector. With a step of 10, the options would be 0, 10, 20, 30 and so on.",
+    "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
     "np_max_error": "El valor máximo debe ser menor al puntaje ({targetScore}) objetivo",
     "@np_max_error": {
         "placeholders": {

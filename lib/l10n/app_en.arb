@@ -104,7 +104,7 @@
     "np_min_title": "Min value",
     "np_min_description": "The lowest score on the selector. You can still type in lower values manually.",
     "np_step_title": "Step value",
-    "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
+    "np_step_description": "Resolution of the selector. With a step of 10, the options would be 0, 10, 20, 30 and so on.",
     "np_max_error": "Number picker max value must be lower or equal to target score ({targetScore})",
     "@np_max_error": {
         "placeholders": {
