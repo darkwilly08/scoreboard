@@ -4,6 +4,7 @@ import 'package:anotador/patterns/widget_view.dart';
 import 'package:anotador/themes/app_theme.dart';
 import 'package:anotador/widgets/custom_text_button.dart';
 import 'package:anotador/widgets/dialogs/input_dialog.dart';
+import 'package:anotador/widgets/snackbars.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:line_icons/line_icons.dart';
@@ -36,7 +37,7 @@ class _GameSettingsState extends State<GameSettings> {
       _selectedGame = _gameController.selectedGame!;
     } else {
       isNew = true;
-      _selectedGame = _gameController.createEmptyGame();
+      _selectedGame = _gameController.createEmptyGame("");
       _gameController.setSelected(_selectedGame);
     }
 
@@ -51,7 +52,7 @@ class _GameSettingsState extends State<GameSettings> {
   void handleUpdateName(String? gameName) {
     if (gameName != null) {
       if (isNew) {
-        _selectedGame.name = gameName;
+        setState(() => _selectedGame.name = gameName);
       } else {
         _gameController.updateGameName(gameName);
       }
@@ -61,16 +62,78 @@ class _GameSettingsState extends State<GameSettings> {
   void handleUpdateTargetScore(int? score) {
     if (score != null) {
       if (isNew) {
-        _selectedGame.targetScore = score;
+        setState(() {
+          _selectedGame.targetScore = score;
+          _gameController.recalculateNp(_selectedGame);
+        });
       } else {
         _gameController.updateTargetScore(score);
       }
     }
   }
 
+  void handleUpdateNpMax(int? max) {
+    if (max != null) {
+      if (_selectedGame.targetScore < max) {
+        final snackBar = DangerSnackBar(Text(AppLocalizations.of(context)!
+            .np_max_error(_selectedGame.targetScore)));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+
+      if (isNew) {
+        setState(() {
+          _selectedGame.npMaxVal = max;
+          _gameController.recalculateNp(_selectedGame);
+        });
+      } else {
+        _gameController.updateNpMax(max);
+      }
+    }
+  }
+
+  void handleUpdateNpMin(int? min) {
+    if (min != null) {
+      if (_selectedGame.npMaxVal! <= min) {
+        final snackBar = DangerSnackBar(Text(AppLocalizations.of(context)!
+            .np_min_error(_selectedGame.npMaxVal!)));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+
+      if (isNew) {
+        setState(() {
+          _selectedGame.npMinVal = min;
+          _gameController.recalculateNp(_selectedGame);
+        });
+      } else {
+        _gameController.updateNpMin(min);
+      }
+    }
+  }
+
+  void handleUpdateNpStep(int? step) {
+    if (step != null) {
+      if (step == 0) {
+        final snackBar =
+            DangerSnackBar(Text(AppLocalizations.of(context)!.np_step_error));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+      if (isNew) {
+        setState(() {
+          _selectedGame.npStep = step;
+          _gameController.recalculateNp(_selectedGame);
+        });
+      } else {
+        _gameController.updateNpStep(step);
+      }
+    }
+  }
+
   void handleUpdateTargetScoreWins(bool targetScoreWins) {
     if (isNew) {
-      _selectedGame.targetScoreWins = targetScoreWins;
+      setState(() => _selectedGame.targetScoreWins = targetScoreWins);
     } else {
       _gameController.updateTargetScoreWins(targetScoreWins);
     }
@@ -78,14 +141,28 @@ class _GameSettingsState extends State<GameSettings> {
 
   void handleUpdateNegativeAllowed(bool negativeAllowed) {
     if (isNew) {
-      _selectedGame.isNegativeAllowed = negativeAllowed;
+      setState(() => _selectedGame.isNegativeAllowed = negativeAllowed);
     } else {
       _gameController.updateNegativeAllowed(negativeAllowed);
     }
   }
 
-  void handelSaveBtn() {}
-  void handelCancelBtn() {}
+  Future<void> handelSaveBtn() async {
+    if (isNew) {
+      if (_selectedGame.name == "") {
+        final snackBar = DangerSnackBar(
+            Text(AppLocalizations.of(context)!.game_name_missing));
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        return;
+      }
+      await _gameController.addGame(_selectedGame);
+      Navigator.pop(context);
+    }
+  }
+
+  void handelCancelBtn() {
+    Navigator.pop(context);
+  }
 }
 
 class _GameSettingsPhoneView
@@ -112,7 +189,9 @@ class _GameSettingsPhoneView
               SettingsTile.navigation(
                 leading: const Icon(LineIcons.dice),
                 title: Text(AppLocalizations.of(context)!.game_name),
-                value: Text(state._selectedGame.name),
+                value: Text(state._selectedGame.name == ""
+                    ? AppLocalizations.of(context)!.new_game
+                    : state._selectedGame.name),
                 onPressed: (BuildContext context) async {
                   String? newGameName = await InputDialog(
                     title: Text(AppLocalizations.of(context)!.game_name),
@@ -162,53 +241,59 @@ class _GameSettingsPhoneView
           ),
           SettingsSection(
             title: Text(
-              "Popup Selector",
+              AppLocalizations.of(context)!.np_title,
               style: TextStyle(color: Theme.of(context).colorScheme.secondary),
             ),
             tiles: <SettingsTile>[
               SettingsTile.navigation(
-                leading: const Icon(LineIcons.flagCheckered),
-                title: Text("Min"),
-                value: Text(state._selectedGame.targetScore.toString()),
+                leading: const Icon(LineIcons.starHalfAlt),
+                title: Text(AppLocalizations.of(context)!.min),
+                description:
+                    Text(AppLocalizations.of(context)!.np_min_description),
+                trailing: Text(state._selectedGame.npMinVal.toString()),
                 onPressed: (BuildContext context) async {
                   String? valStr = await InputDialog(
-                    title: Text(AppLocalizations.of(context)!.target_score),
+                    title: Text(AppLocalizations.of(context)!.np_min_title),
                     isNumber: true,
-                    val: state._selectedGame.targetScore.toString(),
+                    val: state._selectedGame.npMinVal.toString(),
                   ).show(context);
 
-                  int? score = valStr != null ? int.tryParse(valStr) : null;
-                  state.handleUpdateTargetScore(score);
+                  int? min = valStr != null ? int.tryParse(valStr) : null;
+                  state.handleUpdateNpMin(min);
                 },
               ),
               SettingsTile.navigation(
-                leading: const Icon(LineIcons.flagCheckered),
-                title: Text("Max"),
-                value: Text(state._selectedGame.targetScore.toString()),
+                leading: const Icon(LineIcons.stream),
+                title: Text(AppLocalizations.of(context)!.step),
+                description:
+                    Text(AppLocalizations.of(context)!.np_step_description),
+                trailing: Text(state._selectedGame.npStep.toString()),
                 onPressed: (BuildContext context) async {
                   String? valStr = await InputDialog(
-                    title: Text(AppLocalizations.of(context)!.target_score),
+                    title: Text(AppLocalizations.of(context)!.np_step_title),
                     isNumber: true,
-                    val: state._selectedGame.targetScore.toString(),
+                    val: state._selectedGame.npStep.toString(),
                   ).show(context);
 
-                  int? score = valStr != null ? int.tryParse(valStr) : null;
-                  state.handleUpdateTargetScore(score);
+                  int? step = valStr != null ? int.tryParse(valStr) : null;
+                  state.handleUpdateNpStep(step);
                 },
               ),
               SettingsTile.navigation(
-                leading: const Icon(LineIcons.flagCheckered),
-                title: Text("Step"),
-                value: Text(state._selectedGame.targetScore.toString()),
+                leading: const Icon(LineIcons.starAlt),
+                title: Text(AppLocalizations.of(context)!.max),
+                description:
+                    Text(AppLocalizations.of(context)!.np_max_description),
+                trailing: Text(state._selectedGame.npMaxVal.toString()),
                 onPressed: (BuildContext context) async {
                   String? valStr = await InputDialog(
-                    title: Text(AppLocalizations.of(context)!.target_score),
+                    title: Text(AppLocalizations.of(context)!.np_max_title),
                     isNumber: true,
-                    val: state._selectedGame.targetScore.toString(),
+                    val: state._selectedGame.npMaxVal.toString(),
                   ).show(context);
 
-                  int? score = valStr != null ? int.tryParse(valStr) : null;
-                  state.handleUpdateTargetScore(score);
+                  int? max = valStr != null ? int.tryParse(valStr) : null;
+                  state.handleUpdateNpMax(max);
                 },
               ),
             ],

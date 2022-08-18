@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/truco/truco_score.dart';
 import 'package:anotador/model/truco_game.dart';
@@ -19,18 +21,29 @@ class GameController extends ChangeNotifier {
     _selectedGame = game;
   }
 
-  Game createEmptyGame() {
+  Game createEmptyGame(String name) {
     Game game = Game(
-        name: 'new game',
+        name: name,
         targetScore: 100,
         targetScoreWins: true,
-        isNegativeAllowed: false);
-    // game.npMaxVal = game.targetScore,
-
-    //     npMinVal: game.npMinVal,
-    //     npStep: game.npStep);
+        isNegativeAllowed: false,
+        npMaxVal: 100,
+        npMinVal: 0,
+        npStep: 10);
 
     return game;
+  }
+
+  void recalculateNp(Game game) {
+    if (game.npMaxVal != null && game.npMinVal != null) {
+      game.npMaxVal = min(game.targetScore, game.npMaxVal!);
+      game.npMinVal = min(game.targetScore - 1, game.npMinVal!);
+
+      int range = ((game.npMaxVal! - game.npMinVal!) / 2).floor();
+      range == 0 ? 1 : range;
+
+      game.npStep = min(range, game.npStep!);
+    }
   }
 
   Future<void> updateTargetScore(int targetScore) async {
@@ -39,6 +52,44 @@ class GameController extends ChangeNotifier {
     }
 
     _selectedGame?.targetScore = targetScore; //TODO maybe a setter?
+    recalculateNp(_selectedGame!);
+
+    _gameRepository.update(_selectedGame!);
+    notifyListeners();
+  }
+
+  Future<void> updateNpMin(int min) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
+    _selectedGame?.npMinVal = min; //TODO maybe a setter?
+    recalculateNp(_selectedGame!);
+
+    _gameRepository.update(_selectedGame!);
+    notifyListeners();
+  }
+
+  Future<void> updateNpMax(int max) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
+    _selectedGame?.npMaxVal = max; //TODO maybe a setter?
+    recalculateNp(_selectedGame!);
+
+    _gameRepository.update(_selectedGame!);
+    notifyListeners();
+  }
+
+  Future<void> updateNpStep(int step) async {
+    if (_selectedGame == null) {
+      throw Exception("game is not selected yet");
+    }
+
+    _selectedGame?.npStep = step; //TODO maybe a setter?
+    recalculateNp(_selectedGame!);
+
     _gameRepository.update(_selectedGame!);
     notifyListeners();
   }

@@ -93,5 +93,36 @@
     "onboarding_quote": "While playing Uno remember: Safety first",
     "onboarding_missing_name": "Please tell us your name",
     "display_name": "Display name",
-    "done": "Done"
+    "done": "Done",
+    "new_game": "New game",
+    "max": "Max",
+    "min": "Min",
+    "step": "Step",
+    "np_title": "Popup - number picker",
+    "np_max_title": "Max value",
+    "np_max_description": "The highest score on the selector. You can still type in higher values manually.",
+    "np_min_title": "Min value",
+    "np_min_description": "The lowest score on the selector. You can still type in lower values manually.",
+    "np_step_title": "Step value",
+    "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
+    "np_max_error": "Number picker max value must be lower or equal to target score ({targetScore})",
+    "@np_max_error": {
+        "placeholders": {
+            "targetScore": {
+                "type": "int",
+                "example": "250"
+            }
+        }
+    },
+    "np_min_error": "Number picker min value must be lower than number picker max value ({npMaxVal})",
+    "@np_min_error": {
+        "placeholders": {
+            "npMaxVal": {
+                "type": "int",
+                "example": "250"
+            }
+        }
+    },
+    "np_step_error": "Number picker step value must be greater than 0",
+    "game_name_missing": "Please add a game title to continue!"
 }
