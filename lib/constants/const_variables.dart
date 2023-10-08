@@ -57,7 +57,7 @@ class AssetsConstants {
   AssetsConstants._();
   static const _imagesFolder = 'assets/images';
   static const _iconsFolder = 'assets/icons';
-  static const _audiosFolder = 'assets/audios';
+  static const _audiosFolder = 'audios';
 
   //images
   static const onboardingWelcome =

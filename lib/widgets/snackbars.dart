@@ -4,7 +4,7 @@ class SuccessSnackBar extends SnackBar {
   const SuccessSnackBar(Widget content)
       : super(
             content: content,
-            backgroundColor: Colors.greenAccent,
+            backgroundColor: const Color(0xFF018786),
             duration: const Duration(milliseconds: 1000));
 }
 

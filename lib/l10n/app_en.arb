@@ -1,128 +1,133 @@
 {
-    "title": "Scoreboard",
-    "version": "Version",
-    "home": "Home",
-    "settings": "Settings",
-    "interface": "Interface",
-    "language": "Language",
-    "es": "Spanish",
-    "en": "English",
-    "theme": "Theme",
-    "light_theme": "Light",
-    "dark_theme": "Dark",
-    "languageSelector": "Select the language",
-    "players": "Players",
-    "add_player": "Add player",
-    "input_name": "Name",
-    "input_initial": "Initial",
-    "favorite": "Favorite",
-    "cancel": "Cancel",
-    "save": "Save",
-    "error_field_mandatory": "This field is mandatory",
-    "edit_player": "Edit player",
-    "no_selected_players": "No selected players",
-    "no_players_description": "Wait! You need to add players or teams before starting the match.",
-    "back": "Go back",
-    "page_not_found": "Page not found",
-    "comingSoon": "Coming soon...",
-    "player_added_success": "{name} was added successfuly!",
-    "@player_added_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "player_edited_success": "{name} was edited successfuly!",
-    "@player_edited_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "player_removed_success": "{name} deleted",
-    "@player_removed_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "start": "Start",
-    "teams": "Teams",
-    "team": "Team",
-    "ffa": "FFA",
-    "new_match": "New match",
-    "empty_list": "{name} list is empty",
-    "@empty_list": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Opponents"
-            }
-        }
-    },
-    "match_in_progress": "There's a match in progress",
-    "continue_match_question": "Do you want to continue the ongoing match?",
-    "are_you_sure": "Are you sure?",
-    "match_available_later": "The match will be available to continue it later",
-    "games": "Games",
-    "stats": "Stats",
-    "accept": "Accept",
-    "rules": "Rules",
-    "basic": "Basic",
-    "target_score_wins":"Target score wins",
-    "customize_game":"Customize game",
-    "game_name":"Game name",
-    "scoreboard_type":"Scoreboard type",
-    "is_negative_allowed":"Allows negative scores",
-    "target_score": "Target score",
-    "more_settings": "More rules",
-    "bad_plus_good": "Bad + Good",
-    "restart_match": "Restart match",
-    "exit": "Exit",
-    "add_team": "Add Team",
-    "onboarding_welcome_title": "Welcome to the Scoreboard App!",
-    "onboarding_welcome_description": "Here you can keep score of popular card and dice games and also create your own",
-    "onboarding_letsgo_title": "Let’s get started!",
-    "onboarding_letsgo_description": "Write down your name and start keeping track of your wins!",
-    "onboarding_quote": "While playing Uno remember: Safety first",
-    "onboarding_missing_name": "Please tell us your name",
-    "display_name": "Display name",
-    "done": "Done",
-    "new_game": "New game",
-    "max": "Max",
-    "min": "Min",
-    "step": "Step",
-    "np_title": "Popup - number picker",
-    "np_max_title": "Max value",
-    "np_max_description": "The highest score on the selector. You can still type in higher values manually.",
-    "np_min_title": "Min value",
-    "np_min_description": "The lowest score on the selector. You can still type in lower values manually.",
-    "np_step_title": "Step value",
-    "np_step_description": "Resolution of the selector. With a step of 10, the options would be 0, 10, 20, 30 and so on.",
-    "np_max_error": "Number picker max value must be lower or equal to target score ({targetScore})",
-    "@np_max_error": {
-        "placeholders": {
-            "targetScore": {
-                "type": "int",
-                "example": "250"
-            }
-        }
-    },
-    "np_min_error": "Number picker min value must be lower than number picker max value ({npMaxVal})",
-    "@np_min_error": {
-        "placeholders": {
-            "npMaxVal": {
-                "type": "int",
-                "example": "250"
-            }
-        }
-    },
-    "np_step_error": "Number picker step value must be greater than 0",
-    "game_name_missing": "Please add a game title to continue!"
+  "title": "Scoreboard",
+  "version": "Version",
+  "home": "Home",
+  "settings": "Settings",
+  "interface": "Interface",
+  "language": "Language",
+  "es": "Spanish",
+  "en": "English",
+  "theme": "Theme",
+  "light_theme": "Light",
+  "dark_theme": "Dark",
+  "languageSelector": "Select the language",
+  "players": "Players",
+  "add_player": "Add player",
+  "input_name": "Name",
+  "input_initial": "Initial",
+  "favorite": "Favorite",
+  "cancel": "Cancel",
+  "save": "Save",
+  "error_field_mandatory": "This field is mandatory",
+  "edit_player": "Edit player",
+  "no_selected_players": "No selected players",
+  "no_players_description": "Wait! You need to add players or teams before starting the match.",
+  "back": "Go back",
+  "page_not_found": "Page not found",
+  "comingSoon": "Coming soon...",
+  "player_added_success": "{name} was added successfuly!",
+  "@player_added_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "player_edited_success": "{name} was edited successfuly!",
+  "@player_edited_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "player_removed_success": "{name} deleted",
+  "@player_removed_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "start": "Start",
+  "teams": "Teams",
+  "team": "Team",
+  "ffa": "FFA",
+  "new_match": "New match",
+  "empty_list": "{name} list is empty",
+  "@empty_list": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Opponents"
+      }
+    }
+  },
+  "match_in_progress": "There's a match in progress",
+  "continue_match_question": "Do you want to continue the ongoing match?",
+  "are_you_sure": "Are you sure?",
+  "match_available_later": "The match will be available to continue it later",
+  "games": "Games",
+  "stats": "Stats",
+  "accept": "Accept",
+  "rules": "Rules",
+  "basic": "Basic",
+  "target_score_wins": "Target score wins",
+  "customize_game": "Customize game",
+  "game_name": "Game name",
+  "scoreboard_type": "Scoreboard type",
+  "is_negative_allowed": "Allows negative scores",
+  "target_score": "Target score",
+  "more_settings": "More rules",
+  "bad_plus_good": "Bad + Good",
+  "restart_match": "Restart match",
+  "exit": "Exit",
+  "add_team": "Add Team",
+  "onboarding_welcome_title": "Welcome to the Scoreboard App!",
+  "onboarding_welcome_description": "Here you can keep score of popular card and dice games and also create your own",
+  "onboarding_letsgo_title": "Let’s get started!",
+  "onboarding_letsgo_description": "Write down your name and start keeping track of your wins!",
+  "onboarding_quote": "While playing Uno remember: Safety first",
+  "onboarding_missing_name": "Please tell us your name",
+  "display_name": "Display name",
+  "done": "Done",
+  "new_game": "New game",
+  "max": "Max",
+  "min": "Min",
+  "step": "Step",
+  "np_title": "Popup - number picker",
+  "np_max_title": "Max value",
+  "np_max_description": "The highest score on the selector. You can still type in higher values manually.",
+  "np_min_title": "Min value",
+  "np_min_description": "The lowest score on the selector. You can still type in lower values manually.",
+  "np_step_title": "Step value",
+  "np_step_description": "Resolution of the selector. With a step of 10, the options would be 0, 10, 20, 30 and so on.",
+  "np_max_error": "Number picker max value must be lower or equal to target score ({targetScore})",
+  "@np_max_error": {
+    "placeholders": {
+      "targetScore": {
+        "type": "int",
+        "example": "250"
+      }
+    }
+  },
+  "np_min_error": "Number picker min value must be lower than number picker max value ({npMaxVal})",
+  "@np_min_error": {
+    "placeholders": {
+      "npMaxVal": {
+        "type": "int",
+        "example": "250"
+      }
+    }
+  },
+  "np_step_error": "Number picker step value must be greater than 0",
+  "game_name_missing": "Please add a game title to continue!",
+  "table_header_game": "Game",
+  "table_header_opponent": "Opponent",
+  "table_header_date": "Date",
+  "table_header_score": "Score",
+  "history": "History"
 }
