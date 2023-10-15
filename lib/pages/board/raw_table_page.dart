@@ -1,9 +1,10 @@
-import 'dart:developer';
-
 import 'package:anotador/controllers/stats_controller.dart';
+import 'package:anotador/model/team_status.dart';
+import 'package:anotador/pages/board/constants/const_variables.dart';
 import 'package:anotador/repositories/stats_repository.dart';
+import 'package:anotador/routes/routes.dart';
 import 'package:anotador/utils/date_helper.dart' as date_helper;
-import 'package:anotador/widgets/snackbars.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:horizontal_data_table/horizontal_data_table.dart';
@@ -12,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../patterns/widget_view.dart';
 import '../../widgets/back_header.dart';
+import 'components/header_table.dart';
 
 class RawTablePage extends StatefulWidget {
   static const String routeName = '/RawTablePage';
@@ -39,12 +41,7 @@ class _RawTablePageState extends State<RawTablePage> {
   }
 
   void handleFilterBtn() {
-    final snackBar = SuccessSnackBar(
-      Text(AppLocalizations.of(context)!.comingSoon),
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      snackBar,
-    );
+    Navigator.pushNamed(context, Routes.filters);
   }
 }
 
@@ -65,104 +62,92 @@ class _RawTablePagePhoneView
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: BackHeader(
-          title: AppLocalizations.of(context)!.history,
-          trailing: _buildTrailing(),
-        ),
-        body: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Consumer<StatsController>(
-              builder: (context, statsController, child) {
-                return _buildTable(statsController.rawTable);
-              },
-            )));
-  }
-
-  Widget _generateFirstColumnRow(Stats stats) {
-    return Container(
-      width: 100,
-      height: 52,
-      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-      alignment: Alignment.centerLeft,
-      child: Text(stats.gameName),
+  Widget _buildLeftHandSideColumnRow(Stats stats) {
+    final leftColumns = HistoryTableConstants.columns.where((c) => c.left);
+    int index = 0;
+    return Row(
+      children: [
+        Container(
+          width: leftColumns.elementAt(index++).width,
+          height: HistoryTableConstants.rowHeight,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Text(stats.gameName),
+        )
+      ],
     );
   }
 
-  List<Widget> _getTitleWidget() {
-    return [
-      _getTitleItemWidget(
-          AppLocalizations.of(state.context)!.table_header_game, 75),
-      _getTitleItemWidget(
-          AppLocalizations.of(state.context)!.table_header_opponent, 100),
-      _getTitleItemWidget(
-          AppLocalizations.of(state.context)!.table_header_date, 100),
-      _getTitleItemWidget(
-          AppLocalizations.of(state.context)!.table_header_score, 75),
-    ];
-  }
-
-  Widget _getTitleItemWidget(String label, double width) {
-    return Container(
-      width: width,
-      height: 56,
-      padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-      alignment: Alignment.centerLeft,
-      child: Text(label,
-          style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Theme.of(state.context).colorScheme.secondaryContainer)),
-    );
-  }
-
-  Widget _buildTable(List<Stats>? rawData) {
-    if (rawData == null || rawData.isEmpty) {
-      return const CircularProgressIndicator();
-    }
-
-    inspect(rawData);
-
-    return HorizontalDataTable(
-      leftHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
-      rightHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
-      leftHandSideColumnWidth: 75,
-      rightHandSideColumnWidth: 275,
-      leftSideItemBuilder: (_, index) =>
-          _generateFirstColumnRow(rawData[index]),
-      rightSideItemBuilder: (_, index) =>
-          _generateRightHandSideColumnRow(rawData[index]),
-      itemCount: rawData.length,
-      headerWidgets: _getTitleWidget(),
-      isFixedHeader: true,
-    );
-  }
-
-  Widget _generateRightHandSideColumnRow(Stats stats) {
+  Widget _buildRightHandSideColumnRow(Stats stats) {
+    final rightColumns = HistoryTableConstants.columns.where((c) => !c.left);
+    int index = 0;
     return Row(
       children: <Widget>[
         Container(
-            width: 100,
-            height: 52,
-            padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
-            alignment: Alignment.centerLeft,
-            child: Text(stats.scoreSummarized?.opponentName ?? "")),
+          width: rightColumns.elementAt(index++).width,
+          height: HistoryTableConstants.rowHeight,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Tooltip(
+            triggerMode: TooltipTriggerMode.tap,
+            message: stats.teamsResults
+                .where((teamResult) => teamResult.me)
+                .map((tr) => tr.name)
+                .join('\n'),
+            child: Text(
+              stats.teamsResults.firstWhere((teamResult) => teamResult.me).name,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
         Container(
-          width: 100,
-          height: 52,
+          width: rightColumns.elementAt(index++).width,
+          height: HistoryTableConstants.rowHeight,
+          padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
+          alignment: Alignment.centerLeft,
+          child: Tooltip(
+            triggerMode: TooltipTriggerMode.tap,
+            richMessage: TextSpan(
+              children: stats.teamsResults
+                  .where((teamResult) => !teamResult.me)
+                  .mapIndexed((i, tr) => TextSpan(
+                        text: "${i > 0 ? '\n' : ''}${tr.name}",
+                        style: TextStyle(
+                          color: tr.status.id == TeamStatus.WON
+                              ? Theme.of(state.context)
+                                  .colorScheme
+                                  .secondaryContainer
+                              : Colors.black,
+                        ),
+                      ))
+                  .toList(),
+            ),
+            child: Text(
+              stats.teamsResults
+                  .where((teamResult) => !teamResult.me)
+                  .map((tr) => tr.name)
+                  .join(' '),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ),
+        Container(
+          width: rightColumns.elementAt(index++).width,
+          height: HistoryTableConstants.rowHeight,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: Text(date_helper.DateUtils.instance
               .getFormattedDate(stats.createdAt, null, "dd/MMM/yy")),
         ),
         Container(
-          width: 75,
-          height: 52,
+          width: rightColumns.elementAt(index++).width,
+          height: HistoryTableConstants.rowHeight,
           padding: const EdgeInsets.fromLTRB(5, 0, 0, 0),
           alignment: Alignment.centerLeft,
           child: Text(
-            stats.scoreSummarized?.scoreLabel ?? "",
+            stats.scoreLabel,
             style: TextStyle(
                 color: stats.iWon
                     ? Theme.of(state.context).colorScheme.secondaryContainer
@@ -170,6 +155,57 @@ class _RawTablePagePhoneView
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildTable(List<Stats> rawData) {
+    return HorizontalDataTable(
+      leftHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
+      rightHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
+      leftHandSideColumnWidth: HistoryTableConstants.columns
+          .where((c) => c.left)
+          .map((c) => c.width)
+          .reduce((a, b) => a + b),
+      rightHandSideColumnWidth: HistoryTableConstants.columns
+          .where((c) => !c.left)
+          .map((c) => c.width)
+          .reduce((a, b) => a + b),
+      leftSideItemBuilder: (_, index) =>
+          _buildLeftHandSideColumnRow(rawData[index]),
+      rightSideItemBuilder: (_, index) =>
+          _buildRightHandSideColumnRow(rawData[index]),
+      itemCount: rawData.length,
+      headerWidgets: HeaderTable.of(state.context).build(),
+      isFixedHeader: true,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: BackHeader(
+        title: AppLocalizations.of(context)!.history,
+        trailing: _buildTrailing(),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Consumer<StatsController>(
+          builder: (context, statsController, child) {
+            if (statsController.rawTable == null) {
+              return const CircularProgressIndicator();
+            }
+
+            if (statsController.rawTable!.isEmpty) {
+              return Center(
+                child: Text(AppLocalizations.of(context)!
+                    .empty_list(AppLocalizations.of(context)!.history)),
+              );
+            }
+
+            return _buildTable(statsController.rawTable!);
+          },
+        ),
+      ),
     );
   }
 }

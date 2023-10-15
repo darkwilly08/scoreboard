@@ -126,8 +126,11 @@
   "np_step_error": "El valor del intervalo debe ser mayor a 0",
   "game_name_missing": "Por favor completá el nombre del juego",
   "table_header_game": "Juego",
-  "table_header_opponent": "Rival",
+  "table_header_my_team": "Equipo",
+  "table_header_opponent": "Rivales",
   "table_header_date": "Fecha",
   "table_header_score": "Score",
-  "history": "Historial"
+  "history": "Historial",
+  "local_backup": "Backup manual",
+  "google_drive_backup": "Google Drive"
 }

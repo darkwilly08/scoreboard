@@ -126,8 +126,11 @@
   "np_step_error": "Number picker step value must be greater than 0",
   "game_name_missing": "Please add a game title to continue!",
   "table_header_game": "Game",
-  "table_header_opponent": "Opponent",
+  "table_header_my_team": "My Team",
+  "table_header_opponent": "Opponents",
   "table_header_date": "Date",
   "table_header_score": "Score",
-  "history": "History"
+  "history": "History",
+  "local_backup": "Manual backup",
+  "google_drive_backup": "Google Drive"
 }

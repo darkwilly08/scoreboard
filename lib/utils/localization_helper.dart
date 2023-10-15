@@ -24,6 +24,10 @@ class LocalizationHelper {
         return AppLocalizations.of(context)!.es;
       case 'en':
         return AppLocalizations.of(context)!.en;
+      case 'local_backup':
+        return AppLocalizations.of(context)!.local_backup;
+      case 'google_drive_backup':
+        return AppLocalizations.of(context)!.google_drive_backup;
       default:
         return messageId;
     }

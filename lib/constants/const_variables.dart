@@ -1,3 +1,4 @@
+import 'package:anotador/backup_and_restore/models/backup_type.dart';
 import 'package:anotador/model/custom_locale.dart';
 import 'package:anotador/model/in_game/menu/choice.dart';
 import 'package:anotador/model/truco/truco_score.dart';
@@ -44,6 +45,10 @@ class AppConstants {
       icon: LineIcons.alternateSignOut,
     )
   ];
+  static const backupOptions = <BackupType, String>{
+    BackupType.local: "local_backup",
+    BackupType.googleDrive: "google_drive_backup",
+  };
 }
 
 class PreferenceKeys {

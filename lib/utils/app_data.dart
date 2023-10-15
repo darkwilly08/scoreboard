@@ -1,6 +1,7 @@
 import 'package:anotador/model/game.dart';
 import 'package:anotador/model/truco_game.dart';
 import 'package:anotador/repositories/tables.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path/path.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -10,9 +11,16 @@ class AppData {
   static late SharedPreferences sharedPreferences;
   static late PackageInfo packageInfo;
   static late Future<Database> database;
+  static late DeviceInfoPlugin deviceInfo;
   static Future init() async {
     sharedPreferences = await SharedPreferences.getInstance();
     packageInfo = await PackageInfo.fromPlatform();
+    deviceInfo = DeviceInfoPlugin();
+
+    await initDatabase();
+  }
+
+  static Future<void> initDatabase() async {
     database = openDatabase(join(await getDatabasesPath(), 'scoreboard.db'),
         onCreate: (Database db, version) async {
       await db.transaction((txn) async {

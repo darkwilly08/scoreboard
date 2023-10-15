@@ -1,3 +1,4 @@
+import 'package:anotador/pages/board/filter_page.dart';
 import 'package:anotador/pages/board/raw_table_page.dart';
 import 'package:anotador/pages/game_settings.dart';
 import 'package:anotador/pages/home.dart';
@@ -16,4 +17,5 @@ class Routes {
   static const String matchBoard = GameMatchScreen.routeName;
   static const String gameSettings = GameSettings.routeName;
   static const String boardTable = RawTablePage.routeName;
+  static const String filters = FilterPage.routeName;
 }

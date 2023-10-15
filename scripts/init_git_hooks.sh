@@ -1,0 +1,1 @@
+fvm flutter pub global activate git_hooks
