@@ -43,10 +43,15 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
       backgroundColor: Colors.transparent,
       elevation: 0.0,
       actions: [
-        IconButton(
-          icon: const Icon(LineIcons.plus),
-          onPressed: () => state.handleCreateCustomGame(),
-        ),
+        state._index == 0
+            ? IconButton(
+                icon: const Icon(LineIcons.plus),
+                onPressed: () => state.handleCreateCustomGame(),
+              )
+            : IconButton(
+                icon: const Icon(LineIcons.filter),
+                onPressed: () => {},
+              ),
       ],
     );
   }
@@ -56,10 +61,26 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
       case 0:
         return const GameListScreen();
       case 1:
+        // TODO: revert this when stats are ready
+        // return const BoardPage();
         return Text(AppLocalizations.of(context)!.comingSoon);
       default:
         return Text(AppLocalizations.of(context)!.page_not_found);
     }
+  }
+
+  Widget _buildFooter() {
+    return TextButton(
+      onPressed: () {
+        Navigator.pushNamed(state.context, Routes.boardTable);
+      },
+      child: Text(
+        AppLocalizations.of(state.context)!.history,
+        style: TextStyle(
+            color: Theme.of(state.context).colorScheme.secondaryContainer,
+            fontSize: 16),
+      ),
+    );
   }
 
   void _drawerItemClicked(BuildContext context, String routeName) {
@@ -87,7 +108,8 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
                 duration: const Duration(milliseconds: 500),
                 child: _buildBody(context),
               ),
-            )
+            ),
+            _buildFooter(),
           ],
         ));
   }

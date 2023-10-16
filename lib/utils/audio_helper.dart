@@ -1,10 +1,8 @@
-import 'dart:typed_data';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/services.dart';
 
 class AudioHelper {
-  final AudioCache _audioPlayer = AudioCache(prefix: '');
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   Future<Uint8List> getBytes(String filePath) async {
     ByteData bytes = await rootBundle.load(filePath); //load sound from assets
@@ -12,6 +10,6 @@ class AudioHelper {
   }
 
   Future<void> playLocal(String name) async {
-    await _audioPlayer.play(name);
+    await _audioPlayer.play(AssetSource(name));
   }
 }

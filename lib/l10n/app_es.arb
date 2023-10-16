@@ -1,130 +1,150 @@
 {
-    "title": "Anotador",
-    "version": "Versión",
-    "home": "Inicio",
-    "settings": "Configuración",
-    "interface": "Interfaz",
-    "language": "Idioma",
-    "es": "Español",
-    "en": "Inglés",
-    "theme": "Tema",
-    "light_theme": "Claro",
-    "dark_theme": "Oscuro",
-    "languageSelector": "Seleccione el idioma",
-    "players": "Jugadores",
-    "add_player": "Agregar jugador",
-    "input_name": "Nombre",
-    "input_initial": "Inicial",
-    "favorite": "Favorito",
-    "cancel": "Cancelar",
-    "save": "Guardar",
-    "error_field_mandatory": "Por favor complete este campo",
-    "edit_player": "Editar jugador",
-    "no_selected_players": "No seleccionó jugadores",
-    "no_players_description": "Espere! Tiene que elegir jugadores o formar equipos para la partida.",
-    "back": "Volver",
-    "player_added_success": "¡El jugador {name} fue agregado con éxito!",
-    "page_not_found": "Página no encontrada",
-    "comingSoon": "Próximamente...",
-    "@player_added_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "player_edited_success": "¡El jugador {name} fue editado con éxito!",
-    "@player_edited_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "player_removed_success": "El jugador {name} fue removido",
-    "@player_removed_success": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Wasp"
-            }
-        }
-    },
-    "start": "Comenzar",
-    "teams": "Equipos",
-    "team": "Equipo",
-    "ffa": "Oponentes",
-    "new_match": "Nueva partida",
-    "empty_list": "La lista {name} está vacia",
-    "@empty_list": {
-        "placeholders": {
-            "name": {
-                "type": "String",
-                "example": "Oponentes"
-            }
-        }
-    },
-    "match_in_progress": "Hay una partida en curso",
-    "continue_match_question": "¿Querés continuar la partida vigente?",
-    "are_you_sure": "¿Estás seguro?",
-    "match_available_later": "La partida estará disponible para continuarla más tarde",
-    "games": "Juegos",
-    "stats": "Estadísticas",
-    "accept": "Aceptar",
-    "rules": "Reglas",
-    "basic": "Básico",
-    "customize_game":"Personalizar juego",
-    "game_name":"Nombre del juego",
-    "scoreboard_type":"Tipo de anotador",
-    "target_score_wins":"El primero que llega gana",
-    "more_settings": "Otras reglas",
-    "is_negative_allowed": "Permite puntaje negativo",
-    "target_score": "Puntaje",
-    "bad_plus_good": "Malas + Buenas",
-    "restart_match": "Reinicar partida",
-    "exit": "Salir",
-    "add_team": "Agregar equipo",
-
-    "onboarding_welcome_title": "¡Bienvenido a tu nuevo Anotador!",
-    "onboarding_welcome_description": "En esta app podrás llevar el puntaje de todos tus juegos de cartas y dados, y ver tus estadísticas",
-    "onboarding_letsgo_title": "¡Comencemos!",
-    "onboarding_letsgo_description": "Completá tu nombre para empezar a registrar tus partidas",
-    "onboarding_quote": "¡No te olvides de mostrar el tanto!",
-    "onboarding_missing_name": "Tu nombre nos permite llevar tus estadísticas",
-    "display_name": "Nombre de usuario",
-    "done": "Listo",
-
-    "new_game": "Nuevo juego",
-    "max": "Max",
-    "min": "Min",
-    "step": "Intervalo",
-    "np_title": "Selector de puntaje",
-    "np_max_title": "Valor máximo",
-    "np_max_description": "Puntuación máxima en el selector. Siempre podes indicar valores mayores manualmente.",
-    "np_min_title": "Valor mínimo",
-    "np_min_description": "Puntuación mínima en el selector. Siempre podes indicar valores menores manualmente.",
-    "np_step_title": "Valor del intervalo",
-    "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
-    "np_max_error": "El valor máximo debe ser menor al puntaje ({targetScore}) objetivo",
-    "@np_max_error": {
-        "placeholders": {
-            "targetScore": {
-                "type": "int",
-                "example": "250"
-            }
-        }
-    },
-    "np_min_error": "El valor mínimo debe ser menor al valor máximo ({npMaxVal})",
-    "@np_min_error": {
-        "placeholders": {
-            "npMaxVal": {
-                "type": "int",
-                "example": "250"
-            }
-        }
-    },
-    "np_step_error": "El valor del intervalo debe ser mayor a 0",
-    "game_name_missing": "Por favor completá el nombre del juego"
+  "title": "Anotador",
+  "version": "Versión",
+  "home": "Inicio",
+  "settings": "Configuración",
+  "interface": "Interfaz",
+  "language": "Idioma",
+  "es": "Español",
+  "en": "Inglés",
+  "theme": "Tema",
+  "light_theme": "Claro",
+  "dark_theme": "Oscuro",
+  "languageSelector": "Seleccione el idioma",
+  "players": "Jugadores",
+  "add_player": "Agregar jugador",
+  "input_name": "Nombre",
+  "input_initial": "Inicial",
+  "favorite": "Favorito",
+  "cancel": "Cancelar",
+  "save": "Guardar",
+  "error_field_mandatory": "Por favor complete este campo",
+  "edit_player": "Editar jugador",
+  "no_selected_players": "No seleccionó jugadores",
+  "no_players_description": "Espere! Tiene que elegir jugadores o formar equipos para la partida.",
+  "back": "Volver",
+  "player_added_success": "¡El jugador {name} fue agregado con éxito!",
+  "page_not_found": "Página no encontrada",
+  "comingSoon": "Próximamente...",
+  "@player_added_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "player_edited_success": "¡El jugador {name} fue editado con éxito!",
+  "@player_edited_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "player_removed_success": "El jugador {name} fue removido",
+  "@player_removed_success": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Wasp"
+      }
+    }
+  },
+  "start": "Comenzar",
+  "teams": "Equipos",
+  "team": "Equipo",
+  "ffa": "Oponentes",
+  "new_match": "Nueva partida",
+  "empty_list": "La lista {name} está vacia",
+  "@empty_list": {
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Oponentes"
+      }
+    }
+  },
+  "match_in_progress": "Hay una partida en curso",
+  "continue_match_question": "¿Querés continuar la partida vigente?",
+  "are_you_sure": "¿Estás seguro?",
+  "match_available_later": "La partida estará disponible para continuarla más tarde",
+  "games": "Juegos",
+  "stats": "Estadísticas",
+  "accept": "Aceptar",
+  "rules": "Reglas",
+  "basic": "Básico",
+  "customize_game": "Personalizar juego",
+  "game_name": "Nombre del juego",
+  "scoreboard_type": "Tipo de anotador",
+  "target_score_wins": "El primero que llega gana",
+  "more_settings": "Otras reglas",
+  "is_negative_allowed": "Permite puntaje negativo",
+  "target_score": "Puntaje",
+  "bad_plus_good": "Malas + Buenas",
+  "restart_match": "Reinicar partida",
+  "exit": "Salir",
+  "add_team": "Agregar equipo",
+  "onboarding_welcome_title": "¡Bienvenido a tu nuevo Anotador!",
+  "onboarding_welcome_description": "En esta app podrás llevar el puntaje de todos tus juegos de cartas y dados, y ver tus estadísticas",
+  "onboarding_letsgo_title": "¡Comencemos!",
+  "onboarding_letsgo_description": "Completá tu nombre para empezar a registrar tus partidas",
+  "onboarding_quote": "¡No te olvides de mostrar el tanto!",
+  "onboarding_missing_name": "Tu nombre nos permite llevar tus estadísticas",
+  "display_name": "Nombre de usuario",
+  "done": "Listo",
+  "new_game": "Nuevo juego",
+  "max": "Max",
+  "min": "Min",
+  "step": "Intervalo",
+  "np_title": "Selector de puntaje",
+  "np_max_title": "Valor máximo",
+  "np_max_description": "Puntuación máxima en el selector. Siempre podes indicar valores mayores manualmente.",
+  "np_min_title": "Valor mínimo",
+  "np_min_description": "Puntuación mínima en el selector. Siempre podes indicar valores menores manualmente.",
+  "np_step_title": "Valor del intervalo",
+  "np_step_description": "Paso del intervalo. Con un intervalo de 10, las opciones serán 0, 10, 20, 30...",
+  "np_max_error": "El valor máximo debe ser menor al puntaje ({targetScore}) objetivo",
+  "@np_max_error": {
+    "placeholders": {
+      "targetScore": {
+        "type": "int",
+        "example": "250"
+      }
+    }
+  },
+  "np_min_error": "El valor mínimo debe ser menor al valor máximo ({npMaxVal})",
+  "@np_min_error": {
+    "placeholders": {
+      "npMaxVal": {
+        "type": "int",
+        "example": "250"
+      }
+    }
+  },
+  "np_step_error": "El valor del intervalo debe ser mayor a 0",
+  "game_name_missing": "Por favor completá el nombre del juego",
+  "table_header_game": "Juego",
+  "table_header_my_team": "Equipo",
+  "table_header_opponent": "Rivales",
+  "table_header_date": "Fecha",
+  "table_header_score": "Puntos",
+  "history": "Historial",
+  "backup": "Respaldar datos",
+  "restore": "Restaurar datos",
+  "pick_backup_file": "Seleccionar archivo de respaldo",
+  "manual": "Manual",
+  "backup_options_title": "¿Cómo querés respaldar tus datos?",
+  "local_backup": "Respaldo manual",
+  "backup_success": "Respaldo exitoso en la carpeta Descargas",
+  "access_denied": "Permiso denegado",
+  "access_denied_description": "Para poder realizar el backup de tus datos, necesitás habilitar el permiso de almacenamiento en tu dispositivo. Para hacerlo, debes ir a la configuración de la aplicación.",
+  "google_drive_backup": "Google Drive",
+  "filters": "Filtros",
+  "restore_success": "Datos restaurados con éxito",
+  "reload": "Recargar",
+  "restore_error_invalid_file": "El archivo no es válido. Seleccioná un archivo de respaldo válido con la extensión .db",
+  "restore_error_general": "Error restaurando datos",
+  "restore_success_message": "Es necesario recargar la aplicación para que los cambios surtan efecto."
 }
