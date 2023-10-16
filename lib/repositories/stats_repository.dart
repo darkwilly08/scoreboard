@@ -125,7 +125,7 @@ class StatsRepository {
           select null 
               from team_player tp2
               where 1 = 1
-              and tp2.team_player_user_id in ${usersToFilter?.isNotEmpty == true ? '(0,$usersToFilter)' : '(0)'}
+              ${usersToFilter?.isNotEmpty == true ? 'and tp2.team_player_user_id in ($usersToFilter)' : ''}
               and exists (
                   select null
                   from team t2
@@ -149,6 +149,10 @@ class StatsRepository {
       stats.teamsResults.add(TeamResult.fromJson(row));
     }
 
-    return map.values.toList(growable: false);
+    return map.values
+        .toList(growable: false)
+        .where((element) =>
+            element.teamsResults.where((element) => element.me).isNotEmpty)
+        .toList(growable: false);
   }
 }

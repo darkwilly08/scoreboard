@@ -36,6 +36,12 @@ class _RawTablePageState extends State<RawTablePage> {
   }
 
   @override
+  void dispose() {
+    _statsController.cleanup();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _RawTablePagePhoneView(this);
   }

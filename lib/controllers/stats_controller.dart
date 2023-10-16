@@ -28,4 +28,9 @@ class StatsController extends ChangeNotifier {
     _filters = null;
     await getRawTable();
   }
+
+  void cleanup() {
+    _rawTable = null;
+    _filters = null;
+  }
 }

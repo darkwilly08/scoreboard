@@ -60,7 +60,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
         .toList();
 
     final backupOptionSelected = await SingleChoiceDialog<Backup>(
-            title: const Text("Backup options"),
+            title: Text(
+              AppLocalizations.of(context)!.backup_options_title,
+              textAlign: TextAlign.center,
+            ),
             items: backupOptions,
             selected: null)
         .show(context);
@@ -71,7 +74,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
     if (backupOptionSelected.type == BackupType.googleDrive) {
       ScaffoldMessenger.of(context).showSnackBar(SuccessSnackBar(
-        Text(AppLocalizations.of(context)!.comingSoon),
+        AppLocalizations.of(context)!.comingSoon,
       ));
       return;
     }
@@ -82,9 +85,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
     if (!mounted) return;
 
     if (backup.result == null) {
-      final showSettings =
-          await InformativeDialog(title: const Text("Permiso denegado"))
-              .show(context);
+      final showSettings = await InformativeDialog(
+        title: Text(AppLocalizations.of(context)!.access_denied),
+        description:
+            Text(AppLocalizations.of(context)!.access_denied_description),
+      ).show(context);
 
       if (showSettings == true) {
         openAppSettings();
@@ -94,7 +99,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
 
     final snackBar = SuccessSnackBar(
-      Text("backup saved to: ${backup.result}"),
+      AppLocalizations.of(context)!.backup_success,
       duration: const Duration(seconds: 5),
     );
     ScaffoldMessenger.of(context).showSnackBar(
@@ -105,42 +110,40 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 
   void handleRestorePressed() {
-    final path = " /storage/emulated/0/Download/scoreboard.db";
-    BackupAndRestore.instance.restore(path).then((_) {
+    BackupAndRestore.instance.restore().then((_) {
       showDialog(
           context: context,
           barrierDismissible: false,
           builder: (_) => AlertDialog(
-                title: const Text("Restored successfully"),
+                title: Text(AppLocalizations.of(context)!.restore_success),
                 content: SingleChildScrollView(
                   child: SizedBox(
-                      width: MediaQuery.of(context).size.width, child: Text("""
-            Es necesario recargar la apliación para que los cambios surtan efecto.
-                """)),
+                      width: MediaQuery.of(context).size.width,
+                      child: Text(AppLocalizations.of(context)!
+                          .restore_success_message)),
                 ),
                 actions: [
                   CustomTextButton(
                     onTap: () {
                       RestartWidget.restartApp(context);
                     },
-                    text: "Recargar",
+                    text: AppLocalizations.of(context)!.reload,
                   ),
                 ],
               ));
     }).catchError((e) {
       if (e is ArgumentError) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const DangerSnackBar(
-            Text(
-                "The file is not valid. Please select a valid backup file with the extension .db"),
+          DangerSnackBar(
+            Text(AppLocalizations.of(context)!.restore_error_invalid_file),
           ),
         );
         return;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(
-        const DangerSnackBar(
-          Text("Error restoring backup"),
+        DangerSnackBar(
+          Text(AppLocalizations.of(context)!.restore_error_general),
         ),
       );
     });
@@ -210,16 +213,16 @@ class _SettingsPhoneView
               },
             ),
             SettingsTile(
-              title: const Text("Backup"),
-              value: const Text("Manual"),
+              title: Text(AppLocalizations.of(context)!.backup),
+              value: Text(AppLocalizations.of(context)!.manual),
               leading: const Icon(LineIcons.download),
               onPressed: (BuildContext context) {
                 state.handleBackupPressed();
               },
             ),
             SettingsTile(
-              title: const Text("Restore"),
-              value: const Text("Pick backup file"),
+              title: Text(AppLocalizations.of(context)!.restore),
+              value: Text(AppLocalizations.of(context)!.pick_backup_file),
               leading: const Icon(LineIcons.upload),
               onPressed: (BuildContext context) {
                 state.handleRestorePressed();

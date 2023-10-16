@@ -4,25 +4,24 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class InformativeDialog {
   final Widget? title;
+  final Widget? description;
 
-  InformativeDialog({Key? key, required this.title});
+  InformativeDialog({Key? key, required this.title, required this.description});
 
   Widget _builder(BuildContext context) {
     return AlertDialog(
       title: title,
       content: SingleChildScrollView(
-        child:
-            SizedBox(width: MediaQuery.of(context).size.width, child: Text("""
-            Para poder realizar el backup de tus datos, necesitás habilitar el permiso de almacenamiento en tu dispositivo. 
-            Para hacerlo, debes ir a la configuración de la aplicación.
-                """)),
+        child: SizedBox(
+            width: MediaQuery.of(context).size.width, child: description),
       ),
       actions: [
         CustomTextButton(
-            onTap: () => _handleAccept(context), text: "Entendido"),
-        CustomTextButton(
             onTap: () => Navigator.pop(context, false),
             text: AppLocalizations.of(context)!.cancel),
+        CustomTextButton(
+            onTap: () => _handleAccept(context),
+            text: AppLocalizations.of(context)!.accept),
       ],
     );
   }

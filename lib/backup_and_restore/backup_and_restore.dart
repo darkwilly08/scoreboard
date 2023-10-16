@@ -64,7 +64,7 @@ class BackupAndRestore {
     }
   }
 
-  Future<void> restore(String path) async {
+  Future<void> restore() async {
     FilePickerResult? backupFile = await FilePicker.platform.pickFiles();
 
     if (backupFile == null ||

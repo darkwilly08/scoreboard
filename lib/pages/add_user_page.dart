@@ -73,7 +73,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       Navigator.pop(context);
       String snackMsg =
           AppLocalizations.of(context)!.player_added_success(name!);
-      final snackBar = SuccessSnackBar(Text(snackMsg));
+      final snackBar = SuccessSnackBar(snackMsg);
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
   }
@@ -91,7 +91,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
       String snackMsg =
           AppLocalizations.of(context)!.player_edited_success(name!);
       final snackBar = SuccessSnackBar(
-        Text(snackMsg),
+        snackMsg,
       );
       ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
@@ -102,7 +102,7 @@ class _AddUserScreenState extends State<AddUserScreen> {
     Navigator.pop(context);
     String snackMsg =
         AppLocalizations.of(context)!.player_removed_success(name!);
-    final snackBar = SuccessSnackBar(Text(snackMsg));
+    final snackBar = SuccessSnackBar(snackMsg);
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 

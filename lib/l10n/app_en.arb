@@ -131,6 +131,20 @@
   "table_header_date": "Date",
   "table_header_score": "Score",
   "history": "History",
+  "backup": "Data backup",
+  "manual": "Manual",
+  "restore": "Data restore",
+  "pick_backup_file": "Pick backup file",
+  "backup_options_title": "Backup options",
   "local_backup": "Manual backup",
-  "google_drive_backup": "Google Drive"
+  "google_drive_backup": "Google Drive",
+  "backup_success": "Backup saved in Download folder successfully",
+  "access_denied": "Access denied",
+  "access_denied_description": "You need to grant file access permission in order to download the backup file. Please open the app settings and grant the permission.",
+  "filters": "Filters",
+  "restore_success": "Data restored successfully",
+  "reload": "Reload",
+  "restore_error_invalid_file": "The file is not valid. Please select a valid backup file with the .db extension",
+  "restore_error_general": "Error restoring backup",
+  "restore_success_message": "We need to reload the app to apply the changes"
 }

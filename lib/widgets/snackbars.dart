@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
 class SuccessSnackBar extends SnackBar {
-  const SuccessSnackBar(Widget content, {Duration? duration})
+  SuccessSnackBar(String message, {Duration? duration})
       : super(
-            content: content,
+            content: Text(
+              message,
+              style: const TextStyle(color: Colors.white),
+            ),
             backgroundColor: const Color(0xFF018786),
             duration: duration ?? const Duration(milliseconds: 1000));
 }

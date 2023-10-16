@@ -5,6 +5,7 @@ import 'package:anotador/model/game.dart';
 import 'package:anotador/model/user.dart';
 import 'package:anotador/repositories/stats_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:provider/provider.dart';
 
@@ -123,7 +124,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
     return TextButton(
       onPressed: state.handleSave,
       child: Text(
-        "Guardar",
+        AppLocalizations.of(state.context)!.save,
         style: TextStyle(
             color: Theme.of(state.context).colorScheme.secondaryContainer,
             fontSize: 16),
@@ -135,7 +136,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BackHeader(
-        title: "Filters",
+        title: AppLocalizations.of(state.context)!.filters,
         trailing: _buildTrailing(),
       ),
       body: Padding(
@@ -146,6 +147,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
               mainAxisSize: MainAxisSize.max,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // TODO: add time period filter
                 // Text(
                 //   "Period",
                 //   style: TextStyle(
@@ -172,7 +174,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
                 //   height: 16,
                 // ),
                 Text(
-                  "Games",
+                  AppLocalizations.of(state.context)!.games,
                   style: TextStyle(
                     color: Theme.of(state.context)
                         .colorScheme
@@ -197,7 +199,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
                   height: 16,
                 ),
                 Text(
-                  "Players",
+                  AppLocalizations.of(state.context)!.players,
                   style: TextStyle(
                     color: Theme.of(state.context)
                         .colorScheme
@@ -226,7 +228,7 @@ class _FilterPagePhoneView extends WidgetView<FilterPage, _FilterPageState> {
                     );
                   },
                 ),
-                Spacer(),
+                const Spacer(),
                 Align(
                   alignment: Alignment.center,
                   child: _buildFooter(),
