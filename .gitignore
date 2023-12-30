@@ -1,6 +1,6 @@
 # Miscellaneous
 *.class
-*.lock
+Podfile.lock
 *.log
 *.pyc
 *.swp

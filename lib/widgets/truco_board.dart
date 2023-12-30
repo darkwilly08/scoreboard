@@ -200,4 +200,11 @@ class _TrucoBoardState extends State<TrucoBoard> {
       ],
     );
   }
+
+  @override
+  void dispose() {
+    _audioHelper.dispose();
+    
+    super.dispose();
+  }
 }
