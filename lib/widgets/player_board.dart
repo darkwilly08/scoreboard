@@ -77,7 +77,7 @@ class _TeamBoardState extends State<TeamBoard> {
                     StatefulBuilder(builder: (context, sbSetState) {
                       return _isAddAction
                           ? IconButton(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primary,
                               onPressed: () {
                                 setState(() => _isAddAction = false);
                                 sbSetState(() => _isAddAction = false);
@@ -85,7 +85,7 @@ class _TeamBoardState extends State<TeamBoard> {
                               icon: const Icon(LineIcons.plus),
                             )
                           : IconButton(
-                              color: Theme.of(context).colorScheme.secondary,
+                              color: Theme.of(context).colorScheme.primary,
                               onPressed: () {
                                 setState(() => _isAddAction = true);
                                 sbSetState(() => _isAddAction = true);
@@ -118,6 +118,16 @@ class _TeamBoardState extends State<TeamBoard> {
                         minValue: widget.team.match!.game.npMinVal!,
                         maxValue: widget.team.match!.game.npMaxVal!,
                         step: widget.team.match!.game.npStep!,
+                        selectedTextStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge!.fontSize,
+                        ),
+                        textStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.secondary,
+                          fontSize:
+                              Theme.of(context).textTheme.titleSmall!.fontSize,
+                        ),
                         onChanged: (value) {
                           setState(() => _currentValue = value);
                           sbSetState(() => _currentValue = value);

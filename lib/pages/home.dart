@@ -76,9 +76,7 @@ class _HomePhoneView extends WidgetView<HomeScreen, _HomeScreenState> {
       },
       child: Text(
         AppLocalizations.of(state.context)!.history,
-        style: TextStyle(
-            color: Theme.of(state.context).colorScheme.secondaryContainer,
-            fontSize: 16),
+        style: const TextStyle(fontSize: 16),
       ),
     );
   }

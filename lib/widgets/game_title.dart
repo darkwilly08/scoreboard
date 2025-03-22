@@ -16,7 +16,7 @@ class GameTitle extends StatelessWidget {
             Text(
               title,
               style: TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
+                color: Theme.of(context).colorScheme.primary,
                 fontWeight: FontWeight.bold,
                 fontSize: 18,
               ),
@@ -25,7 +25,7 @@ class GameTitle extends StatelessWidget {
                 ? Text(
                     subtitle!,
                     style: TextStyle(
-                      color: Theme.of(context).colorScheme.secondary,
+                      color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.w400,
                       fontSize: 13,
                     ),

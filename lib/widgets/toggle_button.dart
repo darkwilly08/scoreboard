@@ -46,8 +46,8 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
   }
 
   Widget _buildBtnSelected(String text, IconData? iconData) {
-    TextStyle selectedTextStyle = TextStyle(
-        color: Theme.of(context).colorScheme.secondary, fontSize: 18.0);
+    TextStyle selectedTextStyle =
+        TextStyle(color: Theme.of(context).colorScheme.primary, fontSize: 18.0);
 
     Widget btn;
     if (iconData != null) {
@@ -59,7 +59,7 @@ class _CustomToggleButtonState extends State<CustomToggleButton> {
     } else {
       btn = Container(
         decoration: BoxDecoration(
-            color: Theme.of(context).colorScheme.primaryContainer,
+            color: Theme.of(context).colorScheme.onPrimary,
             borderRadius: BorderRadius.circular(16.0)),
         padding: padding,
         child: Text(text, style: selectedTextStyle),

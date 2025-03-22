@@ -7,18 +7,18 @@ class BoardPage extends StatelessWidget {
   LineTouchData get lineTouchData1 => LineTouchData(
         handleBuiltInTouches: true,
         touchTooltipData: LineTouchTooltipData(
-          tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
-        ),
+            // tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
+            ),
       );
 
   FlTitlesData get titlesData1 => FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: bottomTitles,
         ),
-        rightTitles: AxisTitles(
+        rightTitles: const AxisTitles(
           sideTitles: SideTitles(showTitles: false),
         ),
-        topTitles: AxisTitles(
+        topTitles: const AxisTitles(
           axisNameWidget: Text('Won/Lost trends'),
           sideTitles: SideTitles(showTitles: false),
         ),
@@ -192,7 +192,7 @@ class BoardPage extends StatelessWidget {
                         maxY: 20,
                         barTouchData: BarTouchData(
                           touchTooltipData: BarTouchTooltipData(
-                            tooltipBgColor: Colors.grey,
+                            // tooltipBgColor: Colors.grey,
                             getTooltipItem: (a, b, c, d) => null,
                           ),
                         ),

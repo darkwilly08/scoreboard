@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
               child:
                   Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
                 Text(AppLocalizations.of(context)!.title,
-                    style: Theme.of(context).textTheme.headline6)
+                    style: Theme.of(context).textTheme.titleMedium)
               ]),
             )));
   }

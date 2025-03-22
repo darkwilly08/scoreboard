@@ -166,8 +166,10 @@ class _RawTablePagePhoneView
 
   Widget _buildTable(List<Stats> rawData) {
     return HorizontalDataTable(
-      leftHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
-      rightHandSideColBackgroundColor: Theme.of(state.context).backgroundColor,
+      leftHandSideColBackgroundColor:
+          Theme.of(state.context).colorScheme.surface,
+      rightHandSideColBackgroundColor:
+          Theme.of(state.context).colorScheme.surface,
       leftHandSideColumnWidth: HistoryTableConstants.columns
           .where((c) => c.left)
           .map((c) => c.width)

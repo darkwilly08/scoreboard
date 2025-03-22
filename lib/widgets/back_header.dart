@@ -50,7 +50,7 @@ class BackHeader extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: false,
       title: Text(
         title,
-        style: Theme.of(context).textTheme.headline6,
+        style: Theme.of(context).textTheme.titleSmall,
       ),
       actions: [_buildTrailing()],
     );

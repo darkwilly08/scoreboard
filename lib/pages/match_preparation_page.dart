@@ -291,7 +291,7 @@ class _MatchPreparationPhoneView
           SettingsSection(
             title: Text(
               AppLocalizations.of(context)!.rules,
-              style: TextStyle(color: Theme.of(context).colorScheme.secondary),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
             tiles: _getQuickSettingsTiles(context),
           ),
@@ -306,7 +306,7 @@ class _MatchPreparationPhoneView
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleMedium,
         ),
         const Spacer(),
         CustomFloatingActionButton(
@@ -425,7 +425,7 @@ class _MatchPreparationPhoneView
                 height: 50,
                 width: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondary,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(60.0),
                         topRight: Radius.circular(60.0)),
@@ -443,7 +443,7 @@ class _MatchPreparationPhoneView
                     AppLocalizations.of(context)!.start,
                     style: TextStyle(
                         fontSize: 20,
-                        color: Theme.of(context).colorScheme.primaryContainer),
+                        color: Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ),

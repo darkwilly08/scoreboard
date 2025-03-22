@@ -33,7 +33,7 @@ class _PlayerTileState extends State<PlayerTile> {
         icon: Icon(
           LineIcons.star,
           color: widget.user.favorite
-              ? Theme.of(context).colorScheme.secondary
+              ? Theme.of(context).colorScheme.primary
               : Colors.grey,
         ),
         onPressed: () => onFavorite(widget.user),
@@ -42,7 +42,7 @@ class _PlayerTileState extends State<PlayerTile> {
       return _isSelected
           ? Icon(
               LineIcons.check,
-              color: Theme.of(context).colorScheme.secondary,
+              color: Theme.of(context).colorScheme.primary,
             )
           : null;
     }
@@ -64,7 +64,7 @@ class _PlayerTileState extends State<PlayerTile> {
               widget.user.initial,
               style: TextStyle(
                 fontSize: 20,
-                color: Theme.of(context).colorScheme.background,
+                color: Theme.of(context).colorScheme.surface,
               ),
             ),
           ),

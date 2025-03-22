@@ -186,7 +186,7 @@ class _SettingsPhoneView
         SettingsSection(
           title: Text(AppLocalizations.of(context)!.interface,
               style: TextStyle(
-                  color: Theme.of(state.context).colorScheme.secondary)),
+                  color: Theme.of(state.context).colorScheme.primary)),
           tiles: [
             SettingsTile(
               title: Text(AppLocalizations.of(context)!.language),

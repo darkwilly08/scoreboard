@@ -52,7 +52,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
         title: Text(
           game.name,
           style: TextStyle(
-            color: Theme.of(state.context).colorScheme.secondary,
+            color: Theme.of(state.context).colorScheme.primary,
             fontSize: 22.0,
           ),
         ),
@@ -64,7 +64,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
             children: [
               Text(
                 game.won.toString(),
-                style: Theme.of(state.context).textTheme.subtitle2,
+                style: Theme.of(state.context).textTheme.bodyMedium,
               ),
               const SizedBox(
                 width: 5,
@@ -78,7 +78,7 @@ class _GamesPhoneView extends WidgetView<GameListScreen, _GameScreenState> {
               ),
               Text(
                 game.lost.toString(),
-                style: Theme.of(state.context).textTheme.subtitle2,
+                style: Theme.of(state.context).textTheme.bodyMedium,
               ),
               const SizedBox(
                 width: 5,

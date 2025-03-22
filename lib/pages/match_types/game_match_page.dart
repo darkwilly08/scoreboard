@@ -167,31 +167,36 @@ class _GameMatchView
         "${team.name} won the match!",
         style: Theme.of(context)
             .textTheme
-            .headline5!
-            .copyWith(color: Colors.black),
+            .titleMedium!
+            .copyWith(color: Theme.of(context).colorScheme.onPrimaryContainer),
       ),
-      leading: const CircleAvatar(
-        child: Icon(LineIcons.trophy),
+      leading: Icon(
+        LineIcons.trophy,
+        color: Theme.of(context).colorScheme.secondary,
+        size: 40,
       ),
-      backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
+      backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       actions: [
         TextButton(
             onPressed: state.handleRematchButton,
-            child: const Text(
+            child: Text(
               "RE MATCH",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
             )),
         TextButton(
             onPressed: state.handleKeepPlayingButton,
-            child: const Text(
+            child: Text(
               "KEEP PLAYING",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
             )),
         TextButton(
             onPressed: state.handleExitButton,
-            child: const Text(
+            child: Text(
               "EXIT",
-              style: TextStyle(color: Colors.black),
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.onPrimaryContainer),
             ))
       ],
     );
@@ -201,40 +206,49 @@ class _GameMatchView
   Widget build(BuildContext context) {
     state.widthPlayerBoard = MediaQuery.of(context).size.width /
         state._matchController.match!.teams!.length;
-    return WillPopScope(
-        child: Scaffold(
-            appBar: BackHeader(
-              title: state._matchController.match!.game.name,
-              leading: IconButton(
-                icon: const Icon(LineIcons.arrowLeft),
-                onPressed: () => state.handleBackArrow(),
-              ),
-              trailing: InGamePopupMenu(
-                callback: state.handlePopupMenu,
-                skip: state._matchController.match!.game is TrucoGame ? 1 : 0,
-              ),
+    return PopScope(
+      onPopInvoked: (didPop) async {
+        if (didPop) {
+          return;
+        }
+
+        await state._onWillPop();
+      },
+      canPop: false,
+      child: Scaffold(
+          appBar: BackHeader(
+            title: state._matchController.match!.game.name,
+            leading: IconButton(
+              icon: const Icon(LineIcons.arrowLeft),
+              onPressed: () => state.handleBackArrow(),
             ),
-            body: Column(
-              children: [
-                Consumer<MatchController>(
-                    builder: (context, matchController, _) {
-                  final m = matchController.match!;
-                  final aux = m.teams!
-                      .where((element) => element.status.id == TeamStatus.WON);
-                  if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
-                    final wonTeam = aux.single;
-                    return _buildMatchEndedBanner(wonTeam, context);
-                  }
-                  return const SizedBox.shrink();
-                }),
-                Selector<MatchController, int?>(
-                    builder: (context, matchId, _) {
-                      return Expanded(child: _buildBoard());
-                    },
-                    selector: (_, matchController) =>
-                        matchController.match?.id),
-              ],
-            )),
-        onWillPop: state._onWillPop);
+            trailing: InGamePopupMenu(
+              callback: state.handlePopupMenu,
+              skip: state._matchController.match!.game is TrucoGame ? 1 : 0,
+            ),
+          ),
+          body: Column(
+            children: [
+              Consumer<MatchController>(builder: (context, matchController, _) {
+                final m = matchController.match!;
+                final aux = m.teams!
+                    .where((element) => element.status.id == TeamStatus.WON);
+                if (aux.isNotEmpty && m.status.id == MatchStatus.ENDED) {
+                  final wonTeam = aux.single;
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 8.0),
+                    child: _buildMatchEndedBanner(wonTeam, context),
+                  );
+                }
+                return const SizedBox.shrink();
+              }),
+              Selector<MatchController, int?>(
+                  builder: (context, matchId, _) {
+                    return Expanded(child: _buildBoard());
+                  },
+                  selector: (_, matchController) => matchController.match?.id),
+            ],
+          )),
+    );
   }
 }

@@ -4,9 +4,9 @@ import 'package:flutter/services.dart';
 class AudioHelper {
   final ap = AudioPlayer();
 
-  static const AudioContext _audioContext = AudioContext(
-    android: AudioContextAndroid(audioFocus: AndroidAudioFocus.gainTransientMayDuck)
-  );
+  static final AudioContext _audioContext = AudioContext(
+      android: const AudioContextAndroid(
+          audioFocus: AndroidAudioFocus.gainTransientMayDuck));
 
   Future<Uint8List> getBytes(String filePath) async {
     ByteData bytes = await rootBundle.load(filePath); //load sound from assets

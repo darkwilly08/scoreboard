@@ -19,21 +19,7 @@ class AppTheme {
       titleTextStyle: TextStyle(color: lightFontColor),
       iconTheme: IconThemeData(color: lightFontColor),
     ),
-    backgroundColor: lightBackgroundColor,
-    scaffoldBackgroundColor: lightBackgroundColor,
-    canvasColor: lightSurfaceColor,
-    cardColor: lightSurfaceColor,
-    dialogBackgroundColor: lightSurfaceColor,
-    toggleableActiveColor: lightSecondaryColor,
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: lightBackgroundColor,
-    ),
-    colorScheme: const ColorScheme.light().copyWith(
-      primary: lightSecondaryDarkerColor,
-      secondary: lightSecondaryDarkerColor,
-      primaryContainer: lightSurfaceColor,
-      secondaryContainer: lightSecondaryDarkerColor,
-    ),
+    colorScheme: ColorScheme.fromSeed(seedColor: secondaryColor),
     textTheme: Typography.blackCupertino.apply(
       fontFamily: AppConstants.fontFamily,
     ),
@@ -41,23 +27,12 @@ class AppTheme {
           bodyColor: lightFontColor,
           fontFamily: AppConstants.fontFamily,
         ),
-    iconTheme: const IconThemeData().copyWith(color: lightFontColor),
   );
 
   static final ThemeData darkTheme = ThemeData.dark().copyWith(
-    backgroundColor: backgroundColor,
-    scaffoldBackgroundColor: backgroundColor,
-    canvasColor: surfaceColor,
-    cardColor: surfaceColor,
-    dialogBackgroundColor: surfaceColor,
-    floatingActionButtonTheme: const FloatingActionButtonThemeData(
-      foregroundColor: backgroundColor,
-    ),
-    colorScheme: const ColorScheme.dark().copyWith(
-      primary: secondaryDarkerColor,
-      secondary: secondaryDarkerColor,
-      primaryContainer: surfaceColor,
-      secondaryContainer: secondaryDarkerColor,
+    colorScheme: ColorScheme.fromSeed(
+      seedColor: secondaryColor,
+      brightness: Brightness.dark,
     ),
     textTheme: Typography.whiteHelsinki.apply(
       bodyColor: fontColor,
@@ -66,6 +41,5 @@ class AppTheme {
     primaryTextTheme: ThemeData.dark().textTheme.apply(
           fontFamily: AppConstants.fontFamily,
         ),
-    iconTheme: const IconThemeData().copyWith(color: fontColor),
   );
 }
